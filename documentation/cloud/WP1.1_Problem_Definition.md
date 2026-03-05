@@ -1,0 +1,20 @@
+# 04 - GMS -WP1.1 Problem Definition
+
+> Source: http://confluence.microlab.club/rest/api/content/42633962 | Version: 6
+
+# WP1.1 Problem Definition
+
+*Keywords: *Agricultural data collection, Agricultural automation, Smart greenhouse technology, Environmental monitoring, IoT sensors, Real-time monitoring, Resource efficiency, Greenhouse management, Environmental control system, Smart farming, Cloud data storage 
+
+## Problem Definition
+
+Farmers and greenhouse operators often face difficulties in maintaining stable environmental conditions for plant growth. Monitoring and adjusting factors such as temperature and humidity usually requires constant attention and manual effort. Delayed or incorrect adjustments can cause plant stress and reduce crop quality and yield. As a result, resources such as time, water, and energy are often used inefficiently. 
+
+## Core Problems:
+
+- *Uncontrolled Resource Consumption:* Manual greenhouse management leads to excessive water, energy, and fertilizer usage, due to inaccurate application of resources, eventually resulting in higher waste and increased maintenance costs.
+- *Reactive Rather Than Preventive Management:* In absence of the real-time data, farmers only detect issues after apparent plant stress or diseases occur, leading to yield losses.
+- *24/7 Monitoring Burden: *Greenhouse conditions require constant supervision, but manual monitoring is labor-intensive and unsustainable, leading to worker fatigue and missed critical events during off-hours.
+- *Multi-Site Management Complexity:* Farmers managing multiple greenhouses cannot physically monitor all locations simultaneously, resulting in uneven attention and sub-optimal performance across facilities.
+- *Extreme Weather Vulnerability:* Abrupt and increasing frequency of heatwaves, cold snaps, and storms overwhelm manual response capabilities, causing crop losses, as farmers cannot react fast enough to protect the plantations.
+- *Limited Predictive Capability:* Without historical environmental data linked to crop outcomes, farm workers cannot identify suitable growing patterns or predict the yield, making plannings for the future uncertain.

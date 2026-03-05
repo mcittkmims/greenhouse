@@ -1,0 +1,95 @@
+# 04 - GMS -WP3.2 Stakeholder Workshop
+
+> Source: http://confluence.microlab.club/rest/api/content/42634063 | Version: 3
+
+**
+**
+
+## 1. Interview purpose
+
+The primary objective of these stakeholder interviews was to gather in-depth, real-world insights relevant to the design and implementation of an IoT-based Greenhouse Management System for the Technical University of Moldova (UTM) campus greenhouse.
+The specific objectives of these interviews were to:
+- Validate the technical architecture and component selection for the IoT greenhouse system.
+- Understand the real operational challenges faced by greenhouse operators on a daily basis.
+- Identify functional requirements that the system must address from the end-user perspective.
+- Explore cost, scalability, and reliability constraints relevant to the Moldovan agricultural context.
+- Gather recommendations on sensor types, control logic, data architecture, and dashboard design.
+- Align the project scope with national agricultural conditions and user expectations.
+
+The insights gathered from these interviews directly informed the project's technical requirements, system architecture decisions, and the prioritization of features in the development roadmap.**
+**
+
+## 2. Key Interview Questions
+
+The following structured question sets were prepared prior to the interviews. Questions were tailored to each stakeholder's role and expertise. Interviewers were instructed to remain flexible and allow the conversation to naturally explore relevant tangents while ensuring core topics were covered.
+**2.1 Greenhouse Owners and Operators (Farmers)**
+- Could you please introduce yourself, including your name, age, and how long you have been involved in greenhouse operations?
+- What are the most significant challenges you face in maintaining stable temperature, humidity, and soil moisture conditions throughout the day?
+- How do you currently monitor and adjust conditions in your greenhouse — is it done manually? How much time does it take daily?
+- Have you ever experienced crop losses or quality issues due to delayed or missed adjustments? Can you describe what happened?
+- How do you manage monitoring if you have multiple spaces — for example, a garden and a greenhouse at the same time? What problems does this create?
+- What would an ideal monitoring and automatic control system look like for you — what features would matter most?
+- What concerns would you have about adopting a new IoT-based system — for example, cost, complexity, or reliability?
+
+**2.2 Government and Institutions**
+- Could you please introduce yourself and describe your role in relation to agricultural technology and modernization in Moldova?
+- What are the current national priorities or policies regarding the adoption of smart technologies in the agricultural sector?
+- What compliance requirements or environmental regulations must greenhouse operators follow, and how are these currently monitored or enforced?
+- Are there existing government programs, grants, or incentives that could support greenhouse operators in adopting IoT or automation technologies?
+- How does the Technical University of Moldova currently collaborate with agricultural operators or technology developers, and what form could that take for a project like ours?
+- What barriers do you believe prevent wider adoption of smart agricultural technologies among local farmers?
+- How would you evaluate the long-term impact of an automated greenhouse management system on food security and sustainable agriculture in the region?
+
+**2.3 IoT / Industrial Automation Expert**
+- Please introduce yourself — your name, area of technical expertise, and your role as a distributor/developer in the IoT and industrial automation space.
+- How many years of experience do you have working with industrial control systems, IoT hardware, or agricultural automation solutions?
+- What types of equipment and sensors are available on the market for a project like ours?
+- From your experience, what are the most common failure points in IoT sensor deployments in agricultural or greenhouse environments — especially in high-humidity conditions?
+- What are the frequent integration challenges when connecting PLC-based control systems with cloud platforms or IoT gateways?
+- What is a realistic budget for our project for a single greenhouse zone such as the one at the UTM campus?
+- How would you approach scaling this architecture from a small single-zone greenhouse to a multi-zone, multi-location facility?
+- Can you point us to case studies, local implementations, or commercial greenhouse systems in Moldova or the region that have successfully implemented a similar IoT-based architecture?
+- Do you have any final suggestions or impressions following this interview?
+****
+
+## 3. Interview Tools and Preparation
+
+**Recording and Communication**
+The expert interview with Andrei Bragarenco was conducted remotely using Microsoft Teams, which provided built-in video conferencing, audio/video recording, and automated live transcription features. Consent for recording was obtained from the interviewee prior to the session. The farmer interviews were conducted in person and were not recorded due to privacy preferences; notes were taken manually during each session.
+**Transcription**
+The Teams recording of the expert interview was transcribed using Teams' built-in AI transcription service, which generated a .vtt (WebVTT) subtitle file and a .docx transcript. These files were reviewed and cleaned to correct any automatic transcription errors before being included in this document.****
+
+## 4. Staekholder Interviews
+
+**4.1 Expert Interview — Andrei Bragarenco**
+| Name | Role |
+| --- | --- |
+| Andrei Bragarenco | IoT/Embeded systems expert |
+| Daniel Cojocaru | Sutdent |
+| Daria Rațeeva | Student |
+| Victoria Mutruc | Student |
+| Maxim Alexei | Student |
+| Adrian Vremere | Student |
+
+**Interviewer (Daniel):** Alright, let's begin. The first question — please introduce yourself: your name, your area of technical expertise, and your role as a distributor in the IoT and industrial automation space.
+**Andrei Bragarenco:** Should I start now? Okay. My name is Andrei Bragarenco. My area of interest is developing solutions for the agricultural sector. The trend I'm focused on is innovation in agriculture — specifically embedded systems and IoT. I want to cover everything with end-to-end solutions: identify the problem from the farmer's side and deliver a complete answer. We're in the Republic of Moldova, and the problems here are persistent. Most of our engineers are focused on solving problems for others abroad, while our own farmers buy solutions from outside. My goal is to cut that chain — our engineers work for abroad, and then we buy back from abroad. Moldova is practically an entire experimentation ground, full of unsolved problems that others have already moved past. That's my role and my interest.
+**Interviewer (Daria):** I'll take the next question. What types of equipment and sensors are available for the possible realization of our project, in your opinion?
+**Andrei Bragarenco:** The question needs to come from a slightly different angle, because we are technology producers, but for a greenhouse specifically, we first need to identify which processes are happening inside it. Do we want to control humidity? Then we need a humidity sensor. Air humidity? Soil humidity? Both matter. We currently have a sensor — one of ours — that covers air temperature, air humidity, soil temperature, and soil moisture. Those are the sensor-side technologies. On the processing side, we experimented with Arduino, but the problem is those devices are not certified, not verified. They're not suited for industrial deployment. Put an Arduino in a greenhouse and the humidity alone will degrade it in no time. So we moved to industrial-grade equipment — including with your project in mind. Everything runs at 24V industrial standard, not 5V hobby-level. Sensors are also at industrial quality level.
+**Victoria:** I have a follow-up — we also have CO2 sensors. When we did our research, almost everyone uses CO2 concentration because it's important for plant development.
+**Andrei Bragarenco:** If we find an industrial one online, we buy it. If not — most people use MQ-4 type sensors for gas sensing, which is basically just a board. It's adapted for certain environments and is actually decent quality. Worth considering.
+**Interviewer (Daria):** I have another question. Given that we're talking about humidity and high temperatures inside a greenhouse — what are the most frequent failure points? What should we pay attention to?
+**Andrei Bragarenco:** Write this down, it'll be useful. There are two types of failures: systematic and random. Systematic ones are reproducible — you can investigate them, find the cause. Random ones — something happens out of nowhere: a power drop, a small fault that becomes a bigger problem over time if left unaddressed. For example, a tiny gap in a unit — in a short time it propagates through the whole system. These need protection mechanisms. For example, if I have a fault isolated in one module, it should not spread to the rest. Now, a very real problem in summer — especially in a greenhouse — is what we call the greenhouse effect: temperatures can rise to 60, even 80 degrees Celsius inside. You have to evacuate that heat. We have motors there that control the windows — they run at industrial level, autonomously, but we can redirect them. Our system takes control of the motors and we can open or close the windows exactly when we need. If our system goes down, there's a backup — the system that works without microcontrollers. So there's always a safety layer.
+**Interviewer (Daniel):** You mentioned the greenhouse at UTM — do you grow things there currently?
+**Andrei Bragarenco:** Yes, it's growing in manual mode — someone waters when needed, opens the window when the temperature rises, it's all manual. I'd actually recommend you get the phone number of the person responsible there — she's always on site, she manages the greenhouse. She's the lady responsible for green spaces. I gave her the greenhouse to manage for her own use — it's her space, and for us it's a testing ground. Get her number, go interview her, she'll tell you everything from the operational side.
+**Interviewer (Victoria):** Next question — what are the most frequent problems when integrating a cloud-based platform with control systems?
+**Andrei Bragarenco:** Rather than talking about problems, I want to highlight what's important: the equipment you install must be easy to set up — installable by someone without specialized knowledge. That is the biggest challenge. That's exactly why we stopped using Arduino after a year — too many problems starting from the 5V power side, which is not compatible with industrial equipment, and you end up doing a lot of conversions and workarounds. When you go industrial — a distribution unit, a relay, irrigation solenoid valves — it's much easier to find parts and find people who understand them. The core answer: the system must be easy to integrate with minimal technical knowledge.
+**Interviewer (Adrian):** What is a realistic budget for our project — for a single greenhouse zone like the one at UTM? We estimated around 4,000 euros.
+**Andrei Bragarenco:** In reality, PLCs are expensive because they're industrial — one PLC is around 200–300 EUR. But at that level it can cover a large area. On the other hand, a cheap sensor might cost 2 EUR versus 50 EUR for an industrial one. The 2 EUR one lasts two or three months. The 50 EUR one lasts ten years. This is actually a perfect scenario for your research — run two parallel systems. One industrial, one with Arduino. Compare the costs, document the downsides of each. Because what very often happens in university thesis projects is: someone builds something with a 5 USD sensor, it works for the demo, but reliability? Longevity? Unknown. Reliability costs money — but the question is how much, and that's exactly what your research can answer.
+**Interviewer (Maxim):** Besides the UTM greenhouse, do you know of any other local implementations in Moldova or the region that have used a similar IoT-based architecture?
+**Andrei Bragarenco:** From what I know, implementations here are all separate. Someone needs humidity control — they buy a humidity controller. Irrigation — separate system. Ventilation — another separate system. Nobody has integrated it all into one. That's actually the proposal here: all the data is lifted into the cloud, and there's a site that supervises everything — like an agentic layer that checks everything continuously. The key idea is that hardware should stay lean — just sensors — and the logic lives on the cloud side. When the cloud system is active, it controls everything. When it goes down, the backup takes over. That division is the concept.
+**Victoria:** And what would be the most important things on the dashboard for a greenhouse operator?
+**Andrei Bragarenco:** Validate limits. I'll show you on Saturday — there are threshold systems where you set the acceptable range and the system operates within it. You collect data, you give recommendations. The system can suggest: "I could give a little more water — for example, 3 liters." And you can tell it: "0.5 liters in the morning, 1 liter at noon, 2 liters in the evening." Those are general rules, operational rules. Then you observe — what happens if you give 3 liters all in the morning versus spread through the day? You're collecting behavioral data. What the dashboard should ultimately show: observations and recommendations. Then the system learns and brings optimized control suggestions on its own.
+**Victoria:** And alerts — for example if a level drops suddenly?
+**Andrei Bragarenco:** That's a minimum — that's a given, it's obligatory. But what I'd really like to see is an analysis agent that runs two or three times a day, checks the statistics, and proposes a remediation. Then you can activate or deactivate that proposal. The system learns, brings its own optimized controls, and you choose. Start with basic data collection, analysis, alerts — and then move into diagnostics. Collect data, extract patterns, generate alerts. Document it, describe it clearly. Then build the agent layer on top. That's a beautiful product.
+**Interviewer (Daniel):** Alright, I think we've covered the main questions. Any final suggestions?
+**Andrei Bragarenco:** I'll be honest — I want to look at everything you've done but haven't found the time yet. But what I want from you this week: get your hands on the equipment. Go to the greenhouse, look at what's installed, study the hardware, start researching what sensors are being used. And start a basic setup — something that collects data and sends a control signal back. Even if it's not installed in the actual greenhouse yet, get that loop working. You have two weeks. You're not starting from zero — everything is already there. There's also Radu at the club, he's been our hardware mentor, he can walk you through everything. Go find him. Good luck.

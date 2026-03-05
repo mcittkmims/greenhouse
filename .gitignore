@@ -1,0 +1,22 @@
+# Credentials — never commit
+.env
+
+# Confluence version cache
+documentation/cloud/.cache/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.Python
+*.egg-info/
+dist/
+build/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# VS Code
+.vscode/
