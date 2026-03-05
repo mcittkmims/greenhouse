@@ -23,51 +23,51 @@ scripts/
 
 ---
 
-## Confluence Source of Truth
+## Confluence
 
-- **Base URL:** `http://confluence.microlab.club`
-- **GMS project page:** `http://confluence.microlab.club/display/PBL26/04+-+GMS+-Greenhouse+Management+System`
-- **Only fetch from this GMS project** — do not read pages from other projects (AFB, AGC, CDR, PDD, SPM)
-- **Credentials:** `CONFLUENCE_USER`, `CONFLUENCE_PASS`, `CONFLUENCE_URL` in `.env`
-
----
-
-## Sync Rules
-
-When asked to **update**, **fetch**, or **sync** documentation:
-
-1. Read `documentation/confluence_pages.json` for the page list and IDs
-2. Only fetch pages with WP number **≤ the requested limit** (e.g. "update up to 4.2" → fetch WP1.1, 2.1, 3.1, 3.2, 3.3, 3.4, 4.1 — stop before 4.3 or higher)
-3. Pages in ascending WP order: 1.1 → 2.1 → 3.1 → 3.2 → 3.3 → 3.4 → 4.1 → 4.2 → ...
-4. Pages marked `"skip_fetch": true` in the config are **maintained locally only** — never overwrite from Confluence
-5. Use the sync script: `python3 scripts/confluence_sync.py --up-to X.Y`
+- **URL:** `http://confluence.microlab.club`
+- **Project:** GMS (Space PBL26, root page ID 42633959) — do not read other projects (AFB, AGC, CDR, PDD, SPM)
+- **Auth:** `CONFLUENCE_USER`, `CONFLUENCE_PASS`, `CONFLUENCE_URL` in `.env`
+- **All page IDs:** `documentation/confluence_pages.json`
 
 ---
 
-## WIP Folder
+## Syncing Documentation
 
-`documentation/wip/` contains files currently being actively edited.
-When the user says they are "working on" a document, move or copy it to `wip/`.
-When a document is released/finalised, it moves back to `documentation/`.
+**Command:** `python3 scripts/confluence_sync.py --up-to X.Y`
+
+**Rules:**
+- Only fetch pages with WP ≤ requested limit (e.g., `--up-to 4.2` fetches WP1.1 → 4.2, stops before 4.3)
+- Pages in ascending WP order: 1.1 → 2.1 → 3.1 → 3.2 → 3.3 → 3.4 → 4.1 → 4.2 → ...
+- Pages marked `"skip_fetch": true` are maintained locally; never overwrite from Confluence
+- Script auto-detects version changes via cache in `documentation/cloud/.cache/`
+
+**Adding New Pages:**
+If a WP is requested but not in `documentation/confluence_pages.json`:
+1. Try to discover the page ID by querying the parent page (use `gms_root_page_id`)
+2. Once found, add the entry to `confluence_pages.json` with `wp`, `id`, and `local_file`
+3. Run the sync command
 
 ---
 
-## Fetching a Page Manually
+## Workflow
+
+- **Synced files** (Confluence → Markdown): `documentation/cloud/`
+- **Active work:** Move to `documentation/wip/` while editing, then back when done
+- **Local-only files:** Root `documentation/` (not auto-synced)
+
+---
+
+## Manual Fetch (Advanced)
+
+Use the REST API with page IDs (no display URL needed):
 
 ```sh
 source .env
-# Get content by page ID
 curl -s -u "$CONFLUENCE_USER:$CONFLUENCE_PASS" \
-  "$CONFLUENCE_URL/rest/api/content/<PAGE_ID>?expand=body.storage" | python3 -c "
-import sys, json, re
-data = json.load(sys.stdin)
-html = data['body']['storage']['value']
-text = re.sub(r'<[^>]+>', ' ', html)
-for e,r in [('&nbsp;',' '),('&lt;','<'),('&gt;','>'),('&amp;','&')]:
-    text = text.replace(e, r)
-text = re.sub(r'\s{3,}', '\n', text)
-print(text[:12000])
-"
+  "$CONFLUENCE_URL/rest/api/content/<PAGE_ID>?expand=body.storage"
 ```
 
-All page IDs are in `documentation/confluence_pages.json`.
+**Example:** `curl ... /rest/api/content/42634112?expand=body.storage` (WP4.3)
+
+For automatic multi-page fetching with HTML→Markdown conversion, **use the sync script** (recommended).
