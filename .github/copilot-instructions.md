@@ -56,6 +56,17 @@ If a WP is requested but not in `documentation/confluence_pages.json`:
 - **Active work:** Move to `documentation/wip/` while editing, then back when done
 - **Local-only files:** Root `documentation/` (not auto-synced)
 
+**Pushing local changes back to Confluence:**
+```sh
+python3 scripts/confluence_push.py --file WP4.2_Analyze_Stakeholder_Requirements.md
+```
+- Compares local file against the `cloud/` cached copy and shows a diff
+- Only pushes if changes are detected; prompts for confirmation before pushing
+- Converts Markdown → Confluence storage format automatically
+- Updates the local `cloud/` cache after a successful push
+- Use `--dry-run` to preview the diff and converted XHTML without pushing
+- Use `--no-confirm` to skip the confirmation prompt
+
 ---
 
 ## Manual Fetch (Advanced)

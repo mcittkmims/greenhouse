@@ -1,6 +1,6 @@
 # 04 - GMS -WP4.1 Develop Stakeholder Requirements
 
-> Source: http://confluence.microlab.club/rest/api/content/42634110 | Version: 7
+> Source: http://confluence.microlab.club/rest/api/content/42634110 | Version: 9
 
 ****
 
@@ -94,15 +94,13 @@ Stakeholder Requirement: The system should provide a browser-accessible, mobile-
 
 - As a greenhouse owner, I want to check my greenhouse from a browser on any device so that I am not tied to a specific phone or application.
 - As an operator, I want a simple overview page so that I can understand the state of my greenhouse at a glance.
-- As a small-scale farmer, I want the website to look and work well on my phone so that I do not need a computer to use the system.   
-- As a small-scale farmer using a mobile data plan, I want the website to be lightweight so that it does not consume too much data or load too slowly.
+- As a small-scale farmer, I want the website to look and work well on my phone so that I do not need a computer to use the system.
 
 #### Job Stories:
 
 - When I am traveling, I want to access the dashboard from any browser so I can monitor my greenhouse without carrying specific hardware.
 - When checking greenhouse status quickly, I want a clear single-page overview so I can assess all critical conditions at a glance.
 - When checking the greenhouse on-the-go, I want the interface to be fully functional on my smartphone so I can manage everything without needing a computer.
-- When accessing the dashboard on a limited mobile data plan, I want pages to load quickly and consume minimal bandwidth so I can use the system cost-effectively.
 ****
 
 ### Alerts & Notifications
@@ -158,13 +156,11 @@ Stakeholder Requirement: The system should be affordable for small-scale farmers
 
 - As a small farmer, I want a solution I can actually afford so that I do not need to take on significant financial risk to automate my greenhouse.
 - As an investor, I want to see proven reductions in operational costs so that I can evaluate the return on investment before committing funds.
-- As a business owner, I want the system to be cost-effective so that I can minimize operational expenses.
 
 #### Job Stories:
 
 - When deciding to invest in automation, I want transparent pricing and a cost estimate so I can assess whether the system fits my budget.
 - When reviewing operational results, I want measurable data on water and energy savings so I can calculate the return on investment.
-- When evaluating automation solutions, I want to ensure the system is affordable so I can justify the investment.
 ****
 
 ### Multi-Site/ Multi-Zone Management

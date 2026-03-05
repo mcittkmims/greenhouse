@@ -1,6 +1,6 @@
 # 04 - GMS -WP3.2 Stakeholder Workshop
 
-> Source: http://confluence.microlab.club/rest/api/content/42634063 | Version: 3
+> Source: http://confluence.microlab.club/rest/api/content/42634063 | Version: 5
 
 **
 **
@@ -65,11 +65,11 @@ The Teams recording of the expert interview was transcribed using Teams' built-i
 | Name | Role |
 | --- | --- |
 | Andrei Bragarenco | IoT/Embeded systems expert |
-| Daniel Cojocaru | Sutdent |
-| Daria Rațeeva | Student |
-| Victoria Mutruc | Student |
-| Maxim Alexei | Student |
-| Adrian Vremere | Student |
+|  | Developer |
+|  | Developer |
+|  | Developer |
+|  | Developer |
+|  | Developer |
 
 **Interviewer (Daniel):** Alright, let's begin. The first question — please introduce yourself: your name, your area of technical expertise, and your role as a distributor in the IoT and industrial automation space.
 **Andrei Bragarenco:** Should I start now? Okay. My name is Andrei Bragarenco. My area of interest is developing solutions for the agricultural sector. The trend I'm focused on is innovation in agriculture — specifically embedded systems and IoT. I want to cover everything with end-to-end solutions: identify the problem from the farmer's side and deliver a complete answer. We're in the Republic of Moldova, and the problems here are persistent. Most of our engineers are focused on solving problems for others abroad, while our own farmers buy solutions from outside. My goal is to cut that chain — our engineers work for abroad, and then we buy back from abroad. Moldova is practically an entire experimentation ground, full of unsolved problems that others have already moved past. That's my role and my interest.

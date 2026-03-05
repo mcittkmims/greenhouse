@@ -138,10 +138,14 @@ class ConfluenceHTMLParser(HTMLParser):
             if not self._in_table:
                 self.output.append("\n")
         elif tag in ("strong", "b"):
-            if not self._in_table:
+            if self._in_table:
+                self._current_cell.append("**")
+            else:
                 self.output.append("**")
         elif tag in ("em", "i"):
-            if not self._in_table:
+            if self._in_table:
+                self._current_cell.append("*")
+            else:
                 self.output.append("*")
 
     def handle_endtag(self, tag):
@@ -166,7 +170,7 @@ class ConfluenceHTMLParser(HTMLParser):
             self._table_rows.append(self._current_row)
             self._current_row = []
         elif tag in ("td", "th"):
-            text = self._clean(" ".join(self._current_cell))
+            text = self._clean("".join(self._current_cell))
             self._current_row.append(text)
             # Update the pending rowspan entry with the actual cell text
             if self._col_index in self._pending_rowspans:
@@ -185,10 +189,14 @@ class ConfluenceHTMLParser(HTMLParser):
             if self._list_depth == 0:
                 self.output.append("\n")
         elif tag in ("strong", "b"):
-            if not self._in_table:
+            if self._in_table:
+                self._current_cell.append("**")
+            else:
                 self.output.append("**")
         elif tag in ("em", "i"):
-            if not self._in_table:
+            if self._in_table:
+                self._current_cell.append("*")
+            else:
                 self.output.append("*")
 
     def handle_data(self, data):

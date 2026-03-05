@@ -1,6 +1,6 @@
 # 04 - GMS -WP4.3 Import Stakeholder requirements in Jira
 
-> Source: http://confluence.microlab.club/rest/api/content/42634112 | Version: 5
+> Source: http://confluence.microlab.club/rest/api/content/42634112 | Version: 60
 
 | Category | Stakeholder Requirements | Type | Classification | Rationale | Jira Link |
 | --- | --- | --- | --- | --- | --- |
@@ -61,108 +61,106 @@
 
 ****
 
-### Environmental Monitoring and Control
+### Environmental Monitoring and Control false Microlab Jira 5b8ef41d-7a73-399f-9666-c949acb53653 GMS-1
 
 Stakeholder Requirement: The system should continuously monitor, control and display all key greenhouse parameters in real time.
 
 #### User Stories:
 
-- As a farmer, I want the system to monitor soil moisture continuously so that my crops receive water only when needed.
-- As a greenhouse operator, I want real-time temperature monitoring so that I can prevent crop damage from overheating or frost.
-- As an operator, I want humidity levels tracked automatically so that I can prevent fungal diseases caused by excessive moisture.
-- As a greenhouse operator, I want CO₂ levels tracked so that I can optimize growing conditions and increase yield.
-- As a greenhouse operator, I want up-to-date readings on my screen so that I can catch problems as soon as they happen.
-- As a farmer, I want to receive a warning when conditions become dangerous so that I can act before my crops are damaged.
+- As a farmer, I want the system to monitor soil moisture continuously so that my crops receive water only when needed.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-10
+- As a greenhouse operator, I want real-time temperature monitoring so that I can prevent crop damage from overheating or frost.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-11
+- As an operator, I want humidity levels tracked automatically so that I can prevent fungal diseases caused by excessive moisture.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-12
+- As a greenhouse operator, I want CO₂ levels tracked so that I can optimize growing conditions and increase yield.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-13
+- As a greenhouse operator, I want up-to-date readings on my screen so that I can catch problems as soon as they happen.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-14
+- As a farmer, I want to receive a warning when conditions become dangerous so that I can act before my crops are damaged.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-15
 
 #### Job Stories:
 
-- When soil moisture drops below a set threshold, I want the system to automatically activate irrigation so I can avoid crop stress without being on-site.
-- When temperature falls below 10°C or exceeds 35°C, I want the system to activate heating or ventilation automatically so I can protect my crops without manual intervention.
-- When humidity exceeds safe levels, I want the system to trigger ventilation so I can reduce disease risk without constant manual checks.
-- When CO₂ drops below optimal levels, I want the system to alert me so I can adjust enrichment and improve crop productivity.
-- When conditions change rapidly, I want the dashboard to refresh automatically so I can respond before crop damage occurs.
-- When a parameter exceeds a safe range, I want an immediate alert so I can intervene before plants are stressed.
+- When soil moisture drops below a set threshold, I want the system to automatically activate irrigation so I can avoid crop stress without being on-site.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-16
+- When temperature falls below 10°C or exceeds 35°C, I want the system to activate heating or ventilation automatically so I can protect my crops without manual intervention.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-17
+- When humidity exceeds safe levels, I want the system to trigger ventilation so I can reduce disease risk without constant manual checks.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-18
+- When CO₂ drops below optimal levels, I want the system to alert me so I can adjust enrichment and improve crop productivity.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-19
+- When conditions change rapidly, I want the dashboard to refresh automatically so I can respond before crop damage occurs.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-20
+- When a parameter exceeds a safe range, I want an immediate alert so I can intervene before plants are stressed.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-21
 ****
 
-### Automated Irrigation and Climate Control
+### Automated Irrigation and Climate Control false Microlab Jira 5b8ef41d-7a73-399f-9666-c949acb53653 GMS-2
 
 Stakeholder Requirement: The system should allow users to configure and schedule irrigation and climate parameters remotely, enabling fully autonomous greenhouse operation without requiring on-site presence.
 
 #### User Stories:
 
-- As a farmer, I want irrigation to follow a timed schedule so that my greenhouse can run for months without anyone on-site.
-- As a farmer, I want to define my own comfort zones for the greenhouse so that the system reacts according to my specific crop needs.
-- As a farmer, I want soil moisture to be the first thing shown on my dashboard so that I always know if my crops need water.
-- As a greenhouse owner abroad, I want to start watering from my browser so that I can react to unexpected dry spells even when I am not in the country.
-- As a farmer, I want irrigation to stop automatically when the soil is wet enough so that I do not waste water or damage the roots.
--  As a farmer, I want different alerts for heat and cold so that I know exactly what kind of problem I am dealing with. 
+- As a farmer, I want irrigation to follow a timed schedule so that my greenhouse can run for months without anyone on-site.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-22
+- As a farmer, I want to define my own comfort zones for the greenhouse so that the system reacts according to my specific crop needs.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-23
+- As a farmer, I want soil moisture to be the first thing shown on my dashboard so that I always know if my crops need water.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-24
+- As a greenhouse owner abroad, I want to start watering from my browser so that I can react to unexpected dry spells even when I am not in the country.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-25
+- As a farmer, I want irrigation to stop automatically when the soil is wet enough so that I do not waste water or damage the roots.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-26
+- As a farmer, I want different alerts for heat and cold so that I know exactly what kind of problem I am dealing with.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-27 
 
 #### Job Stories:
 
-- When I am abroad for extended periods, I want a timed irrigation schedule to run autonomously so I can keep the greenhouse operational without being on-site.
-- When I switch to a different crop, I want to reconfigure temperature and humidity ranges so I can adapt the system to new plant requirements.
-- When opening the dashboard, I want soil moisture to appear prominently so I can immediately see if irrigation is needed.
-- When I am outside the country for weeks, I want to remotely activate irrigation from my browser so I can respond to unexpected dry spells.
-- When soil reaches the target moisture level, I want irrigation to stop automatically so I can prevent over-watering and root damage.
-- When nighttime temperatures drop unexpectedly, I want a frost-specific alert separate from heat warnings so I can take the right corrective action.
+- When I am abroad for extended periods, I want a timed irrigation schedule to run autonomously so I can keep the greenhouse operational without being on-site.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-28
+- When I switch to a different crop, I want to reconfigure temperature and humidity ranges so I can adapt the system to new plant requirements.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-29
+- When opening the dashboard, I want soil moisture to appear prominently so I can immediately see if irrigation is needed.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-30
+- When I am outside the country for weeks, I want to remotely activate irrigation from my browser so I can respond to unexpected dry spells.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-31
+- When soil reaches the target moisture level, I want irrigation to stop automatically so I can prevent over-watering and root damage.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-32
+- When nighttime temperatures drop unexpectedly, I want a frost-specific alert separate from heat warnings so I can take the right corrective action.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-33
 ****
 
-### Web Dashboard & Mobile Accessibility
+### Web Dashboard & Mobile Accessibility false Microlab Jira 5b8ef41d-7a73-399f-9666-c949acb53653 GMS-3
 
 Stakeholder Requirement: The system should provide a browser-accessible, mobile-friendly dashboard with a clear and lightweight interface.
 
 #### User Stories:
 
-- As a greenhouse owner, I want to check my greenhouse from a browser on any device so that I am not tied to a specific phone or application.
-- As an operator, I want a simple overview page so that I can understand the state of my greenhouse at a glance.
-- As a small-scale farmer, I want the website to look and work well on my phone so that I do not need a computer to use the system.   
-- As a small-scale farmer using a mobile data plan, I want the website to be lightweight so that it does not consume too much data or load too slowly.
+- As a greenhouse owner, I want to check my greenhouse from a browser on any device so that I am not tied to a specific phone or application.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-34
+- As an operator, I want a simple overview page so that I can understand the state of my greenhouse at a glance.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-35
+- As a small-scale farmer, I want the website to look and work well on my phone so that I do not need a computer to use the system.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-36
 
 #### Job Stories:
 
-- When I am traveling, I want to access the dashboard from any browser so I can monitor my greenhouse without carrying specific hardware.
-- When checking greenhouse status quickly, I want a clear single-page overview so I can assess all critical conditions at a glance.
-- When checking the greenhouse on-the-go, I want the interface to be fully functional on my smartphone so I can manage everything without needing a computer.
-- When accessing the dashboard on a limited mobile data plan, I want pages to load quickly and consume minimal bandwidth so I can use the system cost-effectively.
+- When I am traveling, I want to access the dashboard from any browser so I can monitor my greenhouse without carrying specific hardware.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-37
+- When checking greenhouse status quickly, I want a clear single-page overview so I can assess all critical conditions at a glance.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-38
+- When checking the greenhouse on-the-go, I want the interface to be fully functional on my smartphone so I can manage everything without needing a computer.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-39
 ****
 
-### Alerts & Notifications
+### Alerts & Notifications false Microlab Jira 5b8ef41d-7a73-399f-9666-c949acb53653 GMS-4
 
 Stakeholder Requirement: The system should deliver timely alerts through SMS, push notifications, or on-screen warnings when thresholds are exceeded.
 
 #### User Stories:
 
-- As a farmer, I want to be notified on my phone when something goes wrong so that I can react even when I am away from the computer.
+- As a farmer, I want to be notified on my phone when something goes wrong so that I can react even when I am away from the computer.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-40
 
 #### Job Stories:
 
-- When a critical threshold is exceeded, I want a push notification on my phone so I can react immediately even when away from the site.
+- When a critical threshold is exceeded, I want a push notification on my phone so I can react immediately even when away from the site.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-41
 ****
 
-### Historical Data, Reports & Analytics
+### Historical Data, Reports & Analytics false Microlab Jira 5b8ef41d-7a73-399f-9666-c949acb53653 GMS-5
 
 Stakeholder Requirement: The system should store environmental history, visualize trends, and support data export for reporting and compliance.
 
 #### User Stories:
 
-- As a greenhouse operator, I want to see how conditions have changed over the past weeks and months so that I can make better planting and management decisions.
-- As a business owner, I want to download reports from the system so that I can share them with investors or agronomists.
-- As a business owner, I want to export sensor data to a spreadsheet so that I can share it with my agronomist or include it in business reports.
+- As a greenhouse operator, I want to see how conditions have changed over the past weeks and months so that I can make better planting and management decisions.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-42
+- As a business owner, I want to download reports from the system so that I can share them with investors or agronomists.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-43
+- As a business owner, I want to export sensor data to a spreadsheet so that I can share it with my agronomist or include it in business reports.falseMicrolab Jiraissuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolutionkey,summary,type,created,updated,due,assignee,reporter,priority,status,resolution5b8ef41d-7a73-399f-9666-c949acb53653GMS-44
 
 #### Job Stories:
 
-- When planning the next growing season, I want to review environmental trends from previous months so I can optimize conditions for better yield.
-- When meeting with investors or agronomists, I want to export a formatted data report so I can present evidence of system performance.
-- When preparing records for compliance or advisory meetings, I want to export sensor data to Excel or CSV so I can share it with agronomists or authorities.
+- When planning the next growing season, I want to review environmental trends from previous months so I can optimize conditions for better yield.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-49
+- When meeting with investors or agronomists, I want to export a formatted data report so I can present evidence of system performance.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-50
+- When preparing records for compliance or advisory meetings, I want to export sensor data to Excel or CSV so I can share it with agronomists or authorities.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-51
 ****
 
-### Connectivity & Network Reliability
+### Connectivity & Network Reliability false Microlab Jira 5b8ef41d-7a73-399f-9666-c949acb53653 GMS-6
 
 Stakeholder Requirement: The system must operate reliably over 4G/5G mobile networks and function on low-bandwidth connections.
 
 #### User Stories:
 
-- As a rural farmer, I want the system to work well over mobile internet so that I can use it without needing to install a wired connection at my greenhouse.
+- As a rural farmer, I want the system to work well over mobile internet so that I can use it without needing to install a wired connection at my greenhouse.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-52
 - As a small-scale farmer using a mobile data plan, I want the website to be lightweight so that it does not consume too much data or load too slowly.
 
 #### Job Stories:
@@ -171,7 +169,7 @@ Stakeholder Requirement: The system must operate reliably over 4G/5G mobile netw
 - When accessing the dashboard on a limited mobile data plan, I want pages to load quickly and consume minimal bandwidth so I can use the system cost-effectively.
 ****
 
-### Affordability & Cost Optimization
+### Affordability & Cost Optimization false Microlab Jira 5b8ef41d-7a73-399f-9666-c949acb53653 GMS-7
 
 Stakeholder Requirement: The system should be affordable for small-scale farmers and demonstrate measurable savings in water and energy costs.
 
@@ -179,36 +177,34 @@ Stakeholder Requirement: The system should be affordable for small-scale farmers
 
 - As a small farmer, I want a solution I can actually afford so that I do not need to take on significant financial risk to automate my greenhouse.
 - As an investor, I want to see proven reductions in operational costs so that I can evaluate the return on investment before committing funds.
-- As a business owner, I want the system to be cost-effective so that I can minimize operational expenses.
 
 #### Job Stories:
 
 - When deciding to invest in automation, I want transparent pricing and a cost estimate so I can assess whether the system fits my budget.
 - When reviewing operational results, I want measurable data on water and energy savings so I can calculate the return on investment.
-- When evaluating automation solutions, I want to ensure the system is affordable so I can justify the investment.
 ****
 
-### Multi-Site/ Multi-Zone Management
+### Multi-Site/ Multi-Zone Management false Microlab Jira 5b8ef41d-7a73-399f-9666-c949acb53653 GMS-8
 
 Stakeholder Requirement: The system should enable centralized monitoring and management of multiple greenhouse sites or zones, allowing users to compare performance data and allocate resources without visiting each location.
 
 #### User Stories:
 
-- As a large agricultural enterprise manager, I want a unified dashboard for all my greenhouse sites so that I can manage operations without visiting each location.
+- As a large agricultural enterprise manager, I want a unified dashboard for all my greenhouse sites so that I can manage operations without visiting each location.falseMicrolab Jiraissuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolutionkey,summary,type,created,updated,due,assignee,reporter,priority,status,resolution5b8ef41d-7a73-399f-9666-c949acb53653GMS-45
 
 #### Job Stories:
 
-- When managing multiple zones, I want to compare environmental data across sites so I can identify under-performance and allocate resources efficiently.
+- When managing multiple zones, I want to compare environmental data across sites so I can identify under-performance and allocate resources efficiently.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-46
 ****
 
-### Cybersecurity
+### Cybersecurity false Microlab Jira 5b8ef41d-7a73-399f-9666-c949acb53653 GMS-9
 
 Stakeholder Requirement: The system should ensure all cloud communications and actuator controls are protected through encryption and authentication mechanisms, preventing unauthorized access or manipulation by external parties.
 
 #### User Stories:
 
-- As a system administrator, I want all data transmissions encrypted so that unauthorized parties cannot access or manipulate greenhouse controls.
+- As a system administrator, I want all data transmissions encrypted so that unauthorized parties cannot access or manipulate greenhouse controls.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-47
 
 #### Job Stories:
 
-- When connecting the greenhouse controller to the cloud, I want secure authentication so I can prevent unauthorized access to critical actuator controls.
+- When connecting the greenhouse controller to the cloud, I want secure authentication so I can prevent unauthorized access to critical actuator controls.falseMicrolab Jira5b8ef41d-7a73-399f-9666-c949acb53653GMS-48
