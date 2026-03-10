@@ -12,12 +12,12 @@
 ```
 documentation/
   confluence_pages.json     ← page ID map + config (READ THIS FIRST)
-  CONFLUENCE_INDEX.md       ← human-readable link table
   cloud/                    ← auto-synced copies fetched from Confluence (do not manually edit)
   wip/                      ← files currently being actively worked on
-  WP*.md                    ← locally maintained documents
+  resources/                ← large local reference/learning materials (Markdown, not synced to Confluence)
 scripts/
   confluence_sync.py        ← sync tool (see below)
+  confluence_push.py        ← push local edits back to Confluence
 .env                        ← credentials (never commit)
 ```
 
@@ -38,7 +38,7 @@ scripts/
 
 **Rules:**
 - Only fetch pages with WP ≤ requested limit (e.g., `--up-to 4.2` fetches WP1.1 → 4.2, stops before 4.3)
-- Pages in ascending WP order: 1.1 → 2.1 → 3.1 → 3.2 → 3.3 → 3.4 → 4.1 → 4.2 → ...
+- Pages in ascending WP order: 1.1 → 2.1 → 3.1 → 3.2 → 3.3 → 3.4 → 4.1 → 4.2 → 4.3 → 5.1 → 5.2 → 5.3 → 5.4 → ...
 - Pages marked `"skip_fetch": true` are maintained locally; never overwrite from Confluence
 - Script auto-detects version changes via cache in `documentation/cloud/.cache/`
 
@@ -79,6 +79,6 @@ curl -s -u "$CONFLUENCE_USER:$CONFLUENCE_PASS" \
   "$CONFLUENCE_URL/rest/api/content/<PAGE_ID>?expand=body.storage"
 ```
 
-**Example:** `curl ... /rest/api/content/42634112?expand=body.storage` (WP4.3)
+**Example:** `curl ... /rest/api/content/42634150?expand=body.storage` (WP5.4)
 
 For automatic multi-page fetching with HTML→Markdown conversion, **use the sync script** (recommended).
