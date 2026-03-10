@@ -394,15 +394,15 @@ Cloud-based smart farming platforms such as AWS *IoT* Core, Microsoft Azure *IoT
 ### 4.2 Comparative Analysis Table
 
 The following comparative matrix evaluates the three categories of existing solutions across seven critical performance dimensions relevant to modern greenhouse automation.
-| Criterion | Microcontroller-Based Systems (Arduino/ESP) | Industrial Automation (PLC/SCADA) | Cloud-Based Smart Farming Platforms |
+| **Criterion** | **Microcontroller-Based Systems (Arduino/ESP)** | **Industrial Automation (PLC/SCADA)** | **Cloud-Based Smart Farming Platforms** |
 | --- | --- | --- | --- |
-| Real-Time Monitoring | Basic sensor polling; limited concurrent channels; data sent to cloud for visualization | Deterministic scan cycles (1-10 ms); high-speed I/O acquisition; local HMI displays | Cloud-dependent visualization (network latency); fog computing reduces delay but adds complexity |
-| PLC Usage | No PLC ; relies on microcontrollers ( Arduino Mega, NodeMCU ) with limited resources | Native PLC architecture ( IEC 61131-3 ); modular I/O expansion; industrial-grade processors | No PLC ; cloud computing handles data; edge devices only forward data |
-| Cloud Integration | ThingSpeak, Blynk, or Firebase via ESP8266 ; limited data retention/analytics | Traditionally limited; modern systems use OPC-UA gateways (requires add'l hardware) | Native cloud architecture; extensive APIs , ML services, and scalable storage |
-| Predictive Capability | Minimal; threshold-based alerts only | Advanced; MPC , ANN , fuzzy logic used (up to 30% energy savings) | Strong via cloud ML services ( SageMaker , Azure ML ); requires config/training data |
-| Industrial Reliability | Low; consumer-grade; no certifications; susceptible to EMI | High; ruggedized hardware; extended temperature range; certified EMC ; MTBF > 100,000 hours | Variable; depends on edge hardware quality; high cloud SLA (99.9%+) |
-| Scalability | Limited; constrained by microcontroller I/O/processing; hardware mods needed to add sensors | High; modular I/O expansion; distributed PLC networks; PROFINET/EtherCAT | Very high; cloud infrastructure scales automatically; minimal hardware provisioning for new sites |
-| Multi-Site Management | Not supported; standalone installations | Supported via SCADA but needs dedicated comms & significant config | Natively supported; cloud dashboards aggregate distributed data; hierarchical navigation |
+| **Real-Time Monitoring** | Basic sensor polling; limited concurrent channels; data sent to cloud for visualization | Deterministic scan cycles (1-10 ms); high-speed I/O acquisition; local *HMI* displays | Cloud-dependent visualization (network latency); fog computing reduces delay but adds complexity |
+| **PLC Usage** | No *PLC*; relies on microcontrollers (*Arduino Mega, NodeMCU*) with limited resources | Native *PLC* architecture (*IEC 61131-3*); modular I/O expansion; industrial-grade processors | No *PLC*; cloud computing handles data; edge devices only forward data |
+| **Cloud Integration** | *ThingSpeak, Blynk,* or *Firebase* via *ESP8266*; limited data retention/analytics | Traditionally limited; modern systems use *OPC-UA* gateways (requires add'l hardware) | Native cloud architecture; extensive *APIs*, *ML* services, and scalable storage |
+| **Predictive Capability** | Minimal; threshold-based alerts only | Advanced; *MPC*, *ANN*, fuzzy logic used (up to 30% energy savings) | Strong via cloud *ML* services (*SageMaker*, *Azure ML*); requires config/training data |
+| **Industrial Reliability** | Low; consumer-grade; no certifications; susceptible to *EMI* | High; ruggedized hardware; extended temperature range; certified *EMC*; *MTBF* > 100,000 hours | Variable; depends on edge hardware quality; high cloud *SLA* (99.9%+) |
+| **Scalability** | Limited; constrained by microcontroller I/O/processing; hardware mods needed to add sensors | High; modular I/O expansion; distributed *PLC* networks; *PROFINET/EtherCAT* | Very high; cloud infrastructure scales automatically; minimal hardware provisioning for new sites |
+| **Multi-Site Management** | Not supported; standalone installations | Supported via *SCADA* but needs dedicated comms & significant config | Natively supported; cloud dashboards aggregate distributed data; hierarchical navigation |
 
 ### 4.3 Key Findings and Identified Gaps
 

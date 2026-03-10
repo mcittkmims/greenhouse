@@ -20,6 +20,7 @@ Page IDs are read from documentation/confluence_pages.json.
 """
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -448,10 +449,13 @@ def main():
     pushed_version = result.get("version", {}).get("number", new_version)
     print(f"\nSUCCESS: WP{page_entry['wp']} pushed to Confluence (version {pushed_version})")
 
-    # Update local version cache
+    # Update local version cache and content hash
     cache_dir = ROOT / "documentation" / "cloud" / ".cache"
     cache_dir.mkdir(exist_ok=True)
     (cache_dir / f"{page_entry['local_file']}.version").write_text(str(pushed_version))
+    (cache_dir / f"{page_entry['local_file']}.hash").write_text(
+        hashlib.md5(local_path.read_bytes()).hexdigest()
+    )
     print(f"Updated version cache: version {pushed_version}")
 
 

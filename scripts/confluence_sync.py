@@ -21,6 +21,7 @@ Output dir:   documentation/cloud/
 """
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -334,8 +335,19 @@ def main():
         content = html_to_markdown(html)
         markdown = f"# {title}\n\n> Source: {base_url}/rest/api/content/{page['id']} | Version: {current_version}\n\n{content}\n"
 
+        # Conflict check: warn if local file was edited since last sync
+        hash_cache_path = cache_dir / f"{page['local_file']}.hash"
+        if not args.force and local_path.exists() and hash_cache_path.exists():
+            stored_hash = hash_cache_path.read_text().strip()
+            local_hash = hashlib.md5(local_path.read_bytes()).hexdigest()
+            if local_hash != stored_hash:
+                print(f"  CONFLICT  WP{page['wp']} — local file has uncommitted edits (Confluence: v{cached_version} → v{current_version})")
+                print(f"            Push your changes first, or use --force to discard local edits.")
+                continue
+
         local_path.write_text(markdown, encoding="utf-8")
         version_cache_path.write_text(current_version, encoding="utf-8")
+        hash_cache_path.write_text(hashlib.md5(markdown.encode()).hexdigest())
         print(f"  UPDATED WP{page['wp']} — {page['local_file']} (version {current_version})")
 
     print("\nSync complete.")

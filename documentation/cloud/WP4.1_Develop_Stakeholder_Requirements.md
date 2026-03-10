@@ -6,7 +6,7 @@
 
 ## Requirements
 
-| Category | Stakeholder Requirements | US(User Stories) | JS(Job Stories) |
+| **Category** | **Stakeholder Requirements** | **US(User Stories)** | **JS(Job Stories)** |
 | --- | --- | --- | --- |
 | Environmental Monitoring and Control | The system should monitor soil moisture in real time and trigger automated irrigation based on configurable thresholds. | As a farmer, I want the system to monitor soil moisture continuously so that my crops receive water only when needed. | When soil moisture drops below a set threshold, I want the system to automatically activate irrigation so I can avoid crop stress without being on-site. |
 | Environmental Monitoring and Control | The system must continuously monitor air temperature and trigger heating or ventilation actuators when thresholds are exceeded. | As a greenhouse operator, I want real-time temperature monitoring so that I can prevent crop damage from overheating or frost. | When temperature falls below 10°C or exceeds 35°C, I want the system to activate heating or ventilation automatically so I can protect my crops without manual intervention. |

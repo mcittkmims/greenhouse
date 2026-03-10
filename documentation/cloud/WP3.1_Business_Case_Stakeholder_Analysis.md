@@ -119,7 +119,7 @@ The **Monitor** quadrant represents stakeholders with low power and low direct i
 ## Stakeholder Description
 
 The stakeholder table provides a structured overview of all relevant actors involved in or affected by the greenhouse automation system, clearly defining their roles, reasons for inclusion, and levels of interest and influence. Primary users and the technical team demonstrate both high interest and high influence, as system reliability directly impacts agricultural productivity and operational performance. Government and institutions hold significant influence due to their regulatory authority and ability to support large-scale adoption through policy and funding mechanisms. Business and commercial partners contribute essential infrastructure, financial resources, and technological components necessary for implementation and scalability. Consumers are identified as indirect stakeholders with low influence, benefiting from improved food quality and sustainability outcomes without directly affecting project decisions.
-| Stakeholder Group | Stakeholder | Role in Project | Reason for Inclusion | Level of Interest | Level of Influence |
+| StakeholderGroup | Stakeholder | Role in Project | Reason for Inclusion | Level of Interest | Level of Influence |
 | --- | --- | --- | --- | --- | --- |
 | Primary Users | Farmers (Small & Large-scale) | Use the system for irrigation, climate control, and crop stress monitoring | Their productivity and income depend directly on system performance | High | High |
 | Primary Users | Greenhouse Operators | Monitor environmental parameters and manage daily operations | They are responsible for daily system operation and crop management | High | High |

@@ -2,16 +2,16 @@
 
 > Source: http://confluence.microlab.club/rest/api/content/42634074 | Version: 5
 
-| Field | Detail |
+| **Field** | **Detail** |
 | --- | --- |
-| Project Name | Greenhouse Management System (GMS) |
-| Document Version | 1.0 |
-| Course / Institution | PBL IoT - Technical University of Moldova (UTM) |
-| Supervisor | Andrei Bragarenco |
-| Team | Team 04-GMS (5 members) |
-| Date | February 26, 2026 |
-| Target Completion | June 2026 |
-| Status | Initiation - Awaiting Authorization |
+| **Project Name** | Greenhouse Management System (GMS) |
+| **Document Version** | 1.0 |
+| **Course / Institution** | PBL IoT - Technical University of Moldova (UTM) |
+| **Supervisor** | Andrei Bragarenco |
+| **Team** | Team 04-GMS (5 members) |
+| **Date** | February 26, 2026 |
+| **Target Completion** | June 2026 |
+| **Status** | Initiation - Awaiting Authorization |
 ****
 
 ### Executive Summary
@@ -34,7 +34,7 @@ Farmers and greenhouse operators often face difficulties in maintaining stable e
 
 ### Project Objectives
 
-| # | Objective | Metric | Target | Date |
+| **#** | **Objective** | **Metric** | **Target** | **Date** |
 | --- | --- | --- | --- | --- |
 | O1 | Deploy real-time sensor network (soil moisture, temp, humidity, CO₂, light) | All 5 parameters at ≤ 60 s intervals | ≥ 60s | Apr 2026 |
 | O2 | Automate irrigation via soil moisture thresholds | ≥ 30% water reduction vs. manual baseline | ≥30% | Apr 2026 |
@@ -69,43 +69,43 @@ Farmers and greenhouse operators often face difficulties in maintaining stable e
 
 ### Deliverables, Milestones & Timeline
 
-| Work Package | Deliverable | Status | Target |
+| **Work Package** | **Deliverable** | **Status** | **Target** |
 | --- | --- | --- | --- |
-| Problem Definition | Problem Definition Report | 10 complete Complete | Feb 2026 |
-| Technology Research | Technology Research Report | 11 complete Complete | Feb 2026 |
-| Business Research | Business Case, Stakeholder Analysis, Survey Report, Project Charter | 12 complete Complete | Feb 2026 |
-| Stakeholder Req. | Stakeholder Requirements Document | 13 incomplete Complete | Mar 2026 |
-| System Requirements | SRS, use cases, acceptance criteria | 14 incomplete Complete | Mar 2026 |
-| System Architecture | Architecture document, data flows, I/O mapping, API & DB design | 15 incomplete Complete | Mar-Apr 2026 |
-| Implementation | Integrated system prototype (edge + cloud + dashboard MVP) | 16 incomplete Complete | Apr-May 2026 |
-| Edge Computing | PLC firmware: PID loops, alarm logic, sensor integration, offline autonomy | 17 incomplete Complete | May 2026 |
-| Cloud Computing | Time-series DB, MQTT broker, analytics pipeline, remote dashboard | 18 incomplete Complete | May 2026 |
+| **Problem Definition** | Problem Definition Report | 10 complete Complete | Feb 2026 |
+| **Technology Research** | Technology Research Report | 11 complete Complete | Feb 2026 |
+| **Business Research** | Business Case, Stakeholder Analysis, Survey Report, Project Charter | 12 complete Complete | Feb 2026 |
+| **Stakeholder Req.** | Stakeholder Requirements Document | 13 incomplete Complete | Mar 2026 |
+| **System Requirements** | SRS, use cases, acceptance criteria | 14 incomplete Complete | Mar 2026 |
+| **System Architecture** | Architecture document, data flows, I/O mapping, API & DB design | 15 incomplete Complete | Mar-Apr 2026 |
+| **Implementation** | Integrated system prototype (edge + cloud + dashboard MVP) | 16 incomplete Complete | Apr-May 2026 |
+| **Edge Computing** | PLC firmware: PID loops, alarm logic, sensor integration, offline autonomy | 17 incomplete Complete | May 2026 |
+| **Cloud Computing** | Time-series DB, MQTT broker, analytics pipeline, remote dashboard | 18 incomplete Complete | May 2026 |
 ****
 
 ### Stakeholders
 
-| Engagement Level | Stakeholders & Rationale |
+| **Engagement Level** | **Stakeholders & Rationale** |
 | --- | --- |
-| Manage Closely | Farmers, Greenhouse Operators, Dev Team (Embedded + IoT + Frontend), Investors - direct operational/financial dependence; active sprint collaboration and pilot participation. |
-| Keep Satisfied | Ministry of Agriculture, Agricultural Agencies, HW Suppliers, Cloud Providers - regulatory authority and infrastructure influence; periodic updates and compliance alignment. |
-| Keep Informed | Technical University of Moldova (TUM) - research validation, no executive authority; academic reporting. |
-| Monitor | Consumers - indirect beneficiaries; general awareness only. |
+| **Manage Closely** | Farmers, Greenhouse Operators, Dev Team (Embedded + IoT + Frontend), Investors - direct operational/financial dependence; active sprint collaboration and pilot participation. |
+| **Keep Satisfied** | Ministry of Agriculture, Agricultural Agencies, HW Suppliers, Cloud Providers - regulatory authority and infrastructure influence; periodic updates and compliance alignment. |
+| **Keep Informed** | Technical University of Moldova (TUM) - research validation, no executive authority; academic reporting. |
+| **Monitor** | Consumers - indirect beneficiaries; general awareness only. |
 ****
 
 ### Budget Estimate
 
-| Category | Range |
+| **Category** | **Range** |
 | --- | --- |
 | Hardware (PLC, sensors, actuators, UPS, enclosures) | ~800-2,000 EUR |
 | Cloud infrastructure (DB, Server) | ~100-400 EUR |
 | Connectivity (4G modem + SIM) | ~50-150 EUR |
 | Miscellaneous (installation, tools, contingency) | ~100-500 EUR |
-| TOTAL | ~1,050-3,050 EUR |
+| **TOTAL** | ~1,050-3,050 EUR |
 ****
 
 ### Key Risks & Mitigation Strategies
 
-| Risk | Mitigation |
+| **Risk** | **Mitigation** |
 | --- | --- |
 | Hardware procurement delays | Obtain critical components early and qualify backup suppliers to prevent pipeline blocks. |
 | Connectivity instability at pilot site | Implement edge computing solutions for local data buffering and autonomous control during network loss. |
@@ -137,7 +137,7 @@ Farmers and greenhouse operators often face difficulties in maintaining stable e
 ### Authorization
 
 By signing, the undersigned formally authorize the GMS project to proceed as defined in this charter.
-| Role | Name | Signature | Date |
+| **Role** | **Name** | **Signature** | **Date** |
 | --- | --- | --- | --- |
 | Academic Supervisor | Andrei Bragarenco |  |  |
 | Team Lead | Victoria Mutruc |  |  |

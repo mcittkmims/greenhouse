@@ -60,7 +60,7 @@ The survey reached a diverse cross-section of the identified stakeholder tiers. 
 
 *Figure 1 — Distribution of respondents by activity category (18 responses)*
 
-| Parameter / Question | Result |
+| **Parameter / Question** | **Result** |
 | --- | --- |
 | Small-scale Farmers | 9 respondents (50.0%) |
 | Large Agricultural Enterprise Representatives | 3 respondents (16.7%) |
@@ -76,7 +76,7 @@ Respondents manage a wide range of greenhouse sizes, from as small as 12 m² to 
 ## 5.3 Environmental Parameter Priority (Rating Scale 1–5)
 
 Respondents rated the criticality of real-time monitoring for four environmental parameters on a scale from 1 (not important) to 5 (very important). The results are presented below, sorted by average score:
-| Parameter / Question | Result |
+| **Parameter / Question** | **Result** |
 | --- | --- |
 | Soil Moisture | Avg. 4.83 / 5.00 |
 | Air Temperature | Avg. 4.61 / 5.00 |
@@ -91,7 +91,7 @@ This data directly validates the sensor selection in WP2.1: prioritizing soil mo
 Understanding connectivity is critical to validating the GMS cloud architecture. The survey asked whether a stable internet connection exists at the greenhouse location.
 
 *Figure 2 — Internet connectivity type available at greenhouse locations (18 responses)*
-| Parameter / Question | Result |
+| **Parameter / Question** | **Result** |
 | --- | --- |
 | Cable / Wi-Fi (fixed broadband) | 6 respondents (33.3%) |
 | Mobile Data (4G/5G) | 10 respondents (55.6%) |
@@ -109,7 +109,7 @@ Implications for the GMS architecture:
 This question directly informs the UI/UX design and notification architecture of the GMS dashboard and alerting subsystem.
 
 *Figure 3 — Preferred method for receiving system alerts (18 responses)*
-| Parameter / Question | Result |
+| **Parameter / Question** | **Result** |
 | --- | --- |
 | Dedicated Mobile Application (Dashboard) | 12 respondents (66.7%) |
 | SMS / Push Notification | 5 respondents (27.8%) |
@@ -121,7 +121,7 @@ This finding validates the development of a cloud-connected mobile dashboard as 
 ## 5.6 Perceived Economic Value of Full Irrigation Automation
 
 Respondents rated the economic value that full automation of irrigation would bring to their operations on a scale of 1–5.
-| Parameter / Question | Result |
+| **Parameter / Question** | **Result** |
 | --- | --- |
 | Score 5 (Maximum economic value) | 13 respondents (72.2%) |
 | Score 4 (High value) | 4 respondents (22.2%) |
@@ -138,7 +138,7 @@ This finding provides strong validation for automated irrigation as a core GMS f
 ## 6.1 Most Frequent Production-Impacting Incidents
 
 Respondents were asked to describe the most frequent incident that currently affects their greenhouse production. Responses were translated and categorized into recurring themes:
-| Parameter / Question | Result |
+| **Parameter / Question** | **Result** |
 | --- | --- |
 | Drought / Soil Moisture Deficit | 7 mentions (~39%) |
 | Temperature Extremes (overheating / night cold) | 4 mentions (~22%) |

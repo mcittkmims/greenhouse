@@ -11,6 +11,10 @@
     { "wp": "3.4", "id": "42634074", "local_file": "WP3.4_Project_Charter.md" },
     { "wp": "4.1", "id": "42634110", "local_file": "WP4.1_Develop_Stakeholder_Requirements.md" },
     { "wp": "4.2", "id": "42634111", "local_file": "WP4.2_Analyze_Stakeholder_Requirements.md" },
-    { "wp": "4.3", "id": "42634112", "local_file": "WP4.3_Import_Stakeholder_Requirements_in_Jira.md" }
+    { "wp": "4.3", "id": "42634112", "local_file": "WP4.3_Import_Stakeholder_Requirements_in_Jira.md" },
+    { "wp": "5.1", "id": "42634147", "local_file": "WP5.1_Analyze_Stakeholder_Requirements.md" },
+    { "wp": "5.2", "id": "42634148", "local_file": "WP5.2_Develop_System_Requirements.md" },
+    { "wp": "5.3", "id": "42634149", "local_file": "WP5.3_Ensure_Requirements_Traceability.md" },
+    { "wp": "5.4", "id": "42634150", "local_file": "WP5.4_Review_and_Release_System_Requirements.md" }
   ]
 }
