@@ -7,6 +7,8 @@ source: http://confluence.microlab.club/rest/api/content/42633962
 
 = [WP1.1 Problem Definition](http://confluence.microlab.club/display/PBL25/WP1.1+Problem+Definition)
 
+{br}
+
 *Keywords: *Agricultural data collection, Agricultural automation, Smart greenhouse technology, Environmental monitoring, IoT sensors, Real-time monitoring, Resource efficiency, Greenhouse management, Environmental control system, Smart farming, Cloud data storage 
 
 == Problem Definition
@@ -21,3 +23,5 @@ Farmers and greenhouse operators often face difficulties in maintaining stable e
 - *Multi-Site Management Complexity:* Farmers managing multiple greenhouses cannot physically monitor all locations simultaneously, resulting in uneven attention and sub-optimal performance across facilities.
 - *Extreme Weather Vulnerability:* Abrupt and increasing frequency of heatwaves, cold snaps, and storms overwhelm manual response capabilities, causing crop losses, as farmers cannot react fast enough to protect the plantations.
 - *Limited Predictive Capability:* Without historical environmental data linked to crop outcomes, farm workers cannot identify suitable growing patterns or predict the yield, making plannings for the future uncertain.
+
+{br}

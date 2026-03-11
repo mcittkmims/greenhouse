@@ -501,3 +501,7 @@ Stakeholder Requirement: The system should ensure all cloud communications and a
 ==== Job Stories:
 
 - When connecting the greenhouse controller to the cloud, I want secure authentication so I can prevent unauthorized access to critical actuator controls.{jira:GMS-48}
+
+{br}
+
+{br}

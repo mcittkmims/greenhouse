@@ -14,6 +14,9 @@ Usage:
     python3 scripts/jira/jira_board_server.py bulk-comment --text "Reviewed" GMS-35 GMS-36
     python3 scripts/jira/jira_board_server.py create --issue-type Task --summary "New task"
     python3 scripts/jira/jira_board_server.py users --query "Adrian Vremere"
+    python3 scripts/jira/jira_board_server.py list --assignee adrian.vremere
+    python3 scripts/jira/jira_board_server.py list --assignee adrian.vremere --status Backlog
+    python3 scripts/jira/jira_board_server.py list --status "In Work"
 
 Open http://127.0.0.1:8765/ while the server runs.
 """
@@ -95,6 +98,28 @@ class JiraBoardHandler(BaseHTTPRequestHandler):
         except Exception as exc:
             status, payload = json_error_from_exception(exc)
             self.send_json(status, payload)
+
+
+def cmd_list(client, args):
+    issues = client.fetch_all_issues()
+    for issue in issues:
+        fields = issue.get("fields", {})
+        assignee = fields.get("assignee") or {}
+        status = fields.get("status", {}).get("name", "")
+        issue_type = fields.get("issuetype", {}).get("name", "")
+        if args.assignee and assignee.get("name") != args.assignee:
+            continue
+        if args.status and status.lower() != args.status.lower():
+            continue
+        if args.type and issue_type.lower() != args.type.lower():
+            continue
+        print(json.dumps({
+            "key": issue.get("key"),
+            "summary": fields.get("summary"),
+            "status": status,
+            "type": issue_type,
+            "assignee": assignee.get("name"),
+        }, ensure_ascii=True))
 
 
 def cmd_users(client, args):
@@ -279,6 +304,11 @@ def build_parser():
     create.add_argument("--parent", help="Parent issue key")
     create.add_argument("--project", help="Project key, defaults to board project")
 
+    list_cmd = subparsers.add_parser("list", help="List board issues with optional filters")
+    list_cmd.add_argument("--assignee", help="Filter by Jira username")
+    list_cmd.add_argument("--status", help="Filter by status name (e.g. Backlog, 'In Work', Proposed)")
+    list_cmd.add_argument("--type", help="Filter by issue type (e.g. 'User Story', 'Job Story', Task)")
+
     return parser
 
 
@@ -316,6 +346,8 @@ def main():
         cmd_bulk_comment(client, args)
     elif args.command == "create":
         cmd_create(client, args)
+    elif args.command == "list":
+        cmd_list(client, args)
     else:
         parser.error(f"Unknown command: {args.command}")
 

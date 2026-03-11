@@ -320,8 +320,7 @@ The web and mobile interfaces extend the local *HMI* functionality by enabling r
 
 ===== *Data graphs*
 
-Historical data visualization is a core feature of the web/mobile UI, supporting analysis of greenhouse performance and optimization of control strategies. In the commercial greenhouse project, *Grafana* is integrated as a monitoring add‑on to present time series charts of sensor values and actuator behavior for all sectors, enabling the operator to study trends and detect deviations in temperature, humidity, and other parameters {link anchor=ref32}ref32{/link}. The *Agri Smart Greenhouse* system similarly provides real-time mobile dashboards and offers the option to download historical measurement data for further analysis, combining numerical values with visual representations in the app {link anchor=ref33}ref33{/link}.**
-**
+Historical data visualization is a core feature of the web/mobile UI, supporting analysis of greenhouse performance and optimization of control strategies. In the commercial greenhouse project, *Grafana* is integrated as a monitoring add‑on to present time series charts of sensor values and actuator behavior for all sectors, enabling the operator to study trends and detect deviations in temperature, humidity, and other parameters {link anchor=ref32}ref32{/link}. The *Agri Smart Greenhouse* system similarly provides real-time mobile dashboards and offers the option to download historical measurement data for further analysis, combining numerical values with visual representations in the app {link anchor=ref33}ref33{/link}.**{br}**
 
 ===== *Multi-site overview*
 
@@ -492,7 +491,7 @@ In conclusion, the convergence of industrial automation, *IoT* sensor networks, 
 
 This report is based on publicly available research and technical sources. AI tools were used to help organize and summarize the information. The conclusions presented are drawn from these sources and should be viewed in the context of ongoing developments in agricultural automation.
 
-**6. Bibliography**
+{br}**6. Bibliography**
 
 {anchor:ref1}[1] FAO, “The future of food and agriculture,” 2017.Accessed: Feb. 10, 2026. [Online] Available: [https://openknowledge.fao.org/server/api/core/bitstreams/2e90c833-8e84-46f2-a675-ea2d7afa4e24/content](https://openknowledge.fao.org/server/api/core/bitstreams/2e90c833-8e84-46f2-a675-ea2d7afa4e24/content)
 
@@ -585,5 +584,15 @@ This report is based on publicly available research and technical sources. AI to
 {anchor:ref45}[45] A. Bragarenco and G. Marusic, “Layered architecture for IoT‑based industrial automation systems,” in Proc. IEEE Int. Conf. System Theory, Control and Computing (ICSTCC), 2020, pp. 540–545. [Online]. Available: [https://repository.utm.md/bitstream/handle/5014/25654/Conf-IEEE-ICSTCC‑2020‑p540‑545.pdf](https://repository.utm.md/bitstream/handle/5014/25654/Conf-IEEE-ICSTCC‑2020‑p540‑545.pdf). Accessed: Feb. 15, 2026.
 
 {anchor:ref46}[46] R. Rayhana, G. Xiao, and Z. Liu, “Internet of Things empowered smart greenhouse farming,” *IEEE Journal of Radio Frequency Identification*, vol. 4, no. 4, pp. 195–211, 2020, doi: 10.1109/JRFID.2020.2984391.
+
+{br}
+
+{br}
+
+{br}
+
+{br}
+
+{br}
 
 ‌

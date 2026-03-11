@@ -125,6 +125,8 @@ Strong coordination among stakeholders supports system reliability, secure cloud
 
 **Consumers** - They benefit from improved food safety, consistent product quality, and environmentally responsible production methods.
 
+{br}
+
 == *Stakeholder Map*
 
 A stakeholder map is a visual tool used to categorize and prioritize stakeholders based on their level of power and interest in a project. It helps project teams understand which stakeholders require close collaboration and which require minimal engagement. Stakeholder mapping is part of the stakeholder analysis process. And of course, stakeholder analysis is often part of the stakeholder planning, stakeholder assessment, stakeholder engagement, and stakeholder management processes [1]. By structuring stakeholders into clear categories, organizations can allocate communication efforts efficiently and reduce project risks.
@@ -255,6 +257,8 @@ Group{/th}
 
 The stakeholder mapping rationale clarifies why each actor is positioned within a specific quadrant of the Power-Interest matrix. Primary users and the technical team are placed in the “Manage Closely” category because system performance directly impacts their operations and responsibilities. Government and Institutional bodies and key suppliers are classified under “Keep Satisfied” due to their regulatory authority and infrastructure influence, even though they are not involved in daily activities. Research institutions are kept informed to support validation and innovation, while consumers are monitored as indirect beneficiaries with limited decision-making power.
 
+{br}
+
 {table width=40.0% class="relative-table wrapped"}
 {colgroup}
 {col style="width: 21.6327%;"}
@@ -362,4 +366,8 @@ This report is based on publicly available research and technical sources. AI to
 
 {anchor:ref10}[10] Sagheer, Alaa, et al. “A Cloud-Based IoT Platform for Precision Control of Soilless Greenhouse Cultivation.” *Sensors*, vol. 21, no. 1, 31 Dec. 2020, p. 223, [https://doi.org/10.3390/s21010223](https://doi.org/10.3390/s21010223).
 
-{anchor:ref11}[11] Bersani, Chiara, et al. “Internet of Things Approaches for Monitoring and Control of Smart Greenhouses in Industry 4.0.” *Energies*, vol. 15, no. 10, 23 May 2022, p. 3834, [https://doi.org/10.3390/en15103834](https://doi.org/10.3390/en15103834).
+{anchor:ref11}[11] Bersani, Chiara, et al. “Internet of Things Approaches for Monitoring and Control of Smart Greenhouses in Industry 4.0.” *Energies*, vol. 15, no. 10, 23 May 2022, p. 3834, [https://doi.org/10.3390/en15103834](https://doi.org/10.3390/en15103834). 
+
+{br}
+
+{br}

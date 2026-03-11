@@ -82,6 +82,8 @@ Only Jira content and automation live under `documentation/jira/` and `scripts/j
 
 Use that script both for the local interactive board server and direct Jira automation commands such as assignee changes, comments, issue updates, moves, and issue creation.
 
+**Agent rule:** Always prefer the built-in CLI commands (`jira_board_server.py`, `confluence_sync.py`, `confluence_push.py`) over writing inline Python. Only write custom Python when the built-in scripts provably do not support the required operation. Check available subcommands with `--help` before resorting to custom code.
+
 ---
 
 ## Syncing Documentation

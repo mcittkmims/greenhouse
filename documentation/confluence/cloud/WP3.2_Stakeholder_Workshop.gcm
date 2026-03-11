@@ -5,8 +5,7 @@ version: 5
 source: http://confluence.microlab.club/rest/api/content/42634063
 ---
 
-== **1. Interview purpose
-**
+== **1. Interview purpose{br}**
 
 The primary objective of these stakeholder interviews was to gather in-depth, real-world insights relevant to the design and implementation of an IoT-based Greenhouse Management System for the Technical University of Moldova (UTM) campus greenhouse.
 
@@ -21,8 +20,7 @@ The specific objectives of these interviews were to:
 
 The insights gathered from these interviews directly informed the project's technical requirements, system architecture decisions, and the prioritization of features in the development roadmap.
 
-== **2. Key Interview Questions
-**
+== **2. Key Interview Questions{br}**
 
 The following structured question sets were prepared prior to the interviews. Questions were tailored to each stakeholder's role and expertise. Interviewers were instructed to remain flexible and allow the conversation to naturally explore relevant tangents while ensuring core topics were covered.
 
@@ -149,4 +147,4 @@ The Teams recording of the expert interview was transcribed using Teams' built-i
 
 **Interviewer (Daniel):** Alright, I think we've covered the main questions. Any final suggestions?
 
-**Andrei Bragarenco:** I'll be honest — I want to look at everything you've done but haven't found the time yet. But what I want from you this week: get your hands on the equipment. Go to the greenhouse, look at what's installed, study the hardware, start researching what sensors are being used. And start a basic setup — something that collects data and sends a control signal back. Even if it's not installed in the actual greenhouse yet, get that loop working. You have two weeks. You're not starting from zero — everything is already there. There's also Radu at the club, he's been our hardware mentor, he can walk you through everything. Go find him. Good luck.
+**Andrei Bragarenco:** I'll be honest — I want to look at everything you've done but haven't found the time yet. But what I want from you this week: get your hands on the equipment. Go to the greenhouse, look at what's installed, study the hardware, start researching what sensors are being used. And start a basic setup — something that collects data and sends a control signal back. Even if it's not installed in the actual greenhouse yet, get that loop working. You have two weeks. You're not starting from zero — everything is already there. There's also Radu at the club, he's been our hardware mentor, he can walk you through everything. Go find him. Good luck.{br}{br}{br}
