@@ -3,8 +3,8 @@
 confluence_sync.py — Fetch GMS Confluence pages and update local markdown files.
 
 Usage:
-    python3 scripts/confluence_sync.py --up-to 4.2
-    python3 scripts/confluence_sync.py --up-to 3.3 --dry-run
+    python3 scripts/confluence/confluence_sync.py --up-to 4.2
+    python3 scripts/confluence/confluence_sync.py --up-to 3.3 --dry-run
 
 Options:
     --up-to X.Y     Fetch all pages with WP number <= X.Y (in ascending order)
@@ -16,8 +16,8 @@ Credentials are read from .env in the workspace root:
     CONFLUENCE_PASS=...
     CONFLUENCE_URL=http://confluence.microlab.club
 
-Pages config: documentation/confluence_pages.json
-Output dir:   documentation/cloud/
+Pages config: documentation/confluence/confluence_pages.json
+Output dir:   documentation/confluence/cloud/
 """
 
 import argparse
@@ -35,7 +35,7 @@ except ImportError:
     sys.exit(1)
 
 
-ROOT = Path(__file__).parent.parent
+ROOT = Path(__file__).parent.parent.parent
 
 
 # ---------------------------------------------------------------------------
@@ -60,6 +60,9 @@ class ConfluenceHTMLParser(HTMLParser):
         self._list_depth = 0
         self._in_heading = 0
         self._heading_text = []
+        self._in_jira_macro = False
+        self._jira_params = {}
+        self._current_jira_param = None
 
     # -- helpers --
 
@@ -148,6 +151,13 @@ class ConfluenceHTMLParser(HTMLParser):
                 self._current_cell.append("*")
             else:
                 self.output.append("*")
+        elif tag == "ac:structured-macro":
+            if attrs_dict.get("ac:name") == "jira":
+                self._in_jira_macro = True
+                self._jira_params = {}
+                self._current_jira_param = None
+        elif tag == "ac:parameter" and self._in_jira_macro:
+            self._current_jira_param = attrs_dict.get("ac:name")
 
     def handle_endtag(self, tag):
         tag = tag.lower()
@@ -199,9 +209,30 @@ class ConfluenceHTMLParser(HTMLParser):
                 self._current_cell.append("*")
             else:
                 self.output.append("*")
+        elif tag == "ac:structured-macro" and self._in_jira_macro:
+            key = self._jira_params.get("key", "")
+            if key:
+                text = f"[{key}](../../jira/board.html#{key.lower()})"
+                if self._in_table:
+                    self._current_cell.append(text)
+                elif self._in_heading:
+                    self._heading_text.append(text)
+                else:
+                    self.output.append(text)
+            self._in_jira_macro = False
+            self._jira_params = {}
+            self._current_jira_param = None
+        elif tag == "ac:parameter" and self._in_jira_macro:
+            self._current_jira_param = None
 
     def handle_data(self, data):
         if self._skip_depth:
+            return
+        if self._in_jira_macro:
+            if self._current_jira_param is not None:
+                self._jira_params[self._current_jira_param] = (
+                    self._jira_params.get(self._current_jira_param, "") + data
+                )
             return
         if self._in_heading:
             self._heading_text.append(data)
@@ -244,7 +275,7 @@ def load_env():
 
 
 def load_config():
-    config_path = ROOT / "documentation" / "confluence_pages.json"
+    config_path = ROOT / "documentation" / "confluence" / "confluence_pages.json"
     if not config_path.exists():
         print(f"ERROR: Config not found at {config_path}")
         sys.exit(1)
@@ -284,7 +315,7 @@ def main():
     config = load_config()
     auth = (env["CONFLUENCE_USER"], env["CONFLUENCE_PASS"])
     base_url = env.get("CONFLUENCE_URL", config["base_url"])
-    out_dir = ROOT / "documentation" / "cloud"
+    out_dir = ROOT / "documentation" / "confluence" / "cloud"
     cache_dir = out_dir / ".cache"
     out_dir.mkdir(parents=True, exist_ok=True)
     cache_dir.mkdir(parents=True, exist_ok=True)

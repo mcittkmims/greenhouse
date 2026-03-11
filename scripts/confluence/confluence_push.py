@@ -7,16 +7,16 @@ changed, then converts the local Markdown to Confluence storage format
 and updates the page via the REST API.
 
 Usage:
-    python3 scripts/confluence_push.py --file WP4.2_Analyze_Stakeholder_Requirements.md
-    python3 scripts/confluence_push.py --file WP4.2_Analyze_Stakeholder_Requirements.md --dry-run
+    python3 scripts/confluence/confluence_push.py --file WP4.2_Analyze_Stakeholder_Requirements.md
+    python3 scripts/confluence/confluence_push.py --file WP4.2_Analyze_Stakeholder_Requirements.md --dry-run
 
 Options:
-    --file FILE     Filename to push (looks in documentation/cloud/ and documentation/wip/)
+    --file FILE     Filename to push (looks in documentation/confluence/cloud/ and documentation/confluence/wip/)
     --dry-run       Show diff and converted content without pushing
     --no-confirm    Skip confirmation prompt (auto-confirm push)
 
 Credentials are read from .env in the workspace root.
-Page IDs are read from documentation/confluence_pages.json.
+Page IDs are read from documentation/confluence/confluence_pages.json.
 """
 
 import argparse
@@ -34,7 +34,10 @@ except ImportError:
     print("ERROR: 'requests' not installed. Run: pip3 install requests")
     sys.exit(1)
 
-ROOT = Path(__file__).parent.parent
+ROOT = Path(__file__).parent.parent.parent
+
+_jira_server = ""
+_jira_server_id = ""
 
 # Import html_to_markdown from the sync script
 sys.path.insert(0, str(Path(__file__).parent))
@@ -49,8 +52,30 @@ def _escape_xhtml(text):
     return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
 
 
+def _jira_macro(key):
+    """Generate a Confluence Jira macro for the given issue key."""
+    parts = []
+    if _jira_server:
+        parts.append(f'<ac:parameter ac:name="server">{_escape_xhtml(_jira_server)}</ac:parameter>')
+    if _jira_server_id:
+        parts.append(f'<ac:parameter ac:name="serverId">{_jira_server_id}</ac:parameter>')
+    parts.append(f'<ac:parameter ac:name="key">{_escape_xhtml(key)}</ac:parameter>')
+    return f'<ac:structured-macro ac:name="jira" ac:schema-version="1">{"" .join(parts)}</ac:structured-macro>'
+
+
 def _inline_markup(text):
     """Convert inline Markdown (bold, italic, inline code) to XHTML."""
+    # Jira issue links: [KEY](jira:KEY) or local board.html links → Confluence Jira macro
+    _jira_placeholders = []
+    def _replace_jira(m):
+        idx = len(_jira_placeholders)
+        _jira_placeholders.append(_jira_macro(m.group(1)))
+        return f"\x00JIRA{idx}\x00"
+    text = re.sub(
+        r'\[([A-Z][A-Z0-9]*-\d+)\]\((?:jira:[A-Z][A-Z0-9]*-\d+|[^)]*jira/board\.html[^)]*)\)',
+        _replace_jira, text
+    )
+
     # Extract markup spans before escaping so < > inside plain text are escaped
     # but markers like ** and * are handled first.
     # Bold+italic: ***text***
@@ -76,6 +101,9 @@ def _inline_markup(text):
             result.append(s[i])
             i += 1
         return ''.join(result)
+    # Restore Jira macro placeholders
+    for i, macro in enumerate(_jira_placeholders):
+        text = text.replace(f"\x00JIRA{i}\x00", macro)
     return text
 
 
@@ -254,7 +282,7 @@ def load_env():
 
 
 def load_config():
-    config_path = ROOT / "documentation" / "confluence_pages.json"
+    config_path = ROOT / "documentation" / "confluence" / "confluence_pages.json"
     if not config_path.exists():
         print(f"ERROR: Config not found at {config_path}")
         sys.exit(1)
@@ -273,7 +301,7 @@ def find_page_entry(config, filename):
 def find_local_file(filename):
     """Locate the file in cloud/ only."""
     basename = Path(filename).name
-    p = ROOT / "documentation" / "cloud" / basename
+    p = ROOT / "documentation" / "confluence" / "cloud" / basename
     return p if p.exists() else None
 
 
@@ -349,11 +377,16 @@ def main():
     auth = (env["CONFLUENCE_USER"], env["CONFLUENCE_PASS"])
     base_url = env.get("CONFLUENCE_URL", config["base_url"])
 
+    jira_cfg = config.get("jira", {})
+    global _jira_server, _jira_server_id
+    _jira_server = jira_cfg.get("server", "")
+    _jira_server_id = jira_cfg.get("server_id", "")
+
     # Locate local file
     local_path = find_local_file(args.file)
     if not local_path:
-        print(f"ERROR: File not found in documentation/cloud/: {Path(args.file).name}")
-        print("Only files in documentation/cloud/ can be pushed to Confluence.")
+        print(f"ERROR: File not found in documentation/confluence/cloud/: {Path(args.file).name}")
+        print("Only files in documentation/confluence/cloud/ can be pushed to Confluence.")
         sys.exit(1)
 
     print(f"Local file:  {local_path}")
@@ -361,7 +394,7 @@ def main():
     # Find config entry
     page_entry = find_page_entry(config, args.file)
     if not page_entry:
-        print(f"ERROR: No page entry found for '{Path(args.file).name}' in confluence_pages.json")
+        print(f"ERROR: No page entry found for '{Path(args.file).name}' in documentation/confluence/confluence_pages.json")
         sys.exit(1)
 
     page_id = page_entry["id"]
@@ -392,7 +425,7 @@ def main():
             print(f"  Your cached version : {cached_version}")
             print(f"  Current live version: {current_version}")
             print(f"\nRun the sync script first to review the remote changes:")
-            print(f"  python3 scripts/confluence_sync.py --up-to {page_entry['wp']} --force")
+            print(f"  python3 scripts/confluence/confluence_sync.py --up-to {page_entry['wp']} --force")
             sys.exit(1)
     else:
         print("Warning: No local version cache found — skipping conflict check.")
@@ -450,7 +483,7 @@ def main():
     print(f"\nSUCCESS: WP{page_entry['wp']} pushed to Confluence (version {pushed_version})")
 
     # Update local version cache and content hash
-    cache_dir = ROOT / "documentation" / "cloud" / ".cache"
+    cache_dir = ROOT / "documentation" / "confluence" / "cloud" / ".cache"
     cache_dir.mkdir(exist_ok=True)
     (cache_dir / f"{page_entry['local_file']}.version").write_text(str(pushed_version))
     (cache_dir / f"{page_entry['local_file']}.hash").write_text(

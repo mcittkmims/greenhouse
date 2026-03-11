@@ -2,6 +2,8 @@
   "project": "GMS - Greenhouse Management System",
   "base_url": "http://confluence.microlab.club",
   "gms_root_page_id": "42633959",
+  "jira": { "server": "Microlab Jira", "server_id": "5b8ef41d-7a73-399f-9666-c949acb53653" },
+  "jira_board_id": 78,
   "pages": [
     { "wp": "1.1", "id": "42633962", "local_file": "WP1.1_Problem_Definition.md" },
     { "wp": "2.1", "id": "42634000", "local_file": "WP2.1_Technology_Research.md" },

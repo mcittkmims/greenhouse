@@ -2,7 +2,7 @@
 .env
 
 # Confluence version cache
-documentation/cloud/.cache/
+documentation/confluence/cloud/.cache/
 
 # Python
 __pycache__/
