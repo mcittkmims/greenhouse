@@ -4,237 +4,52 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Local Jira Board</title>
-<style>
-  :root {
-    --bg: #f4f5f7;
-    --panel: #ffffff;
-    --panel-alt: #ebecf0;
-    --text: #172b4d;
-    --muted: #5e6c84;
-    --link: #0c66e4;
-    --border: #dfe1e6;
-    --shadow: 0 1px 1px rgba(9, 30, 66, 0.13), 0 0 1px rgba(9, 30, 66, 0.31);
-    --header: #0747a6;
-    --overlay: rgba(9, 30, 66, 0.54);
-  }
-
-  * { box-sizing: border-box; }
-  html, body { height: 100%; }
-  body {
-    margin: 0;
-    font: 14px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    color: var(--text);
-    background: var(--bg);
-  }
-
-  .topbar {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 16px;
-    background: var(--header);
-    color: #fff;
-  }
-  .topbar .title { font-weight: 600; }
-  .topbar a { color: #b3d4ff; text-decoration: none; }
-  .topbar a:hover { text-decoration: underline; }
-
-  .toolbar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 16px;
-    background: #fff;
-    border-bottom: 1px solid var(--border);
-  }
-  .toolbar input {
-    width: min(380px, 100%);
-    padding: 8px 10px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    background: #fff;
-  }
-  .toolbar button {
-    border: 1px solid var(--border);
-    background: #fff;
-    color: var(--text);
-    border-radius: 6px;
-    padding: 8px 12px;
-    cursor: pointer;
-  }
-  .toolbar .spacer { flex: 1; }
-  .toolbar .meta { color: var(--muted); font-size: 12px; }
-
-  .layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 360px;
-    height: calc(100vh - 94px);
-  }
-
-  .board-wrap { overflow: auto; padding: 12px; }
-  .board { display: flex; align-items: flex-start; gap: 12px; min-height: 100%; }
-
-  .column {
-    width: 290px;
-    flex: 0 0 290px;
-    background: var(--panel-alt);
-    border-radius: 10px;
-    padding: 8px;
-  }
-  .column.drag-target { outline: 2px solid var(--link); }
-
-  .column-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    padding: 6px 6px 10px;
-    color: var(--muted);
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-
-  .count {
-    border-radius: 999px;
-    background: #dfe1e6;
-    color: var(--muted);
-    padding: 2px 8px;
-    font-size: 12px;
-  }
-
-  .cards { display: flex; flex-direction: column; gap: 8px; min-height: 40px; }
-
-  .card {
-    background: var(--panel);
-    border-radius: 8px;
-    box-shadow: var(--shadow);
-    padding: 10px;
-    cursor: pointer;
-    border: 1px solid transparent;
-  }
-  .card.dragging { opacity: 0.5; }
-  .card.active { border-color: var(--link); box-shadow: 0 0 0 2px rgba(12, 102, 228, 0.18); }
-  .card:hover { border-color: #c1c7d0; }
-
-  .card-top { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-  .issue-key { font-size: 12px; font-weight: 700; color: var(--link); text-decoration: none; }
-  .issue-key:hover { text-decoration: underline; }
-  .priority { width: 8px; height: 8px; border-radius: 999px; margin-left: auto; }
-  .summary { color: var(--text); margin-bottom: 10px; white-space: pre-wrap; }
-
-  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
-  .chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 11px;
-    padding: 2px 6px;
-    border-radius: 999px;
-    background: #f1f2f4;
-    color: var(--muted);
-  }
-  .chip a { color: var(--link); text-decoration: none; }
-
-  .drawer {
-    border-left: 1px solid var(--border);
-    background: #fff;
-    padding: 16px;
-    overflow: auto;
-  }
-  .drawer.empty { color: var(--muted); display: flex; align-items: center; justify-content: center; }
-  .drawer h2 { margin: 0 0 8px; font-size: 20px; }
-  .drawer .subline { margin-bottom: 16px; color: var(--muted); }
-  .drawer label { display: block; margin: 12px 0 6px; font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; }
-  .drawer input, .drawer textarea, .drawer select {
-    width: 100%;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 9px 10px;
-    font: inherit;
-    background: #fff;
-    color: var(--text);
-  }
-  .drawer textarea { min-height: 180px; resize: vertical; }
-  .drawer .actions { display: flex; gap: 8px; margin-top: 16px; }
-  .drawer button {
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 9px 12px;
-    background: #fff;
-    cursor: pointer;
-  }
-  .drawer button.primary { background: var(--link); border-color: var(--link); color: #fff; }
-
-  .status-banner {
-    position: fixed;
-    right: 16px;
-    bottom: 16px;
-    padding: 10px 14px;
-    border-radius: 8px;
-    background: #172b4d;
-    color: #fff;
-    box-shadow: var(--shadow);
-    opacity: 0;
-    transform: translateY(12px);
-    pointer-events: none;
-    transition: opacity 160ms ease, transform 160ms ease;
-    z-index: 50;
-  }
-  .status-banner.show { opacity: 1; transform: translateY(0); }
-
-  .error-overlay {
-    position: fixed;
-    inset: 0;
-    background: var(--overlay);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    z-index: 100;
-  }
-  .error-overlay.show { display: flex; }
-  .error-panel {
-    width: min(680px, 100%);
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: var(--shadow);
-    padding: 20px;
-  }
-  .error-panel h3 { margin: 0 0 10px; }
-  .error-panel pre {
-    background: #f4f5f7;
-    border-radius: 8px;
-    padding: 12px;
-    overflow: auto;
-  }
-
-  @media (max-width: 1080px) {
-    .layout { grid-template-columns: 1fr; height: auto; }
-    .drawer { border-left: 0; border-top: 1px solid var(--border); min-height: 40vh; }
-  }
-</style>
+<link rel="stylesheet" href="./board.css">
 </head>
-<body>
-  <div class="topbar">
-    <div class="title">Greenhouse Jira Board</div>
-    <div>Board 78</div>
-    <a href="#" id="open-online-link">Open in Jira</a>
-  </div>
+<body class="aui-layout aui-theme-default ghx-agile ghx-rapid-views">
+  <div id="page" class="app-shell">
+    <nav class="aui-header" aria-label="Site">
+      <div class="aui-header-inner">
+        <div class="aui-header-before">
+          <div class="app-switcher">GMS</div>
+          <div class="aui-header-logo">Jira</div>
+          <div class="board-shell-badge">Kanban Board</div>
+        </div>
+        <div class="aui-header-primary">
+          <button class="aui-button aui-button-primary" id="create-issue-trigger" type="button">Create</button>
+        </div>
+      </div>
+    </nav>
 
-  <div class="toolbar">
-    <input id="search-input" type="search" placeholder="Search issues, assignees, priorities">
-    <button id="refresh-btn">Refresh</button>
-    <div class="spacer"></div>
-    <div class="meta" id="meta-text">Waiting for local Jira server…</div>
-  </div>
+    <div class="project-layout">
+      <main class="board-shell">
+        <header class="board-toolbar">
+          <div class="board-toolbar-main">
+            <h1 id="board-title">04 GMS Board</h1>
+            <div class="board-meta" id="meta-text">Waiting for local Jira server...</div>
+          </div>
+          <div class="board-toolbar-actions">
+            <input id="search-input" class="jira-search" type="search" placeholder="Search board">
+            <button class="aui-button" id="refresh-btn" type="button">Refresh</button>
+            <a class="aui-button" id="open-online-link" href="#" target="_blank" rel="noreferrer">Open in Jira</a>
+          </div>
+        </header>
 
-  <div class="layout">
-    <div class="board-wrap">
-      <div class="board" id="board"></div>
+        <div class="board-content">
+          <section class="ghx-board-area">
+            <div class="ghx-board" id="board"></div>
+          </section>
+          <aside class="issue-detail-panel" id="issue-detail-panel" aria-label="Issue details" hidden>
+            <div class="issue-detail-panel-topbar">
+              <div class="issue-detail-panel-label">Issue details</div>
+              <button class="icon-close" id="close-issue-panel" type="button" aria-label="Close issue details">x</button>
+            </div>
+            <div class="detail-empty" id="detail-empty">Loading issue...</div>
+            <div class="issue-view" id="issue-view" hidden></div>
+          </aside>
+        </div>
+      </main>
     </div>
-    <aside class="drawer empty" id="drawer">Select a card to inspect or edit it.</aside>
   </div>
 
   <div class="status-banner" id="status-banner"></div>
@@ -242,279 +57,71 @@
   <div class="error-overlay" id="error-overlay">
     <div class="error-panel">
       <h3>Local Jira server is not running</h3>
-      <p>This board is interactive. Start the Python server, then refresh the preview.</p>
+      <p>Start the server, then this page will connect automatically.</p>
       <pre>python3 scripts/jira/jira_board_server.py</pre>
-      <p>The board page can stay open in VS Code Live Preview while the server runs in a terminal.</p>
+      <p style="margin-top:12px;color:#5e6c84;font-size:12px;">Retrying every 3 seconds&hellip;</p>
+      <button class="aui-button aui-button-primary" id="retry-connect-btn" type="button" style="margin-top:8px;">Retry now</button>
     </div>
   </div>
 
-<script>
-const API_BASE = "http://127.0.0.1:8765";
-const state = { board: null, columns: [], issueMap: new Map(), selectedKey: null, filter: '' };
-
-const boardEl = document.getElementById('board');
-const drawerEl = document.getElementById('drawer');
-const metaTextEl = document.getElementById('meta-text');
-const statusBannerEl = document.getElementById('status-banner');
-const errorOverlayEl = document.getElementById('error-overlay');
-const searchInputEl = document.getElementById('search-input');
-const refreshBtnEl = document.getElementById('refresh-btn');
-const openOnlineLinkEl = document.getElementById('open-online-link');
-
-function escapeHtml(value) {
-  return String(value ?? '').replace(/[&<>"']/g, (char) => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#39;'
-  })[char]);
-}
-
-function showStatus(message, tone = 'info') {
-  statusBannerEl.textContent = message;
-  statusBannerEl.style.background = tone === 'error' ? '#c9372c' : tone === 'success' ? '#1f845a' : '#172b4d';
-  statusBannerEl.classList.add('show');
-  window.clearTimeout(showStatus._timer);
-  showStatus._timer = window.setTimeout(() => statusBannerEl.classList.remove('show'), 2200);
-}
-
-async function api(path, options = {}) {
-  const response = await fetch(`${API_BASE}${path}`, {
-    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
-    ...options,
-  });
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(text || `${response.status} ${response.statusText}`);
-  }
-  const contentType = response.headers.get('Content-Type') || '';
-  return contentType.includes('application/json') ? response.json() : response.text();
-}
-
-function cardMatches(issue) {
-  const q = state.filter.trim().toLowerCase();
-  if (!q) return true;
-  return [issue.key, issue.summary, issue.status, issue.assigneeDisplay, issue.priority, issue.issueType]
-    .filter(Boolean)
-    .some((value) => value.toLowerCase().includes(q));
-}
-
-function renderBoard() {
-  boardEl.innerHTML = '';
-  state.issueMap.clear();
-
-  for (const column of state.columns) {
-    const visibleIssues = column.issues.filter(cardMatches);
-    const columnEl = document.createElement('section');
-    columnEl.className = 'column';
-    columnEl.dataset.columnId = column.id;
-    columnEl.innerHTML = `
-      <div class="column-header">
-        <span>${escapeHtml(column.name)}</span>
-        <span class="count">${visibleIssues.length}</span>
+  <dialog class="create-dialog" id="create-dialog">
+    <form method="dialog" class="create-dialog-card" id="create-issue-form">
+      <header class="dialog-header">
+        <h2>Create Issue</h2>
+        <button class="icon-close" type="button" id="close-create-dialog" aria-label="Close">x</button>
+      </header>
+      <div class="dialog-body">
+        <label>
+          <span>Summary</span>
+          <input id="create-summary" name="summary" required>
+        </label>
+        <label>
+          <span>Issue Type</span>
+          <select id="create-issue-type" name="issueType">
+            <option value="Task">Task</option>
+            <option value="Story">Story</option>
+            <option value="User Story">User Story</option>
+            <option value="Job Story">Job Story</option>
+            <option value="Epic">Epic</option>
+            <option value="Bug">Bug</option>
+          </select>
+        </label>
+        <label>
+          <span>Assignee Username</span>
+          <input id="create-assignee" name="assigneeName">
+        </label>
+        <label>
+          <span>Priority</span>
+          <select id="create-priority" name="priority">
+            <option value="">None</option>
+            <option value="Highest">Highest</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+            <option value="Lowest">Lowest</option>
+          </select>
+        </label>
+        <label>
+          <span>Labels</span>
+          <input id="create-labels" name="labels" placeholder="comma,separated,labels">
+        </label>
+        <label>
+          <span>Due Date</span>
+          <input id="create-due-date" name="dueDate" type="date">
+        </label>
+        <label>
+          <span>Description</span>
+          <textarea id="create-description" name="description"></textarea>
+        </label>
       </div>
-      <div class="cards"></div>
-    `;
+      <footer class="dialog-footer">
+        <button class="aui-button" type="button" id="cancel-create-dialog">Cancel</button>
+        <button class="aui-button aui-button-primary" type="submit">Create</button>
+      </footer>
+    </form>
+  </dialog>
 
-    const cardsEl = columnEl.querySelector('.cards');
-    cardsEl.addEventListener('dragover', (event) => {
-      event.preventDefault();
-      columnEl.classList.add('drag-target');
-    });
-    cardsEl.addEventListener('dragleave', () => columnEl.classList.remove('drag-target'));
-    cardsEl.addEventListener('drop', async (event) => {
-      event.preventDefault();
-      columnEl.classList.remove('drag-target');
-      const key = event.dataTransfer.getData('text/plain');
-      if (!key) return;
-      await moveIssueToColumn(key, column.id);
-    });
-
-    for (const issue of visibleIssues) {
-      state.issueMap.set(issue.key, issue);
-      const cardEl = document.createElement('article');
-      cardEl.className = 'card';
-      if (state.selectedKey === issue.key) cardEl.classList.add('active');
-      cardEl.id = issue.key.toLowerCase();
-      cardEl.draggable = true;
-      cardEl.dataset.key = issue.key;
-      cardEl.innerHTML = `
-        <div class="card-top">
-          <span title="${escapeHtml(issue.issueType)}">${escapeHtml(issue.issueTypeIcon || '•')}</span>
-          <a class="issue-key" href="${escapeHtml(issue.onlineUrl)}" target="_blank">${escapeHtml(issue.key)}</a>
-          <span class="priority" style="background:${escapeHtml(issue.priorityColor || '#c1c7d0')}"></span>
-        </div>
-        <div class="summary">${escapeHtml(issue.summary)}</div>
-        <div class="chips">
-          ${issue.assigneeDisplay ? `<span class="chip">${escapeHtml(issue.assigneeDisplay)}</span>` : ''}
-          ${issue.priority ? `<span class="chip">${escapeHtml(issue.priority)}</span>` : ''}
-          ${issue.dueDate ? `<span class="chip">Due ${escapeHtml(issue.dueDate)}</span>` : ''}
-          ${issue.parentKey ? `<span class="chip">Parent <a href="#${escapeHtml(issue.parentKey.toLowerCase())}">${escapeHtml(issue.parentKey)}</a></span>` : ''}
-        </div>
-      `;
-
-      cardEl.addEventListener('click', (event) => {
-        if (event.target.closest('a')) return;
-        openIssue(issue.key);
-      });
-      cardEl.addEventListener('dragstart', (event) => {
-        event.dataTransfer.setData('text/plain', issue.key);
-        cardEl.classList.add('dragging');
-      });
-      cardEl.addEventListener('dragend', () => cardEl.classList.remove('dragging'));
-
-      cardsEl.appendChild(cardEl);
-    }
-
-    boardEl.appendChild(columnEl);
-  }
-
-  if (state.selectedKey) renderDrawer(state.selectedKey);
-  focusHashIssue();
-}
-
-function renderDrawer(key) {
-  const issue = state.issueMap.get(key);
-  if (!issue) {
-    drawerEl.className = 'drawer empty';
-    drawerEl.textContent = 'Select a card to inspect or edit it.';
-    return;
-  }
-
-  const statusOptions = state.columns.map((column) => `
-    <option value="${escapeHtml(column.id)}" ${column.id === issue.columnId ? 'selected' : ''}>${escapeHtml(column.name)}</option>
-  `).join('');
-
-  drawerEl.className = 'drawer';
-  drawerEl.innerHTML = `
-    <h2>${escapeHtml(issue.key)}</h2>
-    <div class="subline">
-      <a class="issue-key" href="${escapeHtml(issue.onlineUrl)}" target="_blank">Open in Jira</a>
-    </div>
-
-    <label for="issue-summary">Summary</label>
-    <input id="issue-summary" value="${escapeHtml(issue.summary)}">
-
-    <label for="issue-description">Description</label>
-    <textarea id="issue-description">${escapeHtml(issue.description || '')}</textarea>
-
-    <label for="issue-due-date">Due Date</label>
-    <input id="issue-due-date" type="date" value="${escapeHtml(issue.dueDate || '')}">
-
-    <label for="issue-assignee">Assignee Username</label>
-    <input id="issue-assignee" value="${escapeHtml(issue.assigneeName || '')}" placeholder="Leave empty to unassign">
-
-    <label for="issue-status">Column</label>
-    <select id="issue-status">${statusOptions}</select>
-
-    <div class="actions">
-      <button class="primary" id="save-issue-btn">Save Changes</button>
-      <button id="reload-issue-btn">Reload Board</button>
-    </div>
-  `;
-
-  document.getElementById('save-issue-btn').addEventListener('click', () => saveIssue(key));
-  document.getElementById('reload-issue-btn').addEventListener('click', () => loadBoard(true));
-}
-
-function openIssue(key) {
-  state.selectedKey = key;
-  renderBoard();
-  history.replaceState(null, '', `#${key.toLowerCase()}`);
-}
-
-function focusHashIssue() {
-  const hash = window.location.hash.replace(/^#/, '').toUpperCase();
-  if (!hash) return;
-  const target = document.getElementById(hash.toLowerCase());
-  if (target) {
-    target.scrollIntoView({ block: 'center', inline: 'center' });
-    target.classList.add('active');
-  }
-}
-
-async function moveIssueToColumn(key, columnId) {
-  try {
-    showStatus(`Moving ${key}…`);
-    await api(`/api/issues/${encodeURIComponent(key)}/move`, {
-      method: 'POST',
-      body: JSON.stringify({ columnId }),
-    });
-    await loadBoard(true, key);
-    showStatus(`Moved ${key}`, 'success');
-  } catch (error) {
-    showStatus(error.message, 'error');
-  }
-}
-
-async function saveIssue(key) {
-  const summary = document.getElementById('issue-summary').value;
-  const description = document.getElementById('issue-description').value;
-  const dueDate = document.getElementById('issue-due-date').value;
-  const assignee = document.getElementById('issue-assignee').value;
-  const columnId = document.getElementById('issue-status').value;
-
-  try {
-    showStatus(`Saving ${key}…`);
-    await api(`/api/issues/${encodeURIComponent(key)}`, {
-      method: 'POST',
-      body: JSON.stringify({
-        summary,
-        description,
-        dueDate,
-        assigneeName: assignee,
-      }),
-    });
-
-    const issue = state.issueMap.get(key);
-    if (issue && issue.columnId !== columnId) {
-      await api(`/api/issues/${encodeURIComponent(key)}/move`, {
-        method: 'POST',
-        body: JSON.stringify({ columnId }),
-      });
-    }
-
-    await loadBoard(true, key);
-    showStatus(`Saved ${key}`, 'success');
-  } catch (error) {
-    showStatus(error.message, 'error');
-  }
-}
-
-async function loadBoard(preserveSelection = false, selectedKey = null) {
-  try {
-    const data = await api('/api/board');
-    errorOverlayEl.classList.remove('show');
-    state.board = data.board;
-    state.columns = data.columns;
-    state.selectedKey = preserveSelection ? (selectedKey || state.selectedKey) : state.selectedKey;
-    metaTextEl.textContent = `Updated ${data.updatedAt} · Drag cards between columns or edit them in the side panel`;
-    openOnlineLinkEl.href = data.board.onlineUrl;
-    renderBoard();
-  } catch (error) {
-    console.error(error);
-    errorOverlayEl.classList.add('show');
-    metaTextEl.textContent = 'Local Jira server unavailable';
-  }
-}
-
-searchInputEl.addEventListener('input', () => {
-  state.filter = searchInputEl.value;
-  renderBoard();
-});
-
-refreshBtnEl.addEventListener('click', () => loadBoard(true));
-
-window.addEventListener('hashchange', () => {
-  const key = window.location.hash.replace(/^#/, '').toUpperCase();
-  if (key) {
-    state.selectedKey = key;
-    renderBoard();
-  }
-});
-
-loadBoard();
-</script>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+  <script src="./board.js"></script>
 </body>
 </html>
