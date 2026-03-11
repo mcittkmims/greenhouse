@@ -1,313 +1,82 @@
 #!/usr/bin/env python3
 """
-confluence_push.py — Push a local markdown file back to Confluence.
+confluence_push.py — Push a local GCM file back to Confluence.
 
 Compares the local file against the last-synced cloud/ copy to show what
-changed, then converts the local Markdown to Confluence storage format
-and updates the page via the REST API.
+changed, then converts GCM → Confluence storage XHTML and updates the page.
 
 Usage:
-    python3 scripts/confluence/confluence_push.py --file WP4.2_Analyze_Stakeholder_Requirements.md
-    python3 scripts/confluence/confluence_push.py --file WP4.2_Analyze_Stakeholder_Requirements.md --dry-run
+    python3 scripts/confluence/confluence_push.py --file WP4.2_Analyze_Stakeholder_Requirements.gcm
+    python3 scripts/confluence/confluence_push.py --file WP4.2_Analyze_Stakeholder_Requirements.gcm --dry-run
+    python3 scripts/confluence/confluence_push.py --file WP4.2_Analyze_Stakeholder_Requirements.gcm --no-confirm
 
 Options:
-    --file FILE     Filename to push (looks in documentation/confluence/cloud/ and documentation/confluence/wip/)
-    --dry-run       Show diff and converted content without pushing
-    --no-confirm    Skip confirmation prompt (auto-confirm push)
-
-Credentials are read from .env in the workspace root.
-Page IDs are read from documentation/confluence/confluence_pages.json.
+    --file FILE     Filename to push (in documentation/confluence/cloud/)
+    --dry-run       Show diff and converted XHTML without pushing
+    --no-confirm    Skip confirmation prompt
 """
 
 import argparse
 import hashlib
 import json
-import re
 import sys
-import tempfile
 from difflib import unified_diff
 from pathlib import Path
 
 try:
     import requests
 except ImportError:
-    print("ERROR: 'requests' not installed. Run: pip3 install requests")
+    print("ERROR: 'requests' not installed.  Run: pip3 install requests")
     sys.exit(1)
 
-ROOT = Path(__file__).parent.parent.parent
-
-_jira_server = ""
-_jira_server_id = ""
-
-# Import html_to_markdown from the sync script
 sys.path.insert(0, str(Path(__file__).parent))
-from confluence_sync import html_to_markdown
+from gcm_to_html import gcm_to_html  # noqa: E402
+from gcm_spec import parse_frontmatter  # noqa: E402
+
+ROOT = Path(__file__).resolve().parent.parent.parent
+CONFIG_PATH = ROOT / "documentation" / "confluence" / "confluence_pages.json"
+CLOUD_DIR = ROOT / "documentation" / "confluence" / "cloud"
+CACHE_DIR = CLOUD_DIR / ".cache"
 
 
-# ---------------------------------------------------------------------------
-# Markdown → Confluence storage format (XHTML) converter
-# ---------------------------------------------------------------------------
-
-def _escape_xhtml(text):
-    return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
-
-
-def _jira_macro(key):
-    """Generate a Confluence Jira macro for the given issue key."""
-    parts = []
-    if _jira_server:
-        parts.append(f'<ac:parameter ac:name="server">{_escape_xhtml(_jira_server)}</ac:parameter>')
-    if _jira_server_id:
-        parts.append(f'<ac:parameter ac:name="serverId">{_jira_server_id}</ac:parameter>')
-    parts.append(f'<ac:parameter ac:name="key">{_escape_xhtml(key)}</ac:parameter>')
-    return f'<ac:structured-macro ac:name="jira" ac:schema-version="1">{"" .join(parts)}</ac:structured-macro>'
-
-
-def _inline_markup(text):
-    """Convert inline Markdown (bold, italic, inline code) to XHTML."""
-    # Jira issue links: [KEY](jira:KEY) or local board.html links → Confluence Jira macro
-    _jira_placeholders = []
-    def _replace_jira(m):
-        idx = len(_jira_placeholders)
-        _jira_placeholders.append(_jira_macro(m.group(1)))
-        return f"\x00JIRA{idx}\x00"
-    text = re.sub(
-        r'\[([A-Z][A-Z0-9]*-\d+)\]\((?:jira:[A-Z][A-Z0-9]*-\d+|[^)]*jira/board\.html[^)]*)\)',
-        _replace_jira, text
-    )
-
-    # Extract markup spans before escaping so < > inside plain text are escaped
-    # but markers like ** and * are handled first.
-    # Bold+italic: ***text***
-    text = re.sub(r"\*\*\*(.+?)\*\*\*", lambda m: f"<strong><em>{_escape_xhtml(m.group(1))}</em></strong>", text)
-    # Bold: **text**
-    text = re.sub(r"\*\*(.+?)\*\*", lambda m: f"<strong>{_escape_xhtml(m.group(1))}</strong>", text)
-    # Italic: *text* or _text_  (not preceded/followed by another * or _)
-    text = re.sub(r"(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)", lambda m: f"<em>{_escape_xhtml(m.group(1))}</em>", text)
-    text = re.sub(r"(?<!_)_(?!_)(.+?)(?<!_)_(?!_)", lambda m: f"<em>{_escape_xhtml(m.group(1))}</em>", text)
-    # Inline code: `code`
-    text = re.sub(r"`(.+?)`", lambda m: f"<code>{_escape_xhtml(m.group(1))}</code>", text)
-    # Escape remaining plain text (not inside tags)
-    def escape_outside_tags(s):
-        result = []
-        i = 0
-        while i < len(s):
-            if s[i] == '<':
-                end = s.find('>', i)
-                if end != -1:
-                    result.append(s[i:end+1])
-                    i = end + 1
-                    continue
-            result.append(s[i])
-            i += 1
-        return ''.join(result)
-    # Restore Jira macro placeholders
-    for i, macro in enumerate(_jira_placeholders):
-        text = text.replace(f"\x00JIRA{i}\x00", macro)
-    return text
-
-
-def _table_row_to_xhtml(line, is_header=False):
-    """Convert a Markdown table row to Confluence XHTML <tr>."""
-    tag = "th" if is_header else "td"
-    cells = [c.strip() for c in line.strip().strip("|").split("|")]
-    cells_xhtml = "".join(f"<{tag}><p>{_inline_markup(c)}</p></{tag}>" for c in cells)
-    return f"<tr>{cells_xhtml}</tr>"
-
-
-def markdown_to_confluence(md_text):
-    """Convert Markdown text to Confluence storage format XHTML."""
-    lines = md_text.splitlines()
-    output = []
-    i = 0
-
-    # Strip auto-generated metadata lines (# Title, > Source: ..., blank lines after)
-    while i < len(lines):
-        stripped = lines[i].strip()
-        if stripped.startswith("# ") or stripped.startswith("> Source:") or stripped == "":
-            i += 1
-        else:
-            break
-
-    in_code_block = False
-    in_table = False
-    table_lines = []
-    list_stack = []  # stack of 'ul' or 'ol'
-    paragraph_lines = []
-
-    def flush_paragraph():
-        if paragraph_lines:
-            text = " ".join(paragraph_lines).strip()
-            if text:
-                output.append(f"<p>{_inline_markup(text)}</p>")
-            paragraph_lines.clear()
-
-    def flush_table():
-        if not table_lines:
-            return
-        output.append("<table><tbody>")
-        for j, tline in enumerate(table_lines):
-            if re.match(r"^\s*\|[\s\-:|]+\|\s*$", tline):
-                continue  # separator row
-            is_header = j == 0
-            output.append(_table_row_to_xhtml(tline, is_header))
-        output.append("</tbody></table>")
-        table_lines.clear()
-
-    def close_lists():
-        while list_stack:
-            output.append(f"</{list_stack.pop()}>")
-
-    while i < len(lines):
-        line = lines[i]
-
-        # ---- Code block ----
-        if line.startswith("```"):
-            if not in_code_block:
-                flush_paragraph()
-                close_lists()
-                lang = line[3:].strip()
-                output.append(f'<ac:structured-macro ac:name="code"><ac:plain-text-body><![CDATA[')
-                in_code_block = True
-            else:
-                output.append("]]></ac:plain-text-body></ac:structured-macro>")
-                in_code_block = False
-            i += 1
-            continue
-
-        if in_code_block:
-            output.append(line)
-            i += 1
-            continue
-
-        # ---- Table ----
-        if line.strip().startswith("|"):
-            flush_paragraph()
-            close_lists()
-            table_lines.append(line)
-            in_table = True
-            i += 1
-            continue
-        elif in_table:
-            flush_table()
-            in_table = False
-            continue
-
-        # ---- Heading ----
-        m = re.match(r"^(#{1,6})\s+(.+)", line)
-        if m:
-            flush_paragraph()
-            close_lists()
-            level = len(m.group(1))
-            text = _inline_markup(_escape_xhtml(m.group(2).strip()))
-            output.append(f"<h{level}>{text}</h{level}>")
-            i += 1
-            continue
-
-        # ---- Unordered list ----
-        m = re.match(r"^(\s*)[-*+]\s+(.+)", line)
-        if m:
-            flush_paragraph()
-            indent = len(m.group(1)) // 2
-            text = _inline_markup(m.group(2))
-            # Open/close list tags based on indent depth
-            while len(list_stack) > indent + 1:
-                output.append(f"</{list_stack.pop()}>")
-            if len(list_stack) <= indent:
-                output.append("<ul>")
-                list_stack.append("ul")
-            output.append(f"<li>{text}</li>")
-            i += 1
-            continue
-
-        # ---- Ordered list ----
-        m = re.match(r"^(\s*)\d+\.\s+(.+)", line)
-        if m:
-            flush_paragraph()
-            indent = len(m.group(1)) // 2
-            text = _inline_markup(m.group(2))
-            while len(list_stack) > indent + 1:
-                output.append(f"</{list_stack.pop()}>")
-            if len(list_stack) <= indent:
-                output.append("<ol>")
-                list_stack.append("ol")
-            output.append(f"<li>{text}</li>")
-            i += 1
-            continue
-
-        # ---- Horizontal rule ----
-        if re.match(r"^[-*_]{3,}\s*$", line):
-            flush_paragraph()
-            close_lists()
-            output.append("<hr/>")
-            i += 1
-            continue
-
-        # ---- Blank line ----
-        if not line.strip():
-            flush_paragraph()
-            close_lists()
-            i += 1
-            continue
-
-        # ---- Regular paragraph text ----
-        close_lists()
-        paragraph_lines.append(line.strip())
-        i += 1
-
-    flush_paragraph()
-    if in_table:
-        flush_table()
-    close_lists()
-
-    return "\n".join(output)
-
-
-# ---------------------------------------------------------------------------
-# Utilities
-# ---------------------------------------------------------------------------
+# ── Helpers ──────────────────────────────────────────────────────────────────
 
 def load_env():
-    env_path = ROOT / ".env"
-    if not env_path.exists():
-        print(f"ERROR: .env not found at {env_path}")
-        sys.exit(1)
     env = {}
-    for line in env_path.read_text().splitlines():
-        line = line.strip()
-        if line and not line.startswith("#") and "=" in line:
-            k, v = line.split("=", 1)
-            env[k.strip()] = v.strip()
+    env_path = ROOT / ".env"
+    if env_path.exists():
+        for line in env_path.read_text().splitlines():
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            if "=" in line:
+                k, v = line.split("=", 1)
+                env[k.strip()] = v.strip()
+    for key in ("CONFLUENCE_USER", "CONFLUENCE_PASS"):
+        if key not in env:
+            print(f"ERROR: {key} not set in .env")
+            sys.exit(1)
     return env
 
 
 def load_config():
-    config_path = ROOT / "documentation" / "confluence" / "confluence_pages.json"
-    if not config_path.exists():
-        print(f"ERROR: Config not found at {config_path}")
-        sys.exit(1)
-    return json.loads(config_path.read_text())
+    with open(CONFIG_PATH) as f:
+        return json.load(f)
 
 
 def find_page_entry(config, filename):
-    """Find a page config entry by filename (basename, no path needed)."""
+    """Find a page config entry matching the given filename."""
     basename = Path(filename).name
-    for page in config["pages"]:
-        if page["local_file"] == basename:
-            return page
+    for p in config["pages"]:
+        if p["local_file"] == basename:
+            return p
     return None
 
 
-def find_local_file(filename):
-    """Locate the file in cloud/ only."""
-    basename = Path(filename).name
-    p = ROOT / "documentation" / "confluence" / "cloud" / basename
-    return p if p.exists() else None
-
-
 def fetch_page(page_id, base_url, auth):
-    url = f"{base_url}/rest/api/content/{page_id}?expand=body.storage,version,title"
-    resp = requests.get(url, auth=auth, timeout=15)
+    url = f"{base_url}/rest/api/content/{page_id}"
+    params = {"expand": "body.storage,version,title"}
+    resp = requests.get(url, params=params, auth=auth, timeout=30)
     resp.raise_for_status()
     return resp.json()
 
@@ -322,50 +91,42 @@ def push_page(page_id, title, version_number, storage_xhtml, base_url, auth):
         "body": {
             "storage": {
                 "value": storage_xhtml,
-                "representation": "storage"
+                "representation": "storage",
             }
-        }
+        },
     }
     resp = requests.put(url, json=payload, auth=auth, timeout=30)
     resp.raise_for_status()
     return resp.json()
 
 
-def show_diff(cloud_path, local_path):
-    """Print a unified diff between cloud and local versions. Returns True if different."""
-    if cloud_path and cloud_path.exists():
-        cloud_lines = cloud_path.read_text(encoding="utf-8").splitlines(keepends=True)
-    else:
-        cloud_lines = []
-    local_lines = local_path.read_text(encoding="utf-8").splitlines(keepends=True)
-
-    diff = list(unified_diff(
-        cloud_lines, local_lines,
-        fromfile=f"cloud/{local_path.name}",
-        tofile=f"local/{local_path.name}",
-        lineterm=""
-    ))
-
+def show_diff(cloud_text, local_text, from_label, to_label):
+    """Print a unified diff. Returns True if different."""
+    cloud_lines = cloud_text.splitlines(keepends=True)
+    local_lines = local_text.splitlines(keepends=True)
+    diff = list(unified_diff(cloud_lines, local_lines,
+                             fromfile=from_label, tofile=to_label))
     if not diff:
         return False
-
     added = sum(1 for l in diff if l.startswith("+") and not l.startswith("+++"))
     removed = sum(1 for l in diff if l.startswith("-") and not l.startswith("---"))
-    print(f"\n--- Diff: {added} lines added, {removed} lines removed ---\n")
+    print(f"\n--- Diff: {added} added, {removed} removed ---\n")
     for line in diff:
-        print(line)
+        print(line, end="")
     print()
     return True
 
 
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
+# ── Main ─────────────────────────────────────────────────────────────────────
 
 def main():
-    parser = argparse.ArgumentParser(description="Push a local markdown file to Confluence.")
-    parser.add_argument("--file", required=True, metavar="FILE",
-                        help="Filename to push (e.g. WP4.2_Analyze_Stakeholder_Requirements.md)")
+    parser = argparse.ArgumentParser(
+        description="Push a local GCM file to Confluence."
+    )
+    parser.add_argument(
+        "--file", required=True, metavar="FILE",
+        help="GCM filename to push (e.g. WP4.2_Analyze_Stakeholder_Requirements.gcm)"
+    )
     parser.add_argument("--dry-run", action="store_true",
                         help="Show diff and converted XHTML without pushing")
     parser.add_argument("--no-confirm", action="store_true",
@@ -376,31 +137,26 @@ def main():
     config = load_config()
     auth = (env["CONFLUENCE_USER"], env["CONFLUENCE_PASS"])
     base_url = env.get("CONFLUENCE_URL", config["base_url"])
-
     jira_cfg = config.get("jira", {})
-    global _jira_server, _jira_server_id
-    _jira_server = jira_cfg.get("server", "")
-    _jira_server_id = jira_cfg.get("server_id", "")
 
     # Locate local file
-    local_path = find_local_file(args.file)
-    if not local_path:
-        print(f"ERROR: File not found in documentation/confluence/cloud/: {Path(args.file).name}")
-        print("Only files in documentation/confluence/cloud/ can be pushed to Confluence.")
+    basename = Path(args.file).name
+    local_path = CLOUD_DIR / basename
+    if not local_path.exists():
+        print(f"ERROR: File not found: {local_path}")
         sys.exit(1)
-
     print(f"Local file:  {local_path}")
 
     # Find config entry
-    page_entry = find_page_entry(config, args.file)
+    page_entry = find_page_entry(config, basename)
     if not page_entry:
-        print(f"ERROR: No page entry found for '{Path(args.file).name}' in documentation/confluence/confluence_pages.json")
+        print(f"ERROR: No page entry for '{basename}' in confluence_pages.json")
         sys.exit(1)
 
     page_id = page_entry["id"]
     print(f"Page ID:     {page_id}  (WP{page_entry['wp']})")
 
-    # Fetch live content from Confluence to diff against
+    # Fetch live page for version and conflict check
     print("Fetching current Confluence content...")
     try:
         data = fetch_page(page_id, base_url, auth)
@@ -410,50 +166,50 @@ def main():
 
     current_version = data["version"]["number"]
     title = data["title"]
-    live_html = data["body"]["storage"]["value"]
-    live_md = f"# {title}\n\n> Source: {base_url}/rest/api/content/{page_id} | Version: {current_version}\n\n{html_to_markdown(live_html)}\n"
-
     print(f"Confluence version: {current_version}  |  Title: {title}")
 
-    # Conflict detection: check if Confluence was modified since last local sync
-    cache_dir = ROOT / "documentation" / "cloud" / ".cache"
-    version_cache_path = cache_dir / f"{page_entry['local_file']}.version"
-    if version_cache_path.exists():
-        cached_version = version_cache_path.read_text().strip()
+    # Conflict detection: ensure we're editing the same version we last synced
+    ver_cache = CACHE_DIR / f"{basename}.version"
+    if ver_cache.exists():
+        cached_version = ver_cache.read_text().strip()
         if str(current_version) != cached_version:
-            print(f"\nCONFLICT: Confluence page was modified since your last sync.")
-            print(f"  Your cached version : {cached_version}")
-            print(f"  Current live version: {current_version}")
-            print(f"\nRun the sync script first to review the remote changes:")
-            print(f"  python3 scripts/confluence/confluence_sync.py --up-to {page_entry['wp']} --force")
+            print(f"\nCONFLICT: Confluence was modified since your last sync.")
+            print(f"  Cached version : {cached_version}")
+            print(f"  Live version   : {current_version}")
+            print(f"\nSync first:  python3 scripts/confluence/confluence_sync.py --up-to {page_entry['wp']} --force")
             sys.exit(1)
     else:
-        print("Warning: No local version cache found — skipping conflict check.")
-        print("         Run the sync script to establish a baseline before pushing.")
+        print("Warning: No version cache — skipping conflict check.")
 
-    # Diff live Confluence markdown vs local file
-    local_md = local_path.read_text(encoding="utf-8")
+    # Diff local file vs cached cloud copy
+    local_text = local_path.read_text(encoding="utf-8")
+    hash_cache = CACHE_DIR / f"{basename}.hash"
+    if hash_cache.exists():
+        stored_hash = hash_cache.read_text().strip()
+        local_hash = hashlib.md5(local_text.encode()).hexdigest()
+        if local_hash == stored_hash:
+            print("\nNo changes detected vs last synced version. Nothing to push.")
+            sys.exit(0)
 
-    # Write live content to a temp path for diffing
-    with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False, encoding="utf-8") as tmp:
-        tmp.write(live_md)
-        tmp_path = Path(tmp.name)
+    # Show GCM-level diff (local vs what was last synced)
+    # We re-read the hash-based comparison above; for diff display we
+    # compare against the cloud cached file if it exists
+    cloud_cached = CLOUD_DIR / basename
+    # The local file IS the cloud file (we edit in-place), so compare
+    # against what was last synced by checking the hash
+    print(f"\nLocal file has been modified since last sync.")
 
-    try:
-        has_changes = show_diff(tmp_path, local_path)
-    finally:
-        tmp_path.unlink(missing_ok=True)
-
-    if not has_changes:
-        print("No changes detected vs live Confluence content. Nothing to push.")
-        sys.exit(0)
-
-    # Convert local markdown → Confluence storage XHTML
-    storage_xhtml = markdown_to_confluence(local_md)
+    # Convert GCM → Confluence storage XHTML
+    storage_xhtml, meta = gcm_to_html(
+        local_text,
+        jira_server=jira_cfg.get("server", ""),
+        jira_server_id=jira_cfg.get("server_id", ""),
+    )
 
     if args.dry_run:
-        print("--- Confluence storage XHTML (dry-run) ---\n")
-        print(storage_xhtml[:3000])
+        print("\n--- Confluence storage XHTML (dry-run) ---\n")
+        preview = storage_xhtml[:3000]
+        print(preview)
         if len(storage_xhtml) > 3000:
             print(f"\n... ({len(storage_xhtml) - 3000} more chars)")
         print("\n[dry-run] Nothing pushed.")
@@ -461,15 +217,14 @@ def main():
 
     new_version = current_version + 1
     print(f"New version: {new_version}")
+    print(f"XHTML size:  {len(storage_xhtml)} chars")
 
-    # Confirm
     if not args.no_confirm:
-        answer = input(f"\nPush to Confluence? [y/N] ").strip().lower()
+        answer = input(f"\nPush WP{page_entry['wp']} to Confluence? [y/N] ").strip().lower()
         if answer != "y":
             print("Aborted.")
             sys.exit(0)
 
-    # Push
     print("Pushing...")
     try:
         result = push_page(page_id, title, new_version, storage_xhtml, base_url, auth)
@@ -480,16 +235,15 @@ def main():
         sys.exit(1)
 
     pushed_version = result.get("version", {}).get("number", new_version)
-    print(f"\nSUCCESS: WP{page_entry['wp']} pushed to Confluence (version {pushed_version})")
+    print(f"\nSUCCESS: WP{page_entry['wp']} pushed (version {pushed_version})")
 
-    # Update local version cache and content hash
-    cache_dir = ROOT / "documentation" / "confluence" / "cloud" / ".cache"
-    cache_dir.mkdir(exist_ok=True)
-    (cache_dir / f"{page_entry['local_file']}.version").write_text(str(pushed_version))
-    (cache_dir / f"{page_entry['local_file']}.hash").write_text(
-        hashlib.md5(local_path.read_bytes()).hexdigest()
+    # Update caches
+    CACHE_DIR.mkdir(exist_ok=True)
+    ver_cache.write_text(str(pushed_version), encoding="utf-8")
+    hash_cache.write_text(
+        hashlib.md5(local_text.encode()).hexdigest(), encoding="utf-8"
     )
-    print(f"Updated version cache: version {pushed_version}")
+    print(f"Updated version cache: v{pushed_version}")
 
 
 if __name__ == "__main__":

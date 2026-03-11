@@ -1,0 +1,165 @@
+--- gcm ---
+title: 04 - GMS -WP5.4 Review and Release System requirements
+page_id: 42634150
+version: 1
+source: http://confluence.microlab.club/rest/api/content/42634150
+---
+
+{table width=77.8127% class="relative-table wrapped"}
+{colgroup}
+{col style="width: 4.95965%;"}
+{col style="width: 18.624%;"}
+{col style="width: 29.7579%;"}
+{col style="width: 23.1788%;"}
+{col style="width: 13.1555%;"}
+{col style="width: 10.3242%;"}
+{/colgroup}
+{thead}
+{tr}
+{th}**ID**{/th}
+{th}**System Requirement Jira Ticket**{/th}
+{th}**System Requirement**{/th}
+{th}**Actions**{/th}
+{th}**Assignee**{/th}
+{th}**Due Date**{/th}
+{/tr}
+{/thead}
+{tr}
+{td}**1. **{/td}
+{td}**{jira:CDR-53}**{/td}
+{td}**Performance & Efficiency**{/td}
+{td}Review all child requirements, track implementation progress{/td}
+{td}{user:ff8081819335d39f0194db443b950015}{/td}
+{td}2025-04-25{/td}
+{/tr}
+{tr}
+{td}**1.1**{/td}
+{td}{jira:CDR-54}{/td}
+{td}The system shall minimize operational expenses by optimizing hosting, licensing, maintenance, and automation strategies.{/td}
+{td}Evaluate current cost drivers and implement optimizations{/td}
+{td}{user:ff8081819335d39f0194db443b950015}{/td}
+{td}2025-05-10{/td}
+{/tr}
+{tr}
+{td}**1.2**{/td}
+{td}{jira:CDR-55}{/td}
+{td}Achieve at least 50% of human worker performance with real-time monitoring.{/td}
+{td}Define metrics, set up monitoring tools, simulate workloads{/td}
+{td}{user:ff8081819335d39f0194db443b950015}{/td}
+{td}2025-06-01{/td}
+{/tr}
+{tr}
+{td}**1.3**{/td}
+{td}{jira:CDR-56}{/td}
+{td}Automatically adjust processing speeds based on workload and product type.{/td}
+{td}Develop control logic, test with various workloads{/td}
+{td}{user:ff8081819335d39f0194db443b950015}{/td}
+{td}2025-05-05{/td}
+{/tr}
+{tr}
+{td}**1.4**{/td}
+{td}{jira:CDR-57}{/td}
+{td}Synchronize operation with conveyor belt speed.{/td}
+{td}Integrate belt speed sensors, update system controller{/td}
+{td}{user:ff8081819335d39f0194db411201000d}{/td}
+{td}2025-06-01{/td}
+{/tr}
+{tr}
+{td}**2. **{/td}
+{td}**{jira:CDR-58}**{/td}
+{td}**Safety & Compliance**{/td}
+{td}Coordinate safety-related implementations{/td}
+{td}{user:ff8081819335d39f0194db26b9080002}{/td}
+{td}2025-04-30{/td}
+{/tr}
+{tr}
+{td}**2.1**{/td}
+{td}{jira:CDR-59}{/td}
+{td}Prioritize careful handling for fragile items over speed.{/td}
+{td}Tag fragile items in DB, update handling algorithm{/td}
+{td}{user:ff8081819335d39f0194db26b9080002}{/td}
+{td}2025-06-01{/td}
+{/tr}
+{tr}
+{td}**2.2**{/td}
+{td}{jira:CDR-60}{/td}
+{td}Halt operation and trigger an alarm when a person enters a restricted area.{/td}
+{td}Set up detection zones, integrate with control logic{/td}
+{td}{user:ff8081819335d39f0194db26b9080002}{/td}
+{td}2025-05-15{/td}
+{/tr}
+{tr}
+{td}**3. **{/td}
+{td}**{jira:CDR-61}**{/td}
+{td}**Monitoring & Maintenance**{/td}
+{td}Centralize telemetry and diagnostics tasks{/td}
+{td}{user:ff8081819335d39f0194db4160fa000f}{/td}
+{td}2025-05-01{/td}
+{/tr}
+{tr}
+{td}**3.1**{/td}
+{td}{jira:CDR-62}{/td}
+{td}Collect telemetry data and predict maintenance needs.{/td}
+{td}Implement data logging, build predictive model{/td}
+{td}{user:ff8081819335d39f0194db4160fa000f}{/td}
+{td}2025-05-20{/td}
+{/tr}
+{tr}
+{td}**3.2**{/td}
+{td}{jira:CDR-63}{/td}
+{td}Provide real-time video monitoring of sorting operations.{/td}
+{td}Install cameras, stream feed to control dashboard{/td}
+{td}{user:ff8081819335d39f0194db4160fa000f}{/td}
+{td}2025-05-12{/td}
+{/tr}
+{tr}
+{td}**4. **{/td}
+{td}**{jira:CDR-64}**{/td}
+{td}**Automation & Integration**{/td}
+{td}Ensure integration dependencies across systems{/td}
+{td}{user:ff8081819335d39f0194db26b9080002}{/td}
+{td}2025-05-01{/td}
+{/tr}
+{tr}
+{td}**4.1**{/td}
+{td}{jira:CDR-65}{/td}
+{td}Integrate with the conveyor belt for seamless pallet transfer.{/td}
+{td}Link control systems, validate timing and load distribution{/td}
+{td}{user:ff8081819335d39f0194db4160fa000f}{/td}
+{td}2025-05-22{/td}
+{/tr}
+{tr}
+{td}**5. **{/td}
+{td}**{jira:CDR-67}**{/td}
+{td}**Testing & Simulation**{/td}
+{td}Oversee simulation modules for performance validation{/td}
+{td}{user:ff8081819335d39f0194db411201000d}{/td}
+{td}2025-05-08{/td}
+{/tr}
+{tr}
+{td}**5.1**{/td}
+{td}{jira:CDR-69}{/td}
+{td}Include a simulation module for pre-deployment performance validation.{/td}
+{td}Design simulation logic, replicate realistic scenarios{/td}
+{td}{user:ff8081819335d39f0194db411201000d}{/td}
+{td}2025-05-25{/td}
+{/tr}
+{tr}
+{td}**6. **{/td}
+{td}**{jira:CDR-68}**{/td}
+{td}**Environmental Resilience**{/td}
+{td}Oversee all environmental robustness tasks{/td}
+{td}{user:ff8081819335d39f0194db411201000d}{/td}
+{td}2025-05-01{/td}
+{/tr}
+{tr}
+{td}**6.1**{/td}
+{td}{jira:CDR-70}{/td}
+{td}Operate reliably in slightly wet environments.{/td}
+{td}Waterproof components, test in humid/wet settings{/td}
+{td}{user:ff8081819335d39f0194db411201000d}{/td}
+{td}2025-05-18{/td}
+{/tr}
+{/table}
+
+[https://youtube.com/shorts/ZU4WqCVVSfw?si=PiTvVXAWds5F9xvk](https://youtube.com/shorts/ZU4WqCVVSfw?si=PiTvVXAWds5F9xvk)

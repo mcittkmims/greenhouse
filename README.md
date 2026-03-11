@@ -12,15 +12,19 @@ PBL IoT course project — Technical University of Moldova (UTM)
 documentation/
   confluence/
     confluence_pages.json   ← page ID map + config
-    cloud/                  ← auto-synced copies fetched from Confluence (do not manually edit)
+    cloud/                  ← auto-synced .gcm files fetched from Confluence
     wip/                    ← files currently being actively worked on
-    resources/              ← local reference/learning materials (not synced to Confluence)
+    resources/              ← local reference/learning materials (not synced)
   jira/
     board.html              ← local interactive Jira board shell
 scripts/
   confluence/
-    confluence_sync.py      ← fetch pages from Confluence
-    confluence_push.py      ← push local edits back to Confluence
+    confluence_sync.py      ← fetch Confluence → local .gcm files
+    confluence_push.py      ← push local .gcm edits back to Confluence
+    gcm_from_html.py        ← converter: Confluence storage HTML → GCM
+    gcm_to_html.py          ← converter: GCM → Confluence storage HTML
+    gcm_spec.py             ← shared GCM constants and utilities
+    GCM_SPEC.md             ← GCM format specification
   jira/
     jira_board_server.py    ← local interactive Jira board API/server + Jira automation commands
 .env                        ← credentials (never commit)
@@ -79,31 +83,47 @@ python3 scripts/jira/jira_board_server.py create --issue-type Task --summary "Ne
 
 Confluence-specific files live only in `documentation/confluence/` and `scripts/confluence/`.
 
+### GCM — GMS Confluence Markup
+
+Local copies of Confluence pages are stored in **GCM format** (`.gcm` files), a custom
+line-oriented markup designed for lossless round-tripping of Confluence storage HTML.
+See `scripts/confluence/GCM_SPEC.md` for the full format specification.
+
+Key syntax:
+- Headings: `= H1`, `== H2`, `=== H3`
+- Bold/italic: `**bold**`, `*italic*`
+- Links: `[text](url)`, `{link page="Page Title"}text{/link}`
+- Jira issues: `{jira:GMS-10}`
+- Tables: `{table}…{/table}` with full `rowspan`/`colspan` support
+- Images: `{image file="diagram.png" height=400}`
+- Raw passthrough: `{raw}…{/raw}` for any unrecognized Confluence XML
+
+### Syncing
+
 Fetch pages from Confluence up to a given work package:
 
 ```sh
 python3 scripts/confluence/confluence_sync.py --up-to 5.4
+python3 scripts/confluence/confluence_sync.py --up-to 5.4 --dry-run
+python3 scripts/confluence/confluence_sync.py --up-to 5.4 --force
 ```
 
-Pages are fetched in ascending WP order: 1.1 → 2.1 → 3.1 → 3.2 → 3.3 → 3.4 → 4.1 → 4.2 → 4.3 → 5.1 → 5.2 → 5.3 → 5.4 → ...
+Pages are fetched in ascending WP order, converted from Confluence storage HTML to GCM,
+and written to `documentation/confluence/cloud/*.gcm`. Version caching enables incremental sync.
 
----
-
-## Pushing Changes to Confluence
+### Pushing Changes
 
 ```sh
-python3 scripts/confluence/confluence_push.py --file WP4.2_Analyze_Stakeholder_Requirements.md
+python3 scripts/confluence/confluence_push.py --file WP4.2_Analyze_Stakeholder_Requirements.gcm
+python3 scripts/confluence/confluence_push.py --file WP4.2_Analyze_Stakeholder_Requirements.gcm --dry-run
 ```
 
-- Shows a diff against the cached cloud copy before pushing
-- Use `--dry-run` to preview without pushing
+- Only pushes if local file differs from last sync (hash-based detection)
+- Detects Confluence version conflicts
+- Use `--dry-run` to preview the converted XHTML without pushing
 - Use `--no-confirm` to skip the confirmation prompt
 
----
+### Editing Workflow
 
-## Editing Workflow
-
-1. Move the target file from `documentation/confluence/cloud/` to `documentation/confluence/wip/`
-2. Edit the file
-3. Push back to Confluence using `scripts/confluence/confluence_push.py`
-4. Move the file back to `documentation/confluence/cloud/`
+1. Edit the `.gcm` file in `documentation/confluence/cloud/`
+2. Push back to Confluence using `scripts/confluence/confluence_push.py`

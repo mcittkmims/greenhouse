@@ -1,0 +1,691 @@
+--- gcm ---
+title: 04 - GMS -WP5.1 Analyze Stakeholder Requirements
+page_id: 42634147
+version: 4
+source: http://confluence.microlab.club/rest/api/content/42634147
+---
+
+{table width=109.427% class="wrapped relative-table"}
+{colgroup}
+{col style="width: 5.10856%;"}
+{col style="width: 10.281%;"}
+{col style="width: 4.34227%;"}
+{col style="width: 7.79055%;"}
+{col style="width: 6.76884%;"}
+{col style="width: 12.8352%;"}
+{col style="width: 11.7497%;"}
+{col style="width: 11.5581%;"}
+{col style="width: 13.4738%;"}
+{col style="width: 7.53512%;"}
+{col style="width: 8.55683%;"}
+{/colgroup}
+{thead}
+{tr}
+{th}SHR-ID{/th}
+{th}GMS-ID{/th}
+{th}Story Type{/th}
+{th}User{/th}
+{th}MoSCoW{/th}
+{th}Action/Process{/th}
+{th}Circumstances{/th}
+{th}Outcome{/th}
+{th}Clarification Comments{/th}
+{th}Status{/th}
+{th}JIRA Comment{/th}
+{/tr}
+{/thead}
+{tr}
+{td}SHR-1{/td}
+{td}{jira:GMS-10}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-2{/td}
+{td}{jira:GMS-16}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-3{/td}
+{td}{jira:GMS-11}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-4{/td}
+{td}{jira:GMS-17}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-5{/td}
+{td}{jira:GMS-12}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-6{/td}
+{td}{jira:GMS-18}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-7{/td}
+{td}{jira:GMS-13}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-8{/td}
+{td}{jira:GMS-19}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-9{/td}
+{td}{jira:GMS-14}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-10{/td}
+{td}{jira:GMS-20}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-11{/td}
+{td}{jira:GMS-15}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-12{/td}
+{td}{jira:GMS-21}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-13{/td}
+{td}{jira:GMS-22}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-14{/td}
+{td}{jira:GMS-28}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-15{/td}
+{td}{jira:GMS-23}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-16{/td}
+{td}{jira:GMS-29}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-17{/td}
+{td}{jira:GMS-34}{/td}
+{td}User Story{/td}
+{td}Greenhouse Owner{/td}
+{td}Must Have{/td}
+{td}Access the full GMS dashboard from any standard web browser without installing an app{/td}
+{td}When travelling or working remotely using any available device (laptop, tablet, phone){/td}
+{td}Monitoring is accessible from any device; no hardware or app lock-in; adoption barrier is reduced{/td}
+{td}66.7% of survey respondents selected the browser dashboard as their preferred monitoring channel. Zero-install browser access is essential for non-technical users. Acceptance: dashboard fully functional on Chrome, Firefox, and Safari on both desktop and mobile. Must be combined with mobile-responsive design (GMS-36) — browser access alone is insufficient if the layout breaks on small screens. Cross-reference: GMS-52/58 (4G/5G connectivity). Linked to GMS-37 (Job Story pair).{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Requirement analyzed and refined. Decomposed into: User = greenhouse owner, Action = access dashboard from any browser with no app install, Circumstances = remote or travelling with any device, Outcome = no device/app lock-in. Clarification added: browser access must be paired with mobile-responsive design (GMS-36) to be meaningful — these two requirements are interdependent. Acceptance: fully functional on Chrome, Firefox, Safari on desktop and mobile. Cross-reference added to GMS-52/58 for connectivity dependency. Linked to GMS-37. Moving to Proposed.{/td}
+{/tr}
+{tr}
+{td}SHR-18{/td}
+{td}{jira:GMS-37}{/td}
+{td}Job Story{/td}
+{td}Greenhouse Owner{/td}
+{td}Must Have{/td}
+{td}Access dashboard remotely via any standard web browser without app installation{/td}
+{td}When operator is traveling or away from greenhouse; requires zero-install browser-based access{/td}
+{td}Remote monitoring is possible from any device with a browser, eliminating hardware dependency{/td}
+{td}This is the Job Story counterpart to GMS-34 (US). Zero-install requirement means no native app, no browser plugin. Must function on Chrome, Firefox, Safari. Cross-browser compatibility testing should be part of acceptance criteria. Links to connectivity requirement (GMS-52/GMS-58) - 4G access must also be stable.{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Analyzed: traveling owner, action is browser-based remote access, circumstance is being away from site, outcome is hardware-independent monitoring. Clarification added on browser compatibility scope. 
+Moving to Proposed.{/td}
+{/tr}
+{tr}
+{td}SHR-19{/td}
+{td}{jira:GMS-35}{/td}
+{td}User Story{/td}
+{td}Greenhouse Operator{/td}
+{td}Must Have{/td}
+{td}Access a simple, consolidated overview page showing all greenhouse parameters{/td}
+{td}When checking greenhouse status at any time, especially during daily management{/td}
+{td}Operator can assess all critical conditions at a glance without navigating multiple screens{/td}
+{td}Consolidated single-page layout is critical for non-technical users. Must show sensor readings, alerts, and actuator status. Validated by stakeholder survey - operators need to assess all parameters in one view. 'Simple' should be defined in acceptance criteria (e.g., max 2 taps to reach any key metric).{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Analyzed: user is operator, action is accessing overview page, circumstance is daily/routine checks, outcome is at-a-glance assessment. Clarification added re: definition of 'simple'.
+Moving to Proposed.{/td}
+{/tr}
+{tr}
+{td}SHR-20{/td}
+{td}{jira:GMS-38}{/td}
+{td}Job Story{/td}
+{td}Greenhouse Operator{/td}
+{td}Must Have{/td}
+{td}View all critical greenhouse conditions on one consolidated page without navigating{/td}
+{td}During quick status checks, possibly under time pressure or while doing other tasks{/td}
+{td}All critical parameters visible on a single screen; no additional navigation required{/td}
+{td}Job Story pair to GMS-35 (US). 'Critical conditions' must be explicitly listed in acceptance criteria: soil moisture, temperature, humidity, CO2 levels, actuator status, and active alerts. 'At a glance' implies data must be visually prioritized - consider using color-coded status indicators. Page load time should be defined (e.g., <3s on 4G).{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Analyzed: operator doing quick check, action is viewing single-page overview, circumstance is time-constrained situation, outcome is instant situational awareness. Clarification added on what 'critical conditions' includes. 
+Moving to Proposed.{/td}
+{/tr}
+{tr}
+{td}SHR-21{/td}
+{td}{jira:GMS-40}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-22{/td}
+{td}{jira:GMS-41}{/td}
+{td}Job Story{/td}
+{td}Farmer / Greenhouse Operator{/td}
+{td}Should Have{/td}
+{td}Receive push notification on mobile device when any sensor reading exceeds a critical threshold{/td}
+{td}When operator is not on-site and cannot see the in-dashboard alert; critical event (e.g., extreme temperature, actuator failure){/td}
+{td}Operator is immediately alerted regardless of location and can react before crop damage occurs{/td}
+{td}Job Story pair to GMS-40 (US). Classification as Should Have is correct, in-dashboard alerts cover the baseline. Two-tier severity model recommended (per peer review R3): informational = in-dashboard only; critical = push/SMS triggered. Team must define which events qualify as 'critical' (e.g., temp > 35°C, soil moisture < 10%, actuator failure). Alert fatigue risk if severity not tiered.{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Analyzed: off-site farmer, action is receiving push notification, circumstance is away-from-site during threshold breach, outcome is immediate reaction capability. Severity tiering noted per peer review R3. Moving to Proposed.{/td}
+{/tr}
+{tr}
+{td}SHR-23{/td}
+{td}{jira:GMS-42}{/td}
+{td}User Story{/td}
+{td}Greenhouse Operator / Business Owner{/td}
+{td}Should Have{/td}
+{td}View historical environmental trend data with visualizations over configurable time periods{/td}
+{td}When planning next growing season, analyzing past crop performance, or preparing reports for investors/agronomists{/td}
+{td}Data-driven planting and management decisions based on historical environmental trends{/td}
+{td}Retention period must be specified - per peer review R2, 90-day minimum is recommended to cover a full growing cycle. Acceptance criteria: operator can select date ranges, view line charts for all monitored parameters, and data is retained for at least 90 days. Linked to GMS-43, GMS-44 (export). Trend visualization format (chart type, granularity) should be defined in SRS.{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Analyzed: operator/owner planning decisions, action is viewing historical trends, circumstance is seasonal planning and performance review, outcome is improved data-driven decisions. 90-day retention requirement logged per peer review R2. Moving to Proposed.{/td}
+{/tr}
+{tr}
+{td}SHR-24{/td}
+{td}{jira:GMS-49}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-25{/td}
+{td}{jira:GMS-43}{/td}
+{td}User Story{/td}
+{td}Business Owner / Greenhouse Investor{/td}
+{td}Should Have{/td}
+{td}Download formatted system performance reports and/or raw sensor data exports from the dashboard{/td}
+{td}When meeting with investors, agronomists, or regulatory authorities and needing documented evidence of system performance or raw data for analysis{/td}
+{td}Operator can export data in structured formats (Excel/CSV) and/or formatted summaries suitable for external sharing{/td}
+{td}GMS-44 ('export sensor data to a spreadsheet') has been consolidated into this requirement and marked INVALID, as both requirements share the same user, circumstance, and outcome. This requirement now covers both export modes: (1) raw sensor data export — Excel/CSV with minimum fields: timestamp, sensor ID, parameter name, value, unit (per peer review R5 and explicit survey requests); (2) formatted summary report suitable for investor/agronomist presentation. Acceptance criteria to be defined in SRS covering both output types.{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Consolidated with GMS-44 (marked INVALID — duplicate). Updated scope to cover both raw CSV/Excel export and formatted report generation. R5 export field spec (timestamp + sensor ID + unit) now formally included in this requirement. Moving to Proposed.{/td}
+{/tr}
+{tr}
+{td}SHR-26{/td}
+{td}{jira:GMS-50}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-27{/td}
+{td}{jira:GMS-53}{/td}
+{td}User Story{/td}
+{td}Small-scale Farmer{/td}
+{td}Must Have{/td}
+{td}Provide a GMS solution priced within the budget constraints of small-scale farmers{/td}
+{td}When a small farmer is evaluating whether to invest in greenhouse automation for the first time{/td}
+{td}Farmer can adopt the GMS without prohibitive upfront cost; the primary user segment is not excluded by price{/td}
+{td}50% of survey respondents are small-scale farmers — affordability is a prerequisite for adoption, not a nice-to-have. Project Charter budget estimate: 800–2,000 EUR for hardware. This requirement covers the adoption barrier; demonstrating ROI through savings is handled separately by GMS-54 (Should Have). Peer review R1 noted the cost savings measurement needs a defined mechanism — logged for SRS acceptance criteria phase. Linked to GMS-55 (Job Story pair).{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Requirement analyzed and refined. Decomposed into: User = small-scale farmer, Action = provide affordable solution, Circumstances = pre-adoption evaluation with limited budget, Outcome = adoption without significant financial risk. Scope clarified: this requirement covers the entry cost barrier only; ROI demonstration is a separate Should Have (GMS-54/56). Peer review R1 finding logged — cost savings measurement mechanism to be defined in SRS acceptance criteria. Hardware budget reference: 800–2,000 EUR per Project Charter. Linked to GMS-55. Moving to Proposed.{/td}
+{/tr}
+{tr}
+{td}SHR-28{/td}
+{td}{jira:GMS-55}{/td}
+{td}Job Story{/td}
+{td}Small-scale Farmer / Potential Investor{/td}
+{td}Should Have{/td}
+{td}Present a clear cost breakdown (hardware, cloud, installation) accessible to the user before or during onboarding{/td}
+{td}When a farmer or investor is evaluating whether to commit to the GMS for their operation{/td}
+{td}Decision-maker has the financial information needed to assess fit; informed investment decisions are supported{/td}
+{td}Complements the Must Have affordability requirement (GMS-53). At pilot stage, a documented cost estimate at project handoff satisfies this requirement — a pricing module in the dashboard MVP is not required. Peer review R1: concrete measurement approach for savings deferred to SRS acceptance criteria. Acceptance: cost estimate document available and referenced from the dashboard or onboarding materials. Linked to GMS-53 (User Story pair).{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Requirement analyzed and refined. Decomposed into: User = farmer or investor, Action = access transparent pricing and cost estimate, Circumstances = pre-investment evaluation, Outcome = informed financial decision. Clarified that a pricing module in the MVP dashboard is not required for pilot — a documented cost estimate accessible at onboarding satisfies this at the current stage. Peer review R1 noted: measurement mechanism for savings deferred to SRS phase. Acceptance: cost breakdown document available and linked from onboarding materials. Linked to GMS-53. Moving to Proposed.{/td}
+{/tr}
+{tr}
+{td}SHR-29{/td}
+{td}{jira:GMS-54}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-30{/td}
+{td}{jira:GMS-56}{/td}
+{td}Job Story{/td}
+{td}Investor / Business Owner{/td}
+{td}Should Have{/td}
+{td}Log and display water and energy consumption data comparable to a manually established baseline{/td}
+{td}When reviewing pilot operational results at the end of a growing period{/td}
+{td}Investor can quantify savings against baseline and calculate ROI; evidence-based funding decisions are enabled{/td}
+{td}Research confirms smart greenhouse systems can achieve up to 40% water and 25% energy savings. Acceptance: system logs consumption data and allows comparison to a baseline set at pilot start (per peer review R1). Requires 90-day data retention (per peer review R2) to show meaningful trends across a full growing cycle. Depends on historical data module (GMS-42/49) being in place. Actual savings figures are a pilot-phase outcome — the logging infrastructure must be built during the implementation phase. Linked to GMS-54 (User Story pair).{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Requirement analyzed and refined. Decomposed into: User = investor/business owner, Action = log and display water and energy consumption vs. baseline, Circumstances = end-of-period pilot review, Outcome = quantified ROI evidence. Peer review R1: baseline must be manually set at pilot start for meaningful comparison. Peer review R2: 90-day minimum retention required for seasonal trend analysis. Dependency: historical data module (GMS-42/49) must be in place before this can be validated. Linked to GMS-54. Moving to Proposed.{/td}
+{/tr}
+{tr}
+{td}SHR-31{/td}
+{td}{jira:GMS-45}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-32{/td}
+{td}{jira:GMS-46}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-33{/td}
+{td}{jira:GMS-47}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-34{/td}
+{td}{jira:GMS-48}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-35{/td}
+{td}{jira:GMS-24}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-36{/td}
+{td}{jira:GMS-30}{/td}
+{td}Job Story{/td}
+{td}Farmer / Greenhouse Operator{/td}
+{td}Must Have{/td}
+{td}Display soil moisture as the primary/top-priority widget on dashboard load{/td}
+{td}When opening the dashboard at any time, especially during daily routine checks{/td}
+{td}Operator sees soil moisture status immediately without navigating; irrigation decision can be made at a glance{/td}
+{td}Soil moisture scored highest in survey (4.83/5) and 39% cited drought as their top production incident — prominence on dashboard is a direct UX requirement. Soil moisture widget must be visible above the fold on all screen sizes. Acceptance: widget appears in top section of dashboard on both mobile and desktop. Linked to GMS-24 (User Story pair).{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Requirement analyzed and refined. Decomposed into: User = Farmer/Operator, Action = display soil moisture widget prominently on load, Circumstances = any dashboard open event, Outcome = immediate irrigation assessment without navigation. Survey evidence confirms Must Have priority (4.83/5, 39% incident rate). Acceptance criterion defined: soil moisture widget visible above the fold on all screen sizes. Linked to GMS-24. Moving to Proposed.{/td}
+{/tr}
+{tr}
+{td}SHR-37{/td}
+{td}{jira:GMS-25}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-38{/td}
+{td}{jira:GMS-31}{/td}
+{td}Job Story{/td}
+{td}Greenhouse Owner (off-site / abroad){/td}
+{td}Must Have{/td}
+{td}Remotely trigger irrigation activation via browser dashboard{/td}
+{td}When owner is abroad for an extended period and an unexpected dry spell occurs at the greenhouse{/td}
+{td}Irrigation is activated remotely without on-site presence; crops are protected during absence{/td}
+{td}Survey: one respondent explicitly required fully autonomous and remote-controllable operation for up to 3 months while abroad. Remote activation must function reliably over 4G/5G (cross-reference GMS-52/58). Requires authentication controls (GMS-47/48) to prevent unauthorized triggering. Manual remote override must co-exist with automated threshold-based control. Linked to GMS-25 (User Story pair).{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Requirement analyzed and refined. Decomposed into: User = greenhouse owner abroad, Action = remotely trigger irrigation via browser, Circumstances = extended absence with unexpected dry spell, Outcome = crop protection without on-site presence. Key dependency identified: must work over 4G/5G (GMS-52/58) and requires secure authentication (GMS-47/48). Remote manual override must not conflict with automated threshold control — clarified for SRS use case definition. Linked to GMS-25. Moving to Proposed.{/td}
+{/tr}
+{tr}
+{td}SHR-39{/td}
+{td}{jira:GMS-26}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-40{/td}
+{td}{jira:GMS-32}{/td}
+{td}Job Story{/td}
+{td}Farmer{/td}
+{td}Must Have{/td}
+{td}Automatically halt irrigation when soil moisture sensor reading reaches the configured target threshold{/td}
+{td}During any active irrigation cycle, whether sensor-triggered or schedule-triggered{/td}
+{td}Irrigation stops at the correct moisture level; overwatering, root damage, and water waste are prevented{/td}
+{td}Automatic cutoff is the logical complement to automatic start (GMS-16/31). Survey: 17% cited irrigation failures as a direct production problem. The target threshold must be user-configurable (cross-reference GMS-23/29 — crop-specific setpoints). Critical: the edge controller must execute the cutoff locally even during cloud connectivity loss — this is an offline autonomy requirement. Acceptance: irrigation stops within 30 seconds of moisture reaching the setpoint. Linked to GMS-26 (User Story pair).{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Requirement analyzed and refined. Decomposed into: User = farmer, Action = automatic irrigation cutoff at target threshold, Circumstances = any active irrigation cycle (sensor or scheduled), Outcome = prevention of overwatering and root damage. Critical offline autonomy dependency identified: edge controller must execute cutoff locally without cloud connectivity. Threshold must be user-configurable per crop type (GMS-23/29). Acceptance criterion: irrigation stops within 30 seconds of reaching setpoint. Linked to GMS-26. Moving to Proposed.{/td}
+{/tr}
+{tr}
+{td}SHR-41{/td}
+{td}{jira:GMS-27}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-42{/td}
+{td}{jira:GMS-33}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-43{/td}
+{td}{jira:GMS-52}{/td}
+{td}User Story{/td}
+{td}Rural Farmer{/td}
+{td}Must Have{/td}
+{td}Use all system features reliably over a 4G/5G mobile data connection{/td}
+{td}When located in rural Moldova where 55.6% of greenhouse sites rely on mobile data and only 33.3% have fixed broadband{/td}
+{td}System fully accessible and functional over mobile network; no fixed broadband required{/td}
+{td}Critical infrastructure requirement backed by survey data. Must include: MQTT/HTTPS optimized for high-latency mobile links, lightweight dashboard payload, edge caching for connectivity interruptions. Acceptance criteria: all core features functional on 4G with latency up to 200ms. Also covers the 11.1% with no stable connection — edge offline fallback is complementary.{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Analyzed: rural farmer dependent on mobile data, action is system usage over 4G/5G, circumstance is rural Moldova with limited broadband, outcome is full functionality without wired connection. Technical architecture implications noted. Moving to Proposed.{/td}
+{/tr}
+{tr}
+{td}SHR-44{/td}
+{td}{jira:GMS-58}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}SHR-45{/td}
+{td}{jira:GMS-57}{/td}
+{td}User Story{/td}
+{td}Small-scale Farmer (mobile data plan){/td}
+{td}Should Have{/td}
+{td}Optimize dashboard for minimal data transfer and fast load on constrained mobile connections{/td}
+{td}When accessing the GMS dashboard on a limited or pay-per-MB mobile data plan in a rural area{/td}
+{td}Dashboard is usable without excessive data consumption; operational cost of using the system is kept low{/td}
+{td}Survey: 55.6% of respondents rely on mobile data as their primary connection. Bandwidth optimization is important for usability but does not block core functionality — correctly classified as Should Have. Acceptance: initial dashboard page load transfers under 200 KB; large historical charts are lazy-loaded and not fetched on dashboard open. Implementation note: compress sensor payloads, minimize static asset size, avoid auto-loading full data history. Cross-reference: GMS-36 (mobile responsive design), GMS-52/58 (4G/5G connectivity Must Have). Linked to GMS-59 (Job Story pair).{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Requirement analyzed and refined. Decomposed into: User = small-scale farmer on mobile data plan, Action = optimize dashboard for minimal data transfer and fast load, Circumstances = limited or pay-per-MB mobile connection in rural area, Outcome = usable and cost-effective dashboard on constrained plans. Acceptance criterion defined: initial page load under 200 KB transferred; historical charts lazy-loaded on demand. Implementation guidance noted: compress payloads, minimize assets, avoid auto-fetching full history on open. Cross-references added to GMS-36 (mobile responsive) and GMS-52/58 (connectivity). Linked to GMS-59. Moving to Proposed.{/td}
+{/tr}
+{tr}
+{td}SHR-46{/td}
+{td}{jira:GMS-59}{/td}
+{td}Job Story{/td}
+{td}Small-scale Farmer{/td}
+{td}Should Have{/td}
+{td}Deliver dashboard pages that respond quickly and consume minimal bandwidth on slow or metered connections{/td}
+{td}When checking greenhouse status on a limited mobile data plan, potentially in a low-signal rural area{/td}
+{td}System is cost-effective to use on limited plans; pages are responsive even on slower connections{/td}
+{td}Companion Job Story to GMS-57 (User Story pair). Together, GMS-57 and GMS-59 define the performance budget for the web dashboard. Acceptance: page load time under 3 seconds on a standard 4G connection; dashboard remains functional on connections as slow as 1 Mbps. Dashboard should not auto-refresh heavy payloads — allow user-controlled or interval-based lightweight polling instead. Cross-reference: GMS-52/58 (4G/5G connectivity Must Have) establishes the baseline connectivity assumption this requirement builds on.{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Requirement analyzed and refined. Decomposed into: User = small-scale farmer on mobile data plan, Action = deliver fast-loading low-bandwidth dashboard pages, Circumstances = limited mobile data plan in rural/low-signal area, Outcome = cost-effective and responsive system usage. Together with GMS-57, these two requirements define the full performance budget for the dashboard. Acceptance criteria: page load under 3 seconds on 4G; functional at 1 Mbps minimum. Auto-refresh of heavy payloads should be avoided — lightweight polling recommended instead. Cross-reference added to GMS-52/58 as connectivity baseline dependency. Linked to GMS-57. Moving to Proposed.{/td}
+{/tr}
+{tr}
+{td}SHR-47{/td}
+{td}{jira:GMS-36}{/td}
+{td}User Story{/td}
+{td}Small-scale Farmer{/td}
+{td}Must Have{/td}
+{td}Access and operate all system features via smartphone browser{/td}
+{td}When managing greenhouse without access to a desktop computer, which is the norm for 55.6% of surveyed operators relying on mobile data{/td}
+{td}Full system usability on mobile without degradation of functionality{/td}
+{td}Mobile-responsive design is a hard requirement based on survey data: 55.6% use smartphones as primary device. 'Look and work well' must be defined: minimum viewport support (e.g., 360px), touch-friendly controls, no horizontal scrolling. Acceptance criteria should include testing on common Android/iOS screen sizes.{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Analyzed: small-scale farmer needs full mobile access. Circumstance is daily greenhouse management on smartphone. Clarification added re: specific responsive design targets. Moving to Proposed.{/td}
+{/tr}
+{tr}
+{td}SHR-48{/td}
+{td}{jira:GMS-39}{/td}
+{td}Job Story{/td}
+{td}Small-scale Farmer (on the move){/td}
+{td}Must Have{/td}
+{td}Perform all management actions (monitor, configure, trigger irrigation) via smartphone{/td}
+{td}When farmer is physically away from a desk - in the field, commuting, or at another site{/td}
+{td}Full feature parity between mobile and desktop access; no actions require a computer{/td}
+{td}Job Story pair to GMS-36 (US). 'Fully functional' must be scoped — does it include configuration of thresholds? Irrigation scheduling? All features that a desktop user can access should be available on mobile. Team should confirm if any features are deliberately desktop-only and document exceptions explicitly.{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Analyzed: farmer on-the-go, action is full mobile management, circumstance is away-from-desk field scenario, outcome is complete mobile parity. Clarification added: need to define 'fully functional' scope. 
+Moving to Proposed.{/td}
+{/tr}
+{tr}
+{td}SHR-49{/td}
+{td}{jira:GMS-44}{/td}
+{td}User Story{/td}
+{td}Business Owner{/td}
+{td}Should Have{/td}
+{td}Export raw sensor data to Excel or CSV format from the dashboard{/td}
+{td}When preparing compliance records, advisory meeting materials, or business performance documentation{/td}
+{td}Sensor data available in a structured spreadsheet format suitable for agronomists, investors, and authorities{/td}
+{td}INVALID - fully covered by GMS-43. Both requirements share the same user (Business Owner), circumstance (external sharing with agronomists/investors), and outcome (structured data export). The specific CSV/Excel format requirement and minimum field spec (timestamp, sensor ID, parameter name, value, unit) have been absorbed into GMS-43's updated clarification. Retaining this ticket would create duplicate acceptance criteria and ambiguous implementation scope.{/td}
+{td}{status:INVALID|color=Red}{/td}
+{td}Marked INVALID: requirement fully absorbed by GMS-43, which has been updated to cover both formatted reports and raw CSV/Excel data export. No unique scope remains in this ticket. Closing.{/td}
+{/tr}
+{tr}
+{td}SHR-50{/td}
+{td}{jira:GMS-51}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{/table}

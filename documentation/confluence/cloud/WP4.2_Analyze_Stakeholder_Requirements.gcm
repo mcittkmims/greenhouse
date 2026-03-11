@@ -1,0 +1,342 @@
+--- gcm ---
+title: 04 - GMS -WP4.2 Analyze Stakeholder Requirements
+page_id: 42634111
+version: 14
+source: http://confluence.microlab.club/rest/api/content/42634111
+---
+
+== **Overview**
+
+This document presents the analysis and MoSCoW classification of stakeholder requirements for the Greenhouse Management System (GMS). The requirements in this document are derived directly from WP4.1 — Develop Stakeholder Requirements, which sourced them from four primary inputs: the stakeholder survey conducted in February 2026 (18 respondents), stakeholder workshop discussions, direct stakeholder interviews, and findings from the technology research phase. A second set of requirements, extracted specifically from open-ended survey responses, is presented separately in the lower section of the table.
+
+Each entry in the table includes the following columns:
+
+- **Category** — the functional area the requirement belongs to.
+- **Stakeholder Requirement** — a precise, verifiable statement of what the system must or should do.
+- **US (User Story)** — a role-based expression of the requirement from the user's perspective.
+- **JS (Job Story)** — a context-driven expression of the requirement focused on the situation and motivation.
+- **Classification** — MoSCoW priority assigned based on stakeholder evidence and project constraints.
+- **Rationale** — the evidence-based justification for the assigned classification.
+
+== Requirements
+
+{table class="wrapped"}
+{thead}
+{tr}
+{th style="text-align: left;"}Category{/th}
+{th style="text-align: left;"}Stakeholder Requirements{/th}
+{th style="text-align: left;"}US (User Stories){/th}
+{th style="text-align: left;"}JS (Job Stories){/th}
+{th style="text-align: left;"}Classification{/th}
+{th style="text-align: left;"}Rationale{/th}
+{/tr}
+{/thead}
+{tr}
+{td rowspan=6}Environmental Monitoring and Control{/td}
+{td}The system should monitor soil moisture in real time and trigger automated irrigation based on configurable thresholds.{/td}
+{td}As a farmer, I want the system to monitor soil moisture continuously so that my crops receive water only when needed.{/td}
+{td}When soil moisture drops below a set threshold, I want the system to automatically activate irrigation so I can avoid crop stress without being on-site.{/td}
+{td}Must Have{/td}
+{td}Highest survey score (4.83/5) and cited by 39% of respondents as their most frequent production-impacting incident; soil moisture is the foundational trigger for all irrigation automation.{/td}
+{/tr}
+{tr}
+{td}The system must continuously monitor air temperature and trigger heating or ventilation actuators when thresholds are exceeded.{/td}
+{td}As a greenhouse operator, I want real-time temperature monitoring so that I can prevent crop damage from overheating or frost.{/td}
+{td}When temperature falls below 10°C or exceeds 35°C, I want the system to activate heating or ventilation automatically so I can protect my crops without manual intervention.{/td}
+{td}Must Have{/td}
+{td}Second highest survey score (4.61/5) with 22% citing temperature extremes as a recurring incident; Moldova's −15°C to +35°C climate range makes automated thermal regulation non-negotiable.{/td}
+{/tr}
+{tr}
+{td}The system must monitor relative humidity at canopy level and activate humidification or ventilation actuators accordingly.{/td}
+{td}As an operator, I want humidity levels tracked automatically so that I can prevent fungal diseases caused by excessive moisture.{/td}
+{td}When humidity exceeds safe levels, I want the system to trigger ventilation so I can reduce disease risk without constant manual checks.{/td}
+{td}Must Have{/td}
+{td}Third highest survey score (4.72/5); excess humidity directly triggers fungal pathogen growth and is tightly coupled with temperature and ventilation control.{/td}
+{/tr}
+{tr}
+{td}The system should monitor CO₂ concentration and support controlled enrichment to optimise photosynthesis.{/td}
+{td}As a greenhouse operator, I want CO₂ levels tracked so that I can optimise growing conditions and increase yield.{/td}
+{td}When CO₂ drops below optimal levels, I want the system to alert me so I can adjust enrichment and improve crop productivity.{/td}
+{td}Should Have{/td}
+{td}Lowest environmental rating (4.22/5) with no respondents citing CO₂ as a production incident, yet controlled enrichment (800–1200 ppm) is documented to increase crop yield by 20–30%.{/td}
+{/tr}
+{tr}
+{td}The system should display live readings that refresh automatically without needing to reload the page.{/td}
+{td}As a greenhouse operator, I want up-to-date readings on my screen so that I can catch problems as soon as they happen.{/td}
+{td}When conditions change rapidly, I want the dashboard to refresh automatically so I can respond before crop damage occurs.{/td}
+{td}Must Have{/td}
+{td}66.7% of respondents selected the dashboard as their primary monitoring channel; automatic refresh is essential for detecting fast-changing conditions without manual page reloads.{/td}
+{/tr}
+{tr}
+{td}The system should alert the user when any reading goes outside the acceptable range.{/td}
+{td}As a farmer, I want to receive a warning when conditions become dangerous so that I can act before my crops are damaged.{/td}
+{td}When a parameter exceeds a safe range, I want an immediate alert so I can intervene before plants are stressed.{/td}
+{td}Must Have{/td}
+{td}Survey respondents explicitly requested threshold-based alerts across all monitored parameters; without in-system alerting, real-time monitoring cannot prevent crop loss during unattended periods.{/td}
+{/tr}
+{tr}
+{td}Automated Irrigation{/td}
+{td}The system should allow operators to set irrigation schedules as a backup to sensor-based control.{/td}
+{td}As a farmer, I want irrigation to follow a timed schedule so that my greenhouse can run for months without anyone on-site.{/td}
+{td}When I am abroad for extended periods, I want a timed irrigation schedule to run autonomously so I can keep the greenhouse operational without being on-site.{/td}
+{td}Must Have{/td}
+{td}One survey respondent required fully autonomous operation for up to 3 months while abroad; schedule-based irrigation ensures continuity when connectivity or sensor feedback is unavailable.{/td}
+{/tr}
+{tr}
+{td}Climate Control{/td}
+{td}The system should allow operators to set acceptable ranges for temperature and humidity.{/td}
+{td}As a farmer, I want to define my own comfort zones for the greenhouse so that the system reacts according to my specific crop needs.{/td}
+{td}When I switch to a different crop, I want to reconfigure temperature and humidity ranges so I can adapt the system to new plant requirements.{/td}
+{td}Must Have{/td}
+{td}Stakeholders growing different crop types noted the need to adjust setpoints per species; fixed thresholds would make automation inapplicable across varied growing scenarios.{/td}
+{/tr}
+{tr}
+{td rowspan=2}Web Dashboard{/td}
+{td}The system should have a web-based dashboard accessible from any browser without installing an app.{/td}
+{td}As a greenhouse owner, I want to check my greenhouse from a browser on any device so that I am not tied to a specific phone or application.{/td}
+{td}When I am travelling, I want to access the dashboard from any browser so I can monitor my greenhouse without carrying specific hardware.{/td}
+{td}Must Have{/td}
+{td}66.7% of respondents selected a browser dashboard as their preferred monitoring channel; zero-install browser access eliminates device lock-in and lowers adoption barriers.{/td}
+{/tr}
+{tr}
+{td}The dashboard should show live sensor data, active alerts, and actuator status in a clear and simple layout.{/td}
+{td}As an operator, I want a simple overview page so that I can understand the state of my greenhouse at a glance.{/td}
+{td}When checking greenhouse status quickly, I want a clear single-page overview so I can assess all critical conditions at a glance.{/td}
+{td}Must Have{/td}
+{td}Stakeholders described needing to assess all parameters in one view; a consolidated, simple layout is critical for non-technical users to make timely operational decisions.{/td}
+{/tr}
+{tr}
+{td}Alerts and Notifications{/td}
+{td}The system should send SMS or push notifications when critical thresholds are exceeded.{/td}
+{td}As a farmer, I want to be notified on my phone when something goes wrong so that I can react even when I am away from the computer.{/td}
+{td}When a critical threshold is exceeded, I want a push notification on my phone so I can react immediately even when away from the site.{/td}
+{td}Should Have{/td}
+{td}27.8% of respondents preferred SMS/push as their primary alert channel; off-screen notifications extend responsiveness beyond the dashboard but in-dashboard alerts cover the baseline need.{/td}
+{/tr}
+{tr}
+{td rowspan=2}Historical Data and Reports{/td}
+{td}The system should store sensor data history and allow operators to view trends over time.{/td}
+{td}As a greenhouse operator, I want to see how conditions have changed over the past weeks and months so that I can make better planting and management decisions.{/td}
+{td}When planning the next growing season, I want to review environmental trends from previous months so I can optimize conditions for better yield.{/td}
+{td}Should Have{/td}
+{td}Multiple respondents and technical experts requested historical trends; real-time control and alerting address immediate crop safety while trend visualisation improves longer-term decisions.{/td}
+{/tr}
+{tr}
+{td}Operators should be able to export data reports for record-keeping and compliance.{/td}
+{td}As a business owner, I want to download reports from the system so that I can share them with investors or agronomists.{/td}
+{td}When meeting with investors or agronomists, I want to export a formatted data report so I can present evidence of system performance.{/td}
+{td}Should Have{/td}
+{td}Technical experts flagged audit-trail needs and survey respondents requested shareable reports; export capability positions the system beyond real-time control but is not critical for pilot operation.{/td}
+{/tr}
+{tr}
+{td rowspan=2}Affordability{/td}
+{td}The system should be affordable enough for small-scale farmers with limited budgets.{/td}
+{td}As a small farmer, I want a solution I can actually afford so that I do not need to take on significant financial risk to automate my greenhouse.{/td}
+{td}When deciding to invest in automation, I want transparent pricing and a cost estimate so I can assess whether the system fits my budget.{/td}
+{td}Must Have{/td}
+{td}50% of survey respondents are small-scale farmers; affordability is a prerequisite for adoption among the primary user segment and a core project objective.{/td}
+{/tr}
+{tr}
+{td}The system should demonstrate clear cost savings through reduced water and energy use.{/td}
+{td}As an investor, I want to see proven reductions in operational costs so that I can evaluate the return on investment before committing funds.{/td}
+{td}When reviewing operational results, I want measurable data on water and energy savings so I can calculate the return on investment.{/td}
+{td}Should Have{/td}
+{td}Research shows smart greenhouse systems achieve up to 40% water and 25% energy savings; demonstrating this validates ROI for investors but requires pilot operational data to measure.{/td}
+{/tr}
+{tr}
+{td}Multi-Site / Multi-Zone Management{/td}
+{td}The system should support monitoring and control of multiple greenhouse zones or sites from a single dashboard.{/td}
+{td}As a large agricultural enterprise manager, I want a unified dashboard for all my greenhouse sites so that I can manage operations without visiting each location.{/td}
+{td}When managing multiple zones, I want to compare environmental data across sites so I can identify underperformance and allocate resources efficiently.{/td}
+{td}Won't Have{/td}
+{td}Majority of surveyed operators manage a single greenhouse; multi-site architecture would add significant complexity and is not required for the initial pilot deployment.{/td}
+{/tr}
+{tr}
+{td}Cybersecurity{/td}
+{td}The system should implement TLS encryption, X.509 certificate authentication, and role-based access control for all cloud communications.{/td}
+{td}As a system administrator, I want all data transmissions encrypted so that unauthorised parties cannot access or manipulate greenhouse controls.{/td}
+{td}When connecting the greenhouse controller to the cloud, I want secure authentication so I can prevent unauthorised access to critical actuator controls.{/td}
+{td}Should Have{/td}
+{td}Remote control of physical actuators over public networks is an identified risk; TLS and authenticated MQTT are standard IoT security provisions and must be addressed before production rollout.{/td}
+{/tr}
+{tr}
+{td colspan=6}Survey Extracted Stakeholder Requirements:{/td}
+{/tr}
+{tr}
+{td rowspan=3}Soil and Water Management{/td}
+{td}Soil moisture monitoring should be treated as the top priority across all greenhouse operations.{/td}
+{td}As a farmer, I want soil moisture to be the first thing shown on my dashboard so that I always know if my crops need water.{/td}
+{td}When opening the dashboard, I want soil moisture to appear prominently so I can immediately see if irrigation is needed.{/td}
+{td}Must Have{/td}
+{td}Highest survey score (4.83/5) and most frequently cited production incident (39%); soil moisture must be the primary indicator on the dashboard interface.{/td}
+{/tr}
+{tr}
+{td}The system should support remote activation of irrigation from the website.{/td}
+{td}As a greenhouse owner abroad, I want to start watering from my browser so that I can react to unexpected dry spells even when I am not in the country.{/td}
+{td}When I am outside the country for weeks, I want to remotely activate irrigation from my browser so I can respond to unexpected dry spells.{/td}
+{td}Must Have{/td}
+{td}Survey respondents explicitly requested remote irrigation control; one respondent described needing to trigger watering while abroad for extended periods.{/td}
+{/tr}
+{tr}
+{td}The system should prevent overwatering by stopping irrigation once the moisture level reaches the target.{/td}
+{td}As a farmer, I want irrigation to stop automatically when the soil is wet enough so that I do not waste water or damage the roots.{/td}
+{td}When soil reaches the target moisture level, I want irrigation to stop automatically so I can prevent overwatering and root damage.{/td}
+{td}Must Have{/td}
+{td}17% of respondents cited irrigation failures as a production problem; automatic cutoff prevents sensor-triggered over-activation and the resulting root damage.{/td}
+{/tr}
+{tr}
+{td}Temperature and Humidity{/td}
+{td}The system should alert the operator separately for overheating during the day and frost risk at night.{/td}
+{td}As a farmer, I want different alerts for heat and cold so that I know exactly what kind of problem I am dealing with.{/td}
+{td}When nighttime temperatures drop unexpectedly, I want a frost-specific alert separate from heat warnings so I can take the right corrective action.{/td}
+{td}Could Have{/td}
+{td}Survey respondents described needing to distinguish heat and cold events; the distinction improves response accuracy but a single threshold alert already covers both scenarios at the baseline.{/td}
+{/tr}
+{tr}
+{td rowspan=2}Connectivity{/td}
+{td}The system must work reliably over 4G/5G mobile data, since many greenhouse locations rely on mobile internet rather than fixed broadband.{/td}
+{td}As a rural farmer, I want the system to work well over mobile internet so that I can use it without needing to install a wired connection at my greenhouse.{/td}
+{td}When located in a rural area with only mobile internet, I want the system to connect reliably over 4G/5G so I can use all features without a fixed broadband line.{/td}
+{td}Must Have{/td}
+{td}55.6% of respondents rely on mobile data as their primary connection and only 33.3% have fixed broadband; without 4G/5G support the majority of target users cannot access cloud features.{/td}
+{/tr}
+{tr}
+{td}The website should load quickly and function on low-bandwidth connections.{/td}
+{td}As a small-scale farmer using a mobile data plan, I want the website to be lightweight so that it does not consume too much data or load too slowly.{/td}
+{td}When accessing the dashboard on a limited mobile data plan, I want pages to load quickly and consume minimal bandwidth so I can use the system cost-effectively.{/td}
+{td}Should Have{/td}
+{td}Respondents on mobile data plans expressed concern over data consumption; a lightweight interface is important for usability on limited plans but does not block core functionality.{/td}
+{/tr}
+{tr}
+{td}Web Dashboard{/td}
+{td}The website should work well on mobile screens since most farmers rely on smartphones rather than desktop computers.{/td}
+{td}As a small-scale farmer, I want the website to look and work well on my phone so that I do not need a computer to use the system.{/td}
+{td}When checking the greenhouse on-the-go, I want the interface to be fully functional on my smartphone so I can manage everything without needing a computer.{/td}
+{td}Must Have{/td}
+{td}55.6% of sites rely exclusively on mobile data and smartphones are the primary device among surveyed operators; mobile-responsive design is essential for field usability.{/td}
+{/tr}
+{tr}
+{td}Historical Data and Reports{/td}
+{td}Data export to Excel or CSV should be supported for farmers and agronomists who need records for external use.{/td}
+{td}As a business owner, I want to export sensor data to a spreadsheet so that I can share it with my agronomist or include it in business reports.{/td}
+{td}When preparing records for compliance or advisory meetings, I want to export sensor data to Excel or CSV so I can share it with agronomists or authorities.{/td}
+{td}Should Have{/td}
+{td}Multiple survey respondents and technical experts explicitly requested Excel/CSV export for sharing with agronomists, investors, and regulatory authorities.{/td}
+{/tr}
+{/table}
+
+== **Stakeholder Requirements Review**
+
+=== Iteration 1 — Peer Review of Should Have and Could Have Requirements
+
+**Date:** March 5, 2026 **Reviewers:** Alexei Maxim, Vremere Adrian, Cojocaru Daniel, Rațeeva Daria, Mutruc Victoria **Scope:** Should Have and Could Have tier requirements.
+
+All five team members independently reviewed the full requirements table, assessing each entry for clarity, completeness, accuracy, and alignment with project goals. Findings were then consolidated.
+
+==== Issues Found
+
+{table}
+{thead}
+{tr}
+{th style="text-align: left;"}#{/th}
+{th style="text-align: left;"}Found By{/th}
+{th style="text-align: left;"}Requirement{/th}
+{th style="text-align: left;"}Issue{/th}
+{th style="text-align: left;"}Recommendation{/th}
+{/tr}
+{/thead}
+{tr}
+{td}R1{/td}
+{td}Rațeeva Daria{/td}
+{td}Affordability — demonstrate cost savings{/td}
+{td}The requirement states the system "should demonstrate clear cost savings" but defines no measurement mechanism or baseline. Without a defined output, it cannot be verified at the end of the pilot.{/td}
+{td}Define a concrete measurement approach: the system should log water and energy consumption and compare it against a manually-set baseline established at pilot start.{/td}
+{/tr}
+{tr}
+{td}R2{/td}
+{td}Alexei Maxim{/td}
+{td}Historical Data and Reports — store and view trends{/td}
+{td}The requirement does not specify a data retention period. Without a defined horizon, the storage architecture cannot be properly planned and the requirement cannot be tested.{/td}
+{td}Specify a minimum retention period (e.g., 90 days) to enable meaningful seasonal trend analysis and make the requirement verifiable.{/td}
+{/tr}
+{tr}
+{td}R3{/td}
+{td}Cojocaru Daniel{/td}
+{td}Alerts and Notifications — SMS/push{/td}
+{td}The requirement triggers notifications "when critical thresholds are exceeded" but does not define a severity tier. Without distinguishing critical from informational events, all threshold breaches may trigger off-screen alerts, causing alert fatigue.{/td}
+{td}Define a severity classification — e.g., informational events are shown in-dashboard only, while critical events (actuator failure, extreme temperature) trigger SMS/push.{/td}
+{/tr}
+{tr}
+{td}R4{/td}
+{td}Vremere Adrian{/td}
+{td}Temperature and Humidity — separate day/night alerts{/td}
+{td}The requirement addresses only the heat/frost distinction. Rapid rate-of-change events (e.g., sudden temperature drop of 5°C in under 10 minutes) are not covered, leaving operators without warning during fast-moving weather events.{/td}
+{td}Confirm whether rate-of-change alerting is in scope or explicitly defer it, to avoid an implicit gap in the alerting architecture.{/td}
+{/tr}
+{tr}
+{td}R5{/td}
+{td}Mutruc Victoria{/td}
+{td}Historical Data and Reports — export for compliance{/td}
+{td}The requirement references "record-keeping and compliance" but does not specify required export formats or data fields. Agronomists and regulatory bodies may expect specific columns such as timestamp, sensor ID, and measurement unit.{/td}
+{td}Clarify that the minimum export must include Excel/CSV compatibility with timestamp and sensor ID fields, consistent with explicit survey requests from technical respondents.{/td}
+{/tr}
+{/table}
+
+----
+
+=== Iteration 2 — Implementation of Recommendations
+
+**Date:** March 5, 2026
+
+Each recommendation was implemented by a team member other than the reviewer who raised it.
+
+{table}
+{thead}
+{tr}
+{th style="text-align: left;"}#{/th}
+{th style="text-align: left;"}Recommendation{/th}
+{th style="text-align: left;"}Implemented By{/th}
+{th style="text-align: left;"}Action Taken{/th}
+{/tr}
+{/thead}
+{tr}
+{td}R1{/td}
+{td}Define cost savings measurement mechanism{/td}
+{td}Cojocaru Daniel{/td}
+{td}Requirement retained at stakeholder abstraction level; the measurement approach (logging vs. manual baseline) is logged for the SRS acceptance criteria phase, where testable metrics will be formally defined per deliverable.{/td}
+{/tr}
+{tr}
+{td}R2{/td}
+{td}Specify data retention period{/td}
+{td}Rațeeva Daria{/td}
+{td}A 90-day minimum retention period was acknowledged as the target, aligned with the project objective of covering a full growing cycle. Retention specification is logged for the SRS data architecture definition.{/td}
+{/tr}
+{tr}
+{td}R3{/td}
+{td}Add alert severity classification{/td}
+{td}Mutruc Victoria{/td}
+{td}A two-tier severity model (informational: in-dashboard; critical: SMS/push) is acknowledged and logged for the SRS acceptance criteria. Stakeholder requirement entry kept at current abstraction level, consistent with all other table entries.{/td}
+{/tr}
+{tr}
+{td}R4{/td}
+{td}Clarify rate-of-change alerting scope{/td}
+{td}Alexei Maxim{/td}
+{td}Rate-of-change alerting was evaluated and explicitly deferred to a future phase. Threshold-based alerting addresses the primary stakeholder need identified in the survey. Finding carried forward to SRS use case definitions.{/td}
+{/tr}
+{tr}
+{td}R5{/td}
+{td}Clarify export format requirements{/td}
+{td}Vremere Adrian{/td}
+{td}Excel/CSV with timestamp and sensor ID confirmed as the minimum export specification, directly supported by survey requests from technical respondents. Format specification is logged for the SRS acceptance criteria; no change to the stakeholder table was required.{/td}
+{/tr}
+{/table}
+
+==== Refinement Augmentation
+
+During the implementation pass, the team confirmed that the affordability requirements collectively address both the adoption barrier (Must Have — system must be affordable) and the value demonstration need (Should Have — demonstrate savings). No new requirements were added; the distinction between these two complementary concerns is sufficiently captured by the separate table entries and will be formalised with independent acceptance criteria in the SRS phase.
+
+=== Release — Stakeholder Requirements Elicitation
+
+The Stakeholder Requirements table above represents the finalised output of the elicitation and analysis process. Requirements were sourced from the stakeholder survey (18 respondents, February 2026), stakeholder workshop discussions, direct stakeholder interviews, and technology research. They were classified using MoSCoW, validated through User Story and Job Story pairs, and justified by rationale drawn from primary research data.
+
+The Should Have and Could Have tiers were subject to a dedicated peer review with five recommendations raised across all team members. No reclassifications were required; all recommendations were either resolved in-place or logged for carry-over into the System Requirements Specification. The table is considered complete and stable for handoff to the SRS work package.

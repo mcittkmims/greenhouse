@@ -1,0 +1,441 @@
+--- gcm ---
+title: 04 - GMS -WP3.4 Project Charter
+page_id: 42634074
+version: 5
+source: http://confluence.microlab.club/rest/api/content/42634074
+---
+
+{table width=38.1303% class="relative-table wrapped"}
+{colgroup}
+{col style="width: 35.9066%;"}
+{col style="width: 64.0235%;"}
+{/colgroup}
+{tr}
+{td}**Field**{/td}
+{td}**Detail**{/td}
+{/tr}
+{tr}
+{td}**Project Name**{/td}
+{td}Greenhouse Management System (GMS){/td}
+{/tr}
+{tr}
+{td}**Document Version**{/td}
+{td}1.0{/td}
+{/tr}
+{tr}
+{td}**Course / Institution**{/td}
+{td}PBL IoT - Technical University of Moldova (UTM){/td}
+{/tr}
+{tr}
+{td}**Supervisor**{/td}
+{td}Andrei Bragarenco{/td}
+{/tr}
+{tr}
+{td}**Team**{/td}
+{td}Team 04-GMS (5 members){/td}
+{/tr}
+{tr}
+{td}**Date**{/td}
+{td}February 26, 2026{/td}
+{/tr}
+{tr}
+{td}**Target Completion**{/td}
+{td}June 2026{/td}
+{/tr}
+{tr}
+{td}**Status**{/td}
+{td}Initiation - Awaiting Authorization{/td}
+{/tr}
+{/table}
+
+=== **Executive Summary**
+
+The Greenhouse Management System (GMS) is an IoT-based automation and monitoring platform for greenhouse operators and farmers in the Republic of Moldova, integrating industrial-grade sensors, a PLC-driven edge controller (Arduino Portenta Machine Control), and a cloud-connected mobile dashboard to regulate soil moisture, air temperature, humidity, CO₂, and light intensity.
+
+Driven by the critical gap between Moldova’s manual greenhouse practices - responsible for excessive resource use, reactive crop management, and an unsustainable 24/7 monitoring burden - and validated by an 18-respondent stakeholder survey (February 2026) confirming 94.4% demand for automated irrigation, the GMS positions itself as a data platform delivering traceability, remote management, and measurable resource efficiency for Moldovan agricultural operators.
+
+=== **Problem Statement**
+
+Farmers and greenhouse operators often face difficulties in maintaining stable environmental conditions for plant growth. Monitoring and adjusting factors such as temperature and humidity usually requires constant attention and manual effort. Delayed or incorrect adjustments can cause plant stress and reduce crop quality and yield. As a result, resources such as time, water, and energy are often used inefficiently. 
+
+=== **Business Justification**
+
+- *Improving resource efficiency* through smart management, driving up to 40% reductions in water use {link anchor=re}re{/link} and 25% in energy consumption {link anchor=ref3}ref3{/link}.
+- *Addressing high market demand* validated by 94% of surveyed operators confirming automated irrigation as a top economic priority.
+- *Supporting Moldova’s transition* to Agriculture 4.0 and advancing national food sovereignty initiatives.
+- *Ensuring scalable deployment* from smallholder operations (12-300 m²) up to industrial farm-level management (1-5+ ha).
+- *Reducing import dependency* by automating local greenhouse production to offset the 60%+ reliance on Ukrainian tomato imports {link anchor=ref2}ref2{/link}.
+
+=== **Project Objectives**
+
+{table width=79.4555% class="relative-table wrapped"}
+{colgroup}
+{col style="width: 4.63511%;"}
+{col style="width: 43.9898%;"}
+{col style="width: 34.8071%;"}
+{col style="width: 7.87094%;"}
+{col style="width: 8.66206%;"}
+{/colgroup}
+{tr}
+{td}**#**{/td}
+{td}**Objective**{/td}
+{td}**Metric**{/td}
+{td}**Target**{/td}
+{td}**Date**{/td}
+{/tr}
+{tr}
+{td}O1{/td}
+{td}Deploy real-time sensor network (soil moisture, temp, humidity, CO₂, light){/td}
+{td}All 5 parameters at ≤ 60 s intervals{/td}
+{td}≥ 60s{/td}
+{td}Apr 2026{/td}
+{/tr}
+{tr}
+{td}O2{/td}
+{td}Automate irrigation via soil moisture thresholds{/td}
+{td}≥ 30% water reduction vs. manual baseline{/td}
+{td}≥30%{/td}
+{td}Apr 2026{/td}
+{/tr}
+{tr}
+{td}O3{/td}
+{td}Automate climate regulation (ventilation, heating){/td}
+{td}Temperature within ±0.5°C of setpoint{/td}
+{td}±0.5°C{/td}
+{td}Apr 2026{/td}
+{/tr}
+{tr}
+{td}O4{/td}
+{td}Deploy cloud dashboard with live data, 90-day history, push/SMS alerts{/td}
+{td}Accessible on mobile over 4G/5G{/td}
+{td}Mobile{/td}
+{td}May 2026{/td}
+{/tr}
+{tr}
+{td}O5{/td}
+{td}Guarantee edge-cloud hybrid with offline fallback{/td}
+{td}≥ 72 h autonomous control; zero data loss on reconnect{/td}
+{td}72h{/td}
+{td}May 2026{/td}
+{/tr}
+{tr}
+{td}O6{/td}
+{td}Validate via pilot in ≥ 1 operational greenhouse{/td}
+{td}≥ 30% water, ≥ 20% energy savings confirmed{/td}
+{td}Pilot{/td}
+{td}Jun 2026{/td}
+{/tr}
+{/table}
+
+=== **Project Scope**
+
+==== **In-Scope:**
+
+- *System Development:* Design, develop, and deploy the IoT-enabled Greenhouse Management System for automated climate and irrigation control.
+- *Sensor & Actuator Integration:* Install environmental sensors, like temperature, humidity, soil moisture, light, CO₂, and integrate them with greenhouse climate control equipment, like heaters, fans, valves.
+- *Edge Computing Logic:* Implement local control algorithms to ensure uninterrupted greenhouse management even during periods of network disconnection.
+- *Cloud & Telemetry Dashboard:* Develop a mobile-friendly dashboard for real-time monitoring, historical data analysis, and remote setpoint configuration.
+- *Alerts & Notifications:* Create a reliable communication system to alert operators of critical environmental changes via push notifications or SMS.
+- *Cybersecurity Measures:* Ensure secure data transmission and role-based access to protect greenhouse operations from unauthorized access.
+- *Pilot Testing:* Deploy the fully integrated system in an active tomato greenhouse in Moldova to validate resource savings and operational improvements.
+
+==== **Out-of-Scope:**
+
+- *Advanced AI Forecasting:* Implementation of complex machine learning models or computer vision for plant disease detection, planned for future phases.
+- *Multi-Site Rollout:* Deployment to multiple distinct greenhouse locations during this initial pilot phase.
+- *Third-Party Farm Integration:* Connecting the system to external ERP or enterprise farm management software.
+- *Hardware Manufacturing:* Designing custom electronic boards or mass-producing hardware components.
+
+=== **Deliverables, Milestones & Timeline**
+
+{table width=73.7602% class="relative-table wrapped"}
+{colgroup}
+{col style="width: 19.69%;"}
+{col style="width: 47.1054%;"}
+{col style="width: 15.1727%;"}
+{col style="width: 17.9943%;"}
+{/colgroup}
+{tr}
+{td}**Work Package**{/td}
+{td}**Deliverable**{/td}
+{td}**Status**{/td}
+{td}**Target**{/td}
+{/tr}
+{tr}
+{td}**Problem Definition**{/td}
+{td}Problem Definition Report{/td}
+{td}{raw}
+<ac:task-list>
+<ac:task>
+<ac:task-id>10</ac:task-id>
+<ac:task-status>complete</ac:task-status>
+<ac:task-body><span>Complete</span></ac:task-body>
+</ac:task>
+</ac:task-list>
+{/raw}{/td}
+{td}Feb 2026{/td}
+{/tr}
+{tr}
+{td}**Technology Research**{/td}
+{td}Technology Research Report{/td}
+{td}{raw}
+<ac:task-list>
+<ac:task>
+<ac:task-id>11</ac:task-id>
+<ac:task-status>complete</ac:task-status>
+<ac:task-body><span>Complete</span></ac:task-body>
+</ac:task>
+</ac:task-list>
+{/raw}{/td}
+{td}Feb 2026{/td}
+{/tr}
+{tr}
+{td}**Business Research**{/td}
+{td}Business Case, Stakeholder Analysis, Survey Report, Project Charter{/td}
+{td}{raw}
+<ac:task-list>
+<ac:task>
+<ac:task-id>12</ac:task-id>
+<ac:task-status>complete</ac:task-status>
+<ac:task-body><span>Complete</span></ac:task-body>
+</ac:task>
+</ac:task-list>
+{/raw}{/td}
+{td}Feb 2026{/td}
+{/tr}
+{tr}
+{td}**Stakeholder Req.**{/td}
+{td}Stakeholder Requirements Document{/td}
+{td}{raw}
+<ac:task-list>
+<ac:task>
+<ac:task-id>13</ac:task-id>
+<ac:task-status>incomplete</ac:task-status>
+<ac:task-body><span>Complete</span></ac:task-body>
+</ac:task>
+</ac:task-list>
+{/raw}{/td}
+{td}Mar 2026{/td}
+{/tr}
+{tr}
+{td}**System Requirements**{/td}
+{td}SRS, use cases, acceptance criteria{/td}
+{td}{raw}
+<ac:task-list>
+<ac:task>
+<ac:task-id>14</ac:task-id>
+<ac:task-status>incomplete</ac:task-status>
+<ac:task-body><span>Complete</span></ac:task-body>
+</ac:task>
+</ac:task-list>
+{/raw}{/td}
+{td}Mar 2026{/td}
+{/tr}
+{tr}
+{td}**System Architecture**{/td}
+{td}Architecture document, data flows, I/O mapping, API & DB design{/td}
+{td}{raw}
+<ac:task-list>
+<ac:task>
+<ac:task-id>15</ac:task-id>
+<ac:task-status>incomplete</ac:task-status>
+<ac:task-body><span>Complete</span></ac:task-body>
+</ac:task>
+</ac:task-list>
+{/raw}{/td}
+{td}Mar-Apr 2026{/td}
+{/tr}
+{tr}
+{td}**Implementation**{/td}
+{td}Integrated system prototype (edge + cloud + dashboard MVP){/td}
+{td}{raw}
+<ac:task-list>
+<ac:task>
+<ac:task-id>16</ac:task-id>
+<ac:task-status>incomplete</ac:task-status>
+<ac:task-body><span>Complete</span></ac:task-body>
+</ac:task>
+</ac:task-list>
+{/raw}{/td}
+{td}Apr-May 2026{/td}
+{/tr}
+{tr}
+{td}**Edge Computing**{/td}
+{td}PLC firmware: PID loops, alarm logic, sensor integration, offline autonomy{/td}
+{td}{raw}
+<ac:task-list>
+<ac:task>
+<ac:task-id>17</ac:task-id>
+<ac:task-status>incomplete</ac:task-status>
+<ac:task-body><span>Complete</span></ac:task-body>
+</ac:task>
+</ac:task-list>
+{/raw}{/td}
+{td}May 2026{/td}
+{/tr}
+{tr}
+{td}**Cloud Computing**{/td}
+{td}Time-series DB, MQTT broker, analytics pipeline, remote dashboard{/td}
+{td}{raw}
+<ac:task-list>
+<ac:task>
+<ac:task-id>18</ac:task-id>
+<ac:task-status>incomplete</ac:task-status>
+<ac:task-body><span>Complete</span></ac:task-body>
+</ac:task>
+</ac:task-list>
+{/raw}{/td}
+{td}May 2026{/td}
+{/tr}
+{/table}
+
+=== **Stakeholders**
+
+{table class="wrapped"}
+{tr}
+{td}**Engagement Level**{/td}
+{td}**Stakeholders & Rationale**{/td}
+{/tr}
+{tr}
+{td}**Manage Closely**{/td}
+{td}Farmers, Greenhouse Operators, Dev Team (Embedded + IoT + Frontend), Investors - direct operational/financial dependence; active sprint collaboration and pilot participation.{/td}
+{/tr}
+{tr}
+{td}**Keep Satisfied**{/td}
+{td}Ministry of Agriculture, Agricultural Agencies, HW Suppliers, Cloud Providers - regulatory authority and infrastructure influence; periodic updates and compliance alignment.{/td}
+{/tr}
+{tr}
+{td}**Keep Informed**{/td}
+{td}Technical University of Moldova (TUM) - research validation, no executive authority; academic reporting.{/td}
+{/tr}
+{tr}
+{td}**Monitor**{/td}
+{td}Consumers - indirect beneficiaries; general awareness only.{/td}
+{/tr}
+{/table}
+
+=== **Budget Estimate**
+
+{table class="wrapped"}
+{tr}
+{td}**Category**{/td}
+{td}**Range**{/td}
+{/tr}
+{tr}
+{td}Hardware (PLC, sensors, actuators, UPS, enclosures){/td}
+{td}~800-2,000 EUR{/td}
+{/tr}
+{tr}
+{td}Cloud infrastructure (DB, Server){/td}
+{td}~100-400 EUR{/td}
+{/tr}
+{tr}
+{td}Connectivity (4G modem + SIM){/td}
+{td}~50-150 EUR{/td}
+{/tr}
+{tr}
+{td}Miscellaneous (installation, tools, contingency){/td}
+{td}~100-500 EUR{/td}
+{/tr}
+{tr}
+{td}**TOTAL**{/td}
+{td}~1,050-3,050 EUR{/td}
+{/tr}
+{/table}
+
+=== **Key Risks & Mitigation Strategies**
+
+{table class="wrapped"}
+{tr}
+{td}**Risk**{/td}
+{td}**Mitigation**{/td}
+{/tr}
+{tr}
+{td}Hardware procurement delays{/td}
+{td}Obtain critical components early and qualify backup suppliers to prevent pipeline blocks.{/td}
+{/tr}
+{tr}
+{td}Connectivity instability at pilot site{/td}
+{td}Implement edge computing solutions for local data buffering and autonomous control during network loss.{/td}
+{/tr}
+{tr}
+{td}Pilot site access withdrawn{/td}
+{td}Establish a clear written agreement with the pilot participant and identify a secondary backup site.{/td}
+{/tr}
+{tr}
+{td}Sensor drift / inaccurate data{/td}
+{td}Integrate redundant sensors for critical measurements and perform strict calibration during deployment.{/td}
+{/tr}
+{tr}
+{td}Scope creep from feature requests{/td}
+{td}Enforce project charter boundaries and log any out-of-scope requests for future development phases.{/td}
+{/tr}
+{tr}
+{td}Cybersecurity vulnerability{/td}
+{td}Implement robust data encryption, secure authenticated access, and conduct regular security reviews.{/td}
+{/tr}
+{tr}
+{td}Timeline pressure{/td}
+{td}Prioritize core system features first and maintain parallel development of hardware and cloud components.{/td}
+{/tr}
+{/table}
+
+=== **Assumptions & Constraints**
+
+**Assumptions:**
+
+- 4G coverage at pilot site
+- Arduino Portenta Machine Control available
+- Pilot farmer willing to participate
+- TUM advisory role maintained
+- Tomato crop present during pilot
+
+**Constraints:**
+
+- Mobile-first UI (4G/5G mandatory)
+- Romanian + Russian language support
+- GDPR compliant
+- Cost-viable for SME farmers
+- Single-zone prototype only
+- Completed within one growing season
+
+=== **Authorization**
+
+By signing, the undersigned formally authorize the GMS project to proceed as defined in this charter.
+
+{table width=69.8708% class="relative-table wrapped"}
+{colgroup}
+{col style="width: 18.5978%;"}
+{col style="width: 17.0158%;"}
+{col style="width: 32.0241%;"}
+{col style="width: 32.3224%;"}
+{/colgroup}
+{tr}
+{td}**Role**{/td}
+{td}**Name**{/td}
+{td}**Signature**{/td}
+{td}**Date**{/td}
+{/tr}
+{tr}
+{td}Academic Supervisor{/td}
+{td}Andrei Bragarenco{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}Team Lead{/td}
+{td}Victoria Mutruc{/td}
+{td}{/td}
+{td}{/td}
+{/tr}
+{/table}
+
+*This is a living document - all revisions require Academic Supervisor re-authorization.*
+
+=== **References**
+
+{anchor:ref1}[1] “How to Reduce Water Consumption in Your Greenhouse - Hydroponic Systems.”* Hydroponic Systems*, 9 Sept. 2024, [hydroponicsystems.eu/how-to-reduce-water-consumption-in-your-greenhouse/](http://hydroponicsystems.eu/how-to-reduce-water-consumption-in-your-greenhouse/). Accessed 21 Feb. 2026.
+
+{anchor:ref2}[2] “An Agricultural Country without Its Tomatoes: Moldova Remains Dependent on Imports.” *[News-Pravda.com](http://News-Pravda.com)*, 2026, [md.news-pravda.com/en/world/2026/02/10/88535.html](http://md.news-pravda.com/en/world/2026/02/10/88535.html). Accessed 22 Feb. 2026.
+
+{anchor:ref3}[3] Li, Haixia, et al. “Towards Automated Greenhouse: A State of the Art Review on Greenhouse Monitoring Methods and Technologies Based on Internet of Things.” *Computers and Electronics in Agriculture*, vol. 191, Dec. 2021, p. 106558, [https://doi.org/10.1016/j.compag.2021.106558](https://doi.org/10.1016/j.compag.2021.106558).  Accessed 22 Feb. 2026.
