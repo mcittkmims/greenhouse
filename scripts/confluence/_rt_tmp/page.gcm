@@ -2,7 +2,7 @@
 title: 04 - GMS -WP5.1 Analyze Stakeholder Requirements
 page_id: 42634147
 version: 9
-source: http://confluence.microlab.club/rest/api/content/42634147
+source: test
 ---
 
 {table width=109.427% class="wrapped relative-table"}
@@ -36,7 +36,7 @@ source: http://confluence.microlab.club/rest/api/content/42634147
 {/thead}
 {tr}
 {td}SHR-1{/td}
-{td}{jira:GMS-10|showSummary=false}{/td}
+{td}{jira:GMS-10}{/td}
 {td}User Story{/td}
 {td}Farmer{/td}
 {td}Must Have{/td}

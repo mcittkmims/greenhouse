@@ -193,7 +193,13 @@ class _GCMBuilder(HTMLParser):
 
         if name == "jira":
             key = params.get("key", "UNKNOWN-0")
-            self._emit(f"{{jira:{key}}}")
+            # Preserve all params except server/serverId (re-added from config at push time)
+            extras = "".join(
+                f"|{k}={v}"
+                for k, v in params.items()
+                if k not in ("key", "server", "serverId") and v
+            )
+            self._emit(f"{{jira:{key}{extras}}}")
         elif name == "anchor":
             aname = params.get("", params.get("name", ""))
             # anchor macro: the default (unnamed) parameter is the anchor name

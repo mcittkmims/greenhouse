@@ -20,6 +20,7 @@ import argparse
 import hashlib
 import json
 import sys
+from datetime import datetime
 from difflib import unified_diff
 from pathlib import Path
 
@@ -37,6 +38,7 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 CONFIG_PATH = ROOT / "documentation" / "confluence" / "confluence_pages.json"
 CLOUD_DIR = ROOT / "documentation" / "confluence" / "cloud"
 CACHE_DIR = CLOUD_DIR / ".cache"
+LOG_DIR = CACHE_DIR / "push_logs"
 
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
@@ -100,21 +102,58 @@ def push_page(page_id, title, version_number, storage_xhtml, base_url, auth):
     return resp.json()
 
 
-def show_diff(cloud_text, local_text, from_label, to_label):
-    """Print a unified diff. Returns True if different."""
-    cloud_lines = cloud_text.splitlines(keepends=True)
-    local_lines = local_text.splitlines(keepends=True)
-    diff = list(unified_diff(cloud_lines, local_lines,
+def compute_diff(old_text, new_text, from_label, to_label):
+    """Return (diff_lines, added_count, removed_count)."""
+    old_lines = old_text.splitlines(keepends=True)
+    new_lines = new_text.splitlines(keepends=True)
+    diff = list(unified_diff(old_lines, new_lines,
                              fromfile=from_label, tofile=to_label))
-    if not diff:
-        return False
     added = sum(1 for l in diff if l.startswith("+") and not l.startswith("+++"))
     removed = sum(1 for l in diff if l.startswith("-") and not l.startswith("---"))
+    return diff, added, removed
+
+
+def show_diff(old_text, new_text, from_label, to_label):
+    """Print a unified diff. Returns the diff lines (empty if identical)."""
+    diff, added, removed = compute_diff(old_text, new_text, from_label, to_label)
+    if not diff:
+        return diff
     print(f"\n--- Diff: {added} added, {removed} removed ---\n")
     for line in diff:
         print(line, end="")
     print()
-    return True
+    return diff
+
+
+def write_push_log(basename, page_entry, diff_lines, result_status, details=""):
+    """Write a push log entry to .cache/push_logs/."""
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
+    ts = datetime.now()
+    ts_str = ts.strftime("%Y-%m-%d %H:%M:%S")
+    ts_file = ts.strftime("%Y%m%d_%H%M%S")
+    wp = page_entry["wp"]
+    log_name = f"{ts_file}_WP{wp}_{result_status}.log"
+    log_path = LOG_DIR / log_name
+
+    lines = [
+        f"Push Log — {ts_str}",
+        f"File:    {basename}",
+        f"Page:    WP{wp} (ID {page_entry['id']})",
+        f"Result:  {result_status}",
+    ]
+    if details:
+        lines.append(f"Details: {details}")
+    lines.append("")
+    if diff_lines:
+        lines.append("=== Diff ===")
+        lines.extend(l.rstrip("\n") for l in diff_lines)
+        lines.append("=== End Diff ===")
+    else:
+        lines.append("(no diff — identical to last sync)")
+    lines.append("")
+    log_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    print(f"Log written: {log_path.relative_to(ROOT)}")
+    return log_path
 
 
 # ── Main ─────────────────────────────────────────────────────────────────────
@@ -191,13 +230,10 @@ def main():
             print("\nNo changes detected vs last synced version. Nothing to push.")
             sys.exit(0)
 
-    # Show GCM-level diff (local vs what was last synced)
-    # We re-read the hash-based comparison above; for diff display we
-    # compare against the cloud cached file if it exists
-    cloud_cached = CLOUD_DIR / basename
-    # The local file IS the cloud file (we edit in-place), so compare
-    # against what was last synced by checking the hash
     print(f"\nLocal file has been modified since last sync.")
+
+    # Show XHTML-level diff: current Confluence content vs. what we'd push
+    cloud_xhtml = data["body"]["storage"]["value"]
 
     # Convert GCM → Confluence storage XHTML
     storage_xhtml, meta = gcm_to_html(
@@ -206,13 +242,17 @@ def main():
         jira_server_id=jira_cfg.get("server_id", ""),
     )
 
+    # Show diff between cloud XHTML and what we'd push
+    diff_lines = show_diff(cloud_xhtml, storage_xhtml,
+                           f"confluence (v{current_version})", "local (converted)")
+    if not diff_lines:
+        print("\nNo XHTML differences detected. Nothing to push.")
+        write_push_log(basename, page_entry, [], "SKIPPED", "No XHTML diff")
+        return
+
     if args.dry_run:
-        print("\n--- Confluence storage XHTML (dry-run) ---\n")
-        preview = storage_xhtml[:3000]
-        print(preview)
-        if len(storage_xhtml) > 3000:
-            print(f"\n... ({len(storage_xhtml) - 3000} more chars)")
         print("\n[dry-run] Nothing pushed.")
+        write_push_log(basename, page_entry, diff_lines, "DRY_RUN")
         return
 
     new_version = current_version + 1
@@ -232,10 +272,13 @@ def main():
         print(f"ERROR: Push failed: {e}")
         if e.response is not None:
             print(e.response.text[:1000])
+        write_push_log(basename, page_entry, diff_lines, "FAILED", str(e))
         sys.exit(1)
 
     pushed_version = result.get("version", {}).get("number", new_version)
     print(f"\nSUCCESS: WP{page_entry['wp']} pushed (version {pushed_version})")
+    write_push_log(basename, page_entry, diff_lines, "SUCCESS",
+                   f"v{current_version} → v{pushed_version}")
 
     # Update caches
     CACHE_DIR.mkdir(exist_ok=True)

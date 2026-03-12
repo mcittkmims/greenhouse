@@ -129,9 +129,12 @@ def hello():
 **Jira issue** (special syntax — most common macro, 193 occurrences):
 ```
 {jira:GMS-10}
+{jira:GMS-10|showSummary=false}
+{jira:GMS-10|showSummary=false|columns=key,summary,status}
 ```
-Renders locally with the issue key. On push, reconstructed with server/serverId
-from config.
+Key is always first. Extra params (e.g. `showSummary`, `columns`, `maximumIssues`,
+`jqlQuery`) are preserved as `|name=value` pairs. `server`/`serverId` are NOT
+stored — they are re-added from config at push time.
 
 **Anchor** (second most common, 60 occurrences):
 ```
@@ -217,9 +220,11 @@ External image (ri:url):
 
 ```
 {jira:GMS-10}
+{jira:GMS-10|showSummary=false}
 ```
 
-Same syntax as block — context determines placement.
+Same syntax as block — context determines placement. Extra params preserved as
+`|name=value` pairs; `server`/`serverId` re-added from config at push time.
 
 ### Status badge (inline)
 

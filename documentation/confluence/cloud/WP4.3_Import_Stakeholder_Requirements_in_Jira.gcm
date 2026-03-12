@@ -1,507 +1,507 @@
 --- gcm ---
 title: 04 - GMS -WP4.3 Import Stakeholder requirements in Jira
 page_id: 42634112
-version: 65
+version: 70
 source: http://confluence.microlab.club/rest/api/content/42634112
 ---
 
 {table width=99.875% class="relative-table wrapped"}
-{colgroup}
-{col style="width: 11.7573%;"}
-{col style="width: 34.9242%;"}
-{col style="width: 3.61764%;"}
-{col style="width: 7.79185%;"}
-{col style="width: 32.6979%;"}
-{col style="width: 9.18325%;"}
-{/colgroup}
-{thead}
-{tr}
-{td}**Category**{/td}
-{td}**Stakeholder Requirements**{/td}
-{td}**Type**{/td}
-{td}**Classification**{/td}
-{td}**Rationale**{/td}
-{td}**Jira Link**{/td}
-{/tr}
-{/thead}
-{tr}
-{td rowspan=12 style="vertical-align: middle;"}*Environmental Monitoring and Control*{/td}
-{td}As a farmer, I want the system to monitor soil moisture continuously so that my crops receive water only when needed.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
-{td rowspan=2 style="vertical-align: middle;"}Highest survey score (4.83/5) and cited by 39% of respondents as their most frequent production-impacting incident; soil moisture is the foundational trigger for all irrigation automation.{/td}
-{td}{jira:GMS-10}{/td}
-{/tr}
-{tr}
-{td}When soil moisture drops below a set threshold, I want the system to automatically activate irrigation so I can avoid crop stress without being on-site.{/td}
-{td}JS{/td}
-{td}{jira:GMS-16}{/td}
-{/tr}
-{tr}
-{td}As a greenhouse operator, I want real-time temperature monitoring so that I can prevent crop damage from overheating or frost.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
-{td rowspan=2 style="vertical-align: middle;"}Second highest survey score (4.61/5) with 22% citing temperature extremes as a recurring incident; Moldova's −15°C to +35°C climate range makes automated thermal regulation non-negotiable.{/td}
-{td}{jira:GMS-11}{/td}
-{/tr}
-{tr}
-{td}When temperature falls below 10°C or exceeds 35°C, I want the system to activate heating or ventilation automatically so I can protect my crops without manual intervention.{/td}
-{td}JS{/td}
-{td}{jira:GMS-17}{/td}
-{/tr}
-{tr}
-{td}As an operator, I want humidity levels tracked automatically so that I can prevent fungal diseases caused by excessive moisture.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
-{td rowspan=2 style="vertical-align: middle;"}Third highest survey score (4.72/5); excess humidity directly triggers fungal pathogen growth and is tightly coupled with temperature and ventilation control.{/td}
-{td}{jira:GMS-12}{/td}
-{/tr}
-{tr}
-{td}When humidity exceeds safe levels, I want the system to trigger ventilation so I can reduce disease risk without constant manual checks.{/td}
-{td}JS{/td}
-{td}{jira:GMS-18}{/td}
-{/tr}
-{tr}
-{td}As a greenhouse operator, I want CO₂ levels tracked so that I can optimize growing conditions and increase yield.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Should Have{/td}
-{td rowspan=2 style="vertical-align: middle;"}Lowest environmental rating (4.22/5) with no respondents citing CO₂ as a production incident, yet controlled enrichment (800–1200 ppm) is documented to increase crop yield by 20–30%.{/td}
-{td}{jira:GMS-13}{/td}
-{/tr}
-{tr}
-{td}When CO₂ drops below optimal levels, I want the system to alert me so I can adjust enrichment and improve crop productivity.{/td}
-{td}JS{/td}
-{td}{jira:GMS-19}{/td}
-{/tr}
-{tr}
-{td}As a greenhouse operator, I want up-to-date readings on my screen so that I can catch problems as soon as they happen.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
-{td rowspan=2 style="vertical-align: middle;"}66.7% of respondents selected the dashboard as their primary monitoring channel; automatic refresh is essential for detecting fast-changing conditions without manual page reloads.{/td}
-{td}{jira:GMS-14}{/td}
-{/tr}
-{tr}
-{td}When conditions change rapidly, I want the dashboard to refresh automatically so I can respond before crop damage occurs.{/td}
-{td}JS{/td}
-{td}{jira:GMS-20}{/td}
-{/tr}
-{tr}
-{td}As a farmer, I want to receive a warning when conditions become dangerous so that I can act before my crops are damaged.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
-{td rowspan=2 style="vertical-align: middle;"}Survey respondents explicitly requested threshold-based alerts across all monitored parameters; without in-system alerting, real-time monitoring cannot prevent crop loss during unattended periods.{/td}
-{td}{jira:GMS-15}{/td}
-{/tr}
-{tr}
-{td}When a parameter exceeds a safe range, I want an immediate alert so I can intervene before plants are stressed.{/td}
-{td}JS{/td}
-{td}{jira:GMS-21}{/td}
-{/tr}
-{tr}
-{td rowspan=2 style="vertical-align: middle;"}*Automated Irrigation*{/td}
-{td}As a farmer, I want irrigation to follow a timed schedule so that my greenhouse can run for months without anyone on-site.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
-{td rowspan=2 style="vertical-align: middle;"}One survey respondent required fully autonomous operation for up to 3 months while abroad; schedule-based irrigation ensures continuity when connectivity or sensor feedback is unavailable.{/td}
-{td}{jira:GMS-22}{/td}
-{/tr}
-{tr}
-{td}When I am abroad for extended periods, I want a timed irrigation schedule to run autonomously so I can keep the greenhouse operational without being on-site.{/td}
-{td}JS{/td}
-{td}{jira:GMS-28}{/td}
-{/tr}
-{tr}
-{td rowspan=2 style="vertical-align: middle;"}*Climate Control*{/td}
-{td}As a farmer, I want to define my own comfort zones for the greenhouse so that the system reacts according to my specific crop needs.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
-{td rowspan=2 style="vertical-align: middle;"}Stakeholders growing different crop types noted the need to adjust setpoints per species; fixed thresholds would make automation inapplicable across varied growing scenarios.{/td}
-{td}{jira:GMS-23}{/td}
-{/tr}
-{tr}
-{td}When I switch to a different crop, I want to reconfigure temperature and humidity ranges so I can adapt the system to new plant requirements.{/td}
-{td}JS{/td}
-{td}{jira:GMS-29}{/td}
-{/tr}
-{tr}
-{td rowspan=4 style="vertical-align: middle;"}*Web Dashboard*{/td}
-{td}As a greenhouse owner, I want to check my greenhouse from a browser on any device so that I am not tied to a specific phone or application.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
-{td rowspan=2 style="vertical-align: middle;"}66.7% of respondents selected a browser dashboard as their preferred monitoring channel; zero-install browser access eliminates device lock-in and lowers adoption barriers.{/td}
-{td}{jira:GMS-34}{/td}
-{/tr}
-{tr}
-{td}When I am traveling, I want to access the dashboard from any browser so I can monitor my greenhouse without carrying specific hardware.{/td}
-{td}JS{/td}
-{td}{jira:GMS-37}{/td}
-{/tr}
-{tr}
-{td}As an operator, I want a simple overview page so that I can understand the state of my greenhouse at a glance.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
-{td rowspan=2 style="vertical-align: middle;"}Stakeholders described needing to assess all parameters in one view; a consolidated, simple layout is critical for non-technical users to make timely operational decisions.{/td}
-{td}{jira:GMS-35}{/td}
-{/tr}
-{tr}
-{td}When checking greenhouse status quickly, I want a clear single-page overview so I can assess all critical conditions at a glance.{/td}
-{td}JS{/td}
-{td}{jira:GMS-38}{/td}
-{/tr}
-{tr}
-{td rowspan=2 style="vertical-align: middle;"}*Alerts and Notifications*{/td}
-{td}As a farmer, I want to be notified on my phone when something goes wrong so that I can react even when I am away from the computer.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Should Have{/td}
-{td rowspan=2 style="vertical-align: middle;"}27.8% of respondents preferred SMS/push as their primary alert channel; off-screen notifications extend responsiveness beyond the dashboard but in-dashboard alerts cover the baseline need.{/td}
-{td}{jira:GMS-40}{/td}
-{/tr}
-{tr}
-{td}When a critical threshold is exceeded, I want a push notification on my phone so I can react immediately even when away from the site.{/td}
-{td}JS{/td}
-{td}{jira:GMS-41}{/td}
-{/tr}
-{tr}
-{td rowspan=4 style="vertical-align: middle;"}*Historical Data and Reports*{/td}
-{td}As a greenhouse operator, I want to see how conditions have changed over the past weeks and months so that I can make better planting and management decisions.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Should Have{/td}
-{td rowspan=2 style="vertical-align: middle;"}Multiple respondents and technical experts requested historical trends; real-time control and alerting address immediate crop safety while trend visualisation improves longer-term decisions.{/td}
-{td}{jira:GMS-42}{/td}
-{/tr}
-{tr}
-{td}When planning the next growing season, I want to review environmental trends from previous months so I can optimize conditions for better yield.{/td}
-{td}JS{/td}
-{td}{jira:GMS-49}{/td}
-{/tr}
-{tr}
-{td}As a business owner, I want to download reports from the system so that I can share them with investors or agronomists.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Should Have{/td}
-{td rowspan=2 style="vertical-align: middle;"}Technical experts flagged audit-trail needs and survey respondents requested shareable reports; export capability positions the system beyond real-time control but is not critical for pilot operation.{/td}
-{td}{jira:GMS-43}{/td}
-{/tr}
-{tr}
-{td}When meeting with investors or agronomists, I want to export a formatted data report so I can present evidence of system performance.{/td}
-{td}JS{/td}
-{td}{jira:GMS-50}{/td}
-{/tr}
-{tr}
-{td rowspan=4 style="vertical-align: middle;"}*Affordability*{/td}
-{td}As a small farmer, I want a solution I can actually afford so that I do not need to take on significant financial risk to automate my greenhouse.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
-{td rowspan=2 style="vertical-align: middle;"}50% of survey respondents are small-scale farmers; affordability is a prerequisite for adoption among the primary user segment and a core project objective.{/td}
-{td}{jira:GMS-53}{/td}
-{/tr}
-{tr}
-{td}When deciding to invest in automation, I want transparent pricing and a cost estimate so I can assess whether the system fits my budget.{/td}
-{td}JS{/td}
-{td}{jira:GMS-55}{/td}
-{/tr}
-{tr}
-{td}As an investor, I want to see proven reductions in operational costs so that I can evaluate the return on investment before committing funds.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Should Have{/td}
-{td rowspan=2 style="vertical-align: middle;"}Research shows smart greenhouse systems achieve up to 40% water and 25% energy savings; demonstrating this validates ROI for investors but requires pilot operational data to measure.{/td}
-{td}{jira:GMS-54}{/td}
-{/tr}
-{tr}
-{td}When reviewing operational results, I want measurable data on water and energy savings so I can calculate the return on investment.{/td}
-{td}JS{/td}
-{td}{jira:GMS-56}{/td}
-{/tr}
-{tr}
-{td rowspan=2 style="vertical-align: middle;"}*Multi-Site / Multi-Zone Management*{/td}
-{td}As a large agricultural enterprise manager, I want a unified dashboard for all my greenhouse sites so that I can manage operations without visiting each location.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Won't Have{/td}
-{td rowspan=2 style="vertical-align: middle;"}Majority of surveyed operators manage a single greenhouse; multi-site architecture would add significant complexity and is not required for the initial pilot deployment.{/td}
-{td}{jira:GMS-45}{/td}
-{/tr}
-{tr}
-{td}When managing multiple zones, I want to compare environmental data across sites so I can identify under-performance and allocate resources efficiently.{/td}
-{td}JS{/td}
-{td}{jira:GMS-46}{/td}
-{/tr}
-{tr}
-{td rowspan=2 style="vertical-align: middle;"}*Cybersecurity*{/td}
-{td}As a system administrator, I want all data transmissions encrypted so that unauthorized parties cannot access or manipulate greenhouse controls.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Should Have{/td}
-{td rowspan=2 style="vertical-align: middle;"}Remote control of physical actuators over public networks is an identified risk; TLS and authenticated MQTT are standard IoT security provisions and must be addressed before production rollout.{/td}
-{td}{jira:GMS-47}{/td}
-{/tr}
-{tr}
-{td}When connecting the greenhouse controller to the cloud, I want secure authentication so I can prevent unauthorized access to critical actuator controls.{/td}
-{td}JS{/td}
-{td}{jira:GMS-48}{/td}
-{/tr}
-{tr}
-{td colspan=5}**Survey Extracted Stakeholder Requirements:**{/td}
-{td}{/td}
-{/tr}
-{tr}
-{td rowspan=6 style="vertical-align: middle;"}*Soil and Water Management*{/td}
-{td}As a farmer, I want soil moisture to be the first thing shown on my dashboard so that I always know if my crops need water.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
-{td rowspan=2}Highest survey score (4.83/5) and most frequently cited production incident (39%); soil moisture must be the primary indicator on the dashboard interface.{/td}
-{td}{jira:GMS-24}{/td}
-{/tr}
-{tr}
-{td}When opening the dashboard, I want soil moisture to appear prominently so I can immediately see if irrigation is needed.{/td}
-{td}JS{/td}
-{td}{jira:GMS-30}{/td}
-{/tr}
-{tr}
-{td}As a greenhouse owner abroad, I want to start watering from my browser so that I can react to unexpected dry spells even when I am not in the country.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
-{td rowspan=2}Survey respondents explicitly requested remote irrigation control; one respondent described needing to trigger watering while abroad for extended periods.{/td}
-{td}{jira:GMS-25}{/td}
-{/tr}
-{tr}
-{td}When I am outside the country for weeks, I want to remotely activate irrigation from my browser so I can respond to unexpected dry spells.{/td}
-{td}JS{/td}
-{td}{jira:GMS-31}{/td}
-{/tr}
-{tr}
-{td}As a farmer, I want irrigation to stop automatically when the soil is wet enough so that I do not waste water or damage the roots.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
-{td rowspan=2}17% of respondents cited irrigation failures as a production problem; automatic cutoff prevents sensor-triggered over-activation and the resulting root damage.{/td}
-{td}{jira:GMS-26}{/td}
-{/tr}
-{tr}
-{td}When soil reaches the target moisture level, I want irrigation to stop automatically so I can prevent over-watering and root damage.{/td}
-{td}JS{/td}
-{td}{jira:GMS-32}{/td}
-{/tr}
-{tr}
-{td rowspan=2 style="vertical-align: middle;"}*Temperature and Humidity*{/td}
-{td}As a farmer, I want different alerts for heat and cold so that I know exactly what kind of problem I am dealing with.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Could Have{/td}
-{td rowspan=2}Survey respondents described needing to distinguish heat and cold events; the distinction improves response accuracy but a single threshold alert already covers both scenarios at the baseline.{/td}
-{td}{jira:GMS-27}{/td}
-{/tr}
-{tr}
-{td}When nighttime temperatures drop unexpectedly, I want a frost-specific alert separate from heat warnings so I can take the right corrective action.{/td}
-{td}JS{/td}
-{td}{jira:GMS-33}{/td}
-{/tr}
-{tr}
-{td rowspan=4 style="vertical-align: middle;"}*Connectivity*{/td}
-{td}As a rural farmer, I want the system to work well over mobile internet so that I can use it without needing to install a wired connection at my greenhouse.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
-{td rowspan=2}55.6% of respondents rely on mobile data as their primary connection and only 33.3% have fixed broadband; without 4G/5G support the majority of target users cannot access cloud features.{/td}
-{td}{jira:GMS-52}{/td}
-{/tr}
-{tr}
-{td}When located in a rural area with only mobile internet, I want the system to connect reliably over 4G/5G so I can use all features without a fixed broadband line.{/td}
-{td}JS{/td}
-{td}{jira:GMS-58}{/td}
-{/tr}
-{tr}
-{td}As a small-scale farmer using a mobile data plan, I want the website to be lightweight so that it does not consume too much data or load too slowly.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Should Have{/td}
-{td rowspan=2}Respondents on mobile data plans expressed concern over data consumption; a lightweight interface is important for usability on limited plans but does not block core functionality.{/td}
-{td}{jira:GMS-57}{/td}
-{/tr}
-{tr}
-{td}When accessing the dashboard on a limited mobile data plan, I want pages to load quickly and consume minimal bandwidth so I can use the system cost-effectively.{/td}
-{td}JS{/td}
-{td}{jira:GMS-59}{/td}
-{/tr}
-{tr}
-{td rowspan=2 style="vertical-align: middle;"}*Web Dashboard*{/td}
-{td}As a small-scale farmer, I want the website to look and work well on my phone so that I do not need a computer to use the system.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
-{td rowspan=2}55.6% of sites rely exclusively on mobile data and smartphones are the primary device among surveyed operators; mobile-responsive design is essential for field usability.{/td}
-{td}{jira:GMS-36}{/td}
-{/tr}
-{tr}
-{td}When checking the greenhouse on-the-go, I want the interface to be fully functional on my smartphone so I can manage everything without needing a computer.{/td}
-{td}JS{/td}
-{td}{jira:GMS-39}{/td}
-{/tr}
-{tr}
-{td rowspan=2 style="vertical-align: middle;"}*Historical Data and Reports*{/td}
-{td}As a business owner, I want to export sensor data to a spreadsheet so that I can share it with my agronomist or include it in business reports.{/td}
-{td}US{/td}
-{td rowspan=2 style="vertical-align: middle;"}Should Have{/td}
-{td rowspan=2}Multiple survey respondents and technical experts explicitly requested Excel/CSV export for sharing with agronomists, investors, and regulatory authorities.{/td}
-{td}{jira:GMS-44}{/td}
-{/tr}
-{tr}
-{td}When preparing records for compliance or advisory meetings, I want to export sensor data to Excel or CSV so I can share it with agronomists or authorities.{/td}
-{td}JS{/td}
-{td}{jira:GMS-51}{/td}
-{/tr}
-{/table}
-
+ {colgroup}
+ {col style="width: 11.7573%;"}
+ {col style="width: 34.9242%;"}
+ {col style="width: 3.61764%;"}
+ {col style="width: 7.79185%;"}
+ {col style="width: 32.6979%;"}
+ {col style="width: 9.18325%;"}
+ {/colgroup}
+ {thead}
+ {tr}
+ {td}**Category**{/td}
+ {td}**Stakeholder Requirements**{/td}
+ {td}**Type**{/td}
+ {td}**Classification**{/td}
+ {td}**Rationale**{/td}
+ {td}**Jira Link**{/td}
+ {/tr}
+ {/thead}
+ {tr}
+ {td rowspan=12 style="vertical-align: middle;"}*Environmental Monitoring and Control*{/td}
+ {td}As a farmer, I want the system to monitor soil moisture continuously so that my crops receive water only when needed.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Highest survey score (4.83/5) and cited by 39% of respondents as their most frequent production-impacting incident; soil moisture is the foundational trigger for all irrigation automation.{/td}
+ {td}{jira:GMS-10|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When soil moisture drops below a set threshold, I want the system to automatically activate irrigation so I can avoid crop stress without being on-site.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-16|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}As a greenhouse operator, I want real-time temperature monitoring so that I can prevent crop damage from overheating or frost.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Second highest survey score (4.61/5) with 22% citing temperature extremes as a recurring incident; Moldova's −15°C to +35°C climate range makes automated thermal regulation non-negotiable.{/td}
+ {td}{jira:GMS-11|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When temperature falls below 10°C or exceeds 35°C, I want the system to activate heating or ventilation automatically so I can protect my crops without manual intervention.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-17|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}As an operator, I want humidity levels tracked automatically so that I can prevent fungal diseases caused by excessive moisture.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Third highest survey score (4.72/5); excess humidity directly triggers fungal pathogen growth and is tightly coupled with temperature and ventilation control.{/td}
+ {td}{jira:GMS-12|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When humidity exceeds safe levels, I want the system to trigger ventilation so I can reduce disease risk without constant manual checks.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-18|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}As a greenhouse operator, I want CO₂ levels tracked so that I can optimize growing conditions and increase yield.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Should Have{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Lowest environmental rating (4.22/5) with no respondents citing CO₂ as a production incident, yet controlled enrichment (800–1200 ppm) is documented to increase crop yield by 20–30%.{/td}
+ {td}{jira:GMS-13|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When CO₂ drops below optimal levels, I want the system to alert me so I can adjust enrichment and improve crop productivity.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-19|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}As a greenhouse operator, I want up-to-date readings on my screen so that I can catch problems as soon as they happen.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
+ {td rowspan=2 style="vertical-align: middle;"}66.7% of respondents selected the dashboard as their primary monitoring channel; automatic refresh is essential for detecting fast-changing conditions without manual page reloads.{/td}
+ {td}{jira:GMS-14|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When conditions change rapidly, I want the dashboard to refresh automatically so I can respond before crop damage occurs.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-20|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}As a farmer, I want to receive a warning when conditions become dangerous so that I can act before my crops are damaged.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Survey respondents explicitly requested threshold-based alerts across all monitored parameters; without in-system alerting, real-time monitoring cannot prevent crop loss during unattended periods.{/td}
+ {td}{jira:GMS-15|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When a parameter exceeds a safe range, I want an immediate alert so I can intervene before plants are stressed.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-21|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td rowspan=2 style="vertical-align: middle;"}*Automated Irrigation*{/td}
+ {td}As a farmer, I want irrigation to follow a timed schedule so that my greenhouse can run for months without anyone on-site.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
+ {td rowspan=2 style="vertical-align: middle;"}One survey respondent required fully autonomous operation for up to 3 months while abroad; schedule-based irrigation ensures continuity when connectivity or sensor feedback is unavailable.{/td}
+ {td}{jira:GMS-22|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When I am abroad for extended periods, I want a timed irrigation schedule to run autonomously so I can keep the greenhouse operational without being on-site.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-28|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td rowspan=2 style="vertical-align: middle;"}*Climate Control*{/td}
+ {td}As a farmer, I want to define my own comfort zones for the greenhouse so that the system reacts according to my specific crop needs.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Stakeholders growing different crop types noted the need to adjust setpoints per species; fixed thresholds would make automation inapplicable across varied growing scenarios.{/td}
+ {td}{jira:GMS-23|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When I switch to a different crop, I want to reconfigure temperature and humidity ranges so I can adapt the system to new plant requirements.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-29|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td rowspan=4 style="vertical-align: middle;"}*Web Dashboard*{/td}
+ {td}As a greenhouse owner, I want to check my greenhouse from a browser on any device so that I am not tied to a specific phone or application.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
+ {td rowspan=2 style="vertical-align: middle;"}66.7% of respondents selected a browser dashboard as their preferred monitoring channel; zero-install browser access eliminates device lock-in and lowers adoption barriers.{/td}
+ {td}{jira:GMS-34|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When I am traveling, I want to access the dashboard from any browser so I can monitor my greenhouse without carrying specific hardware.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-37|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}As an operator, I want a simple overview page so that I can understand the state of my greenhouse at a glance.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Stakeholders described needing to assess all parameters in one view; a consolidated, simple layout is critical for non-technical users to make timely operational decisions.{/td}
+ {td}{jira:GMS-35|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When checking greenhouse status quickly, I want a clear single-page overview so I can assess all critical conditions at a glance.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-38|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td rowspan=2 style="vertical-align: middle;"}*Alerts and Notifications*{/td}
+ {td}As a farmer, I want to be notified on my phone when something goes wrong so that I can react even when I am away from the computer.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Should Have{/td}
+ {td rowspan=2 style="vertical-align: middle;"}27.8% of respondents preferred SMS/push as their primary alert channel; off-screen notifications extend responsiveness beyond the dashboard but in-dashboard alerts cover the baseline need.{/td}
+ {td}{jira:GMS-40|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When a critical threshold is exceeded, I want a push notification on my phone so I can react immediately even when away from the site.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-41|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td rowspan=4 style="vertical-align: middle;"}*Historical Data and Reports*{/td}
+ {td}As a greenhouse operator, I want to see how conditions have changed over the past weeks and months so that I can make better planting and management decisions.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Should Have{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Multiple respondents and technical experts requested historical trends; real-time control and alerting address immediate crop safety while trend visualisation improves longer-term decisions.{/td}
+ {td}{jira:GMS-42|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When planning the next growing season, I want to review environmental trends from previous months so I can optimize conditions for better yield.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-49|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}As a business owner, I want to download reports from the system so that I can share them with investors or agronomists.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Should Have{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Technical experts flagged audit-trail needs and survey respondents requested shareable reports; export capability positions the system beyond real-time control but is not critical for pilot operation.{/td}
+ {td}{jira:GMS-43|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When meeting with investors or agronomists, I want to export a formatted data report so I can present evidence of system performance.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-50|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td rowspan=4 style="vertical-align: middle;"}*Affordability*{/td}
+ {td}As a small farmer, I want a solution I can actually afford so that I do not need to take on significant financial risk to automate my greenhouse.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
+ {td rowspan=2 style="vertical-align: middle;"}50% of survey respondents are small-scale farmers; affordability is a prerequisite for adoption among the primary user segment and a core project objective.{/td}
+ {td}{jira:GMS-53|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When deciding to invest in automation, I want transparent pricing and a cost estimate so I can assess whether the system fits my budget.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-55|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}As an investor, I want to see proven reductions in operational costs so that I can evaluate the return on investment before committing funds.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Should Have{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Research shows smart greenhouse systems achieve up to 40% water and 25% energy savings; demonstrating this validates ROI for investors but requires pilot operational data to measure.{/td}
+ {td}{jira:GMS-54|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When reviewing operational results, I want measurable data on water and energy savings so I can calculate the return on investment.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-56|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td rowspan=2 style="vertical-align: middle;"}*Multi-Site / Multi-Zone Management*{/td}
+ {td}As a large agricultural enterprise manager, I want a unified dashboard for all my greenhouse sites so that I can manage operations without visiting each location.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Won't Have{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Majority of surveyed operators manage a single greenhouse; multi-site architecture would add significant complexity and is not required for the initial pilot deployment.{/td}
+ {td}{jira:GMS-45|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When managing multiple zones, I want to compare environmental data across sites so I can identify under-performance and allocate resources efficiently.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-46|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td rowspan=2 style="vertical-align: middle;"}*Cybersecurity*{/td}
+ {td}As a system administrator, I want all data transmissions encrypted so that unauthorized parties cannot access or manipulate greenhouse controls.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Should Have{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Remote control of physical actuators over public networks is an identified risk; TLS and authenticated MQTT are standard IoT security provisions and must be addressed before production rollout.{/td}
+ {td}{jira:GMS-47|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When connecting the greenhouse controller to the cloud, I want secure authentication so I can prevent unauthorized access to critical actuator controls.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-48|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td colspan=5}**Survey Extracted Stakeholder Requirements:**{/td}
+ {td}{/td}
+ {/tr}
+ {tr}
+ {td rowspan=6 style="vertical-align: middle;"}*Soil and Water Management*{/td}
+ {td}As a farmer, I want soil moisture to be the first thing shown on my dashboard so that I always know if my crops need water.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
+ {td rowspan=2}Highest survey score (4.83/5) and most frequently cited production incident (39%); soil moisture must be the primary indicator on the dashboard interface.{/td}
+ {td}{jira:GMS-24|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When opening the dashboard, I want soil moisture to appear prominently so I can immediately see if irrigation is needed.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-30|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}As a greenhouse owner abroad, I want to start watering from my browser so that I can react to unexpected dry spells even when I am not in the country.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
+ {td rowspan=2}Survey respondents explicitly requested remote irrigation control; one respondent described needing to trigger watering while abroad for extended periods.{/td}
+ {td}{jira:GMS-25|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When I am outside the country for weeks, I want to remotely activate irrigation from my browser so I can respond to unexpected dry spells.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-31|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}As a farmer, I want irrigation to stop automatically when the soil is wet enough so that I do not waste water or damage the roots.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
+ {td rowspan=2}17% of respondents cited irrigation failures as a production problem; automatic cutoff prevents sensor-triggered over-activation and the resulting root damage.{/td}
+ {td}{jira:GMS-26|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When soil reaches the target moisture level, I want irrigation to stop automatically so I can prevent over-watering and root damage.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-32|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td rowspan=2 style="vertical-align: middle;"}*Temperature and Humidity*{/td}
+ {td}As a farmer, I want different alerts for heat and cold so that I know exactly what kind of problem I am dealing with.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Could Have{/td}
+ {td rowspan=2}Survey respondents described needing to distinguish heat and cold events; the distinction improves response accuracy but a single threshold alert already covers both scenarios at the baseline.{/td}
+ {td}{jira:GMS-27|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When nighttime temperatures drop unexpectedly, I want a frost-specific alert separate from heat warnings so I can take the right corrective action.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-33|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td rowspan=4 style="vertical-align: middle;"}*Connectivity*{/td}
+ {td}As a rural farmer, I want the system to work well over mobile internet so that I can use it without needing to install a wired connection at my greenhouse.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
+ {td rowspan=2}55.6% of respondents rely on mobile data as their primary connection and only 33.3% have fixed broadband; without 4G/5G support the majority of target users cannot access cloud features.{/td}
+ {td}{jira:GMS-52|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When located in a rural area with only mobile internet, I want the system to connect reliably over 4G/5G so I can use all features without a fixed broadband line.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-58|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}As a small-scale farmer using a mobile data plan, I want the website to be lightweight so that it does not consume too much data or load too slowly.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Should Have{/td}
+ {td rowspan=2}Respondents on mobile data plans expressed concern over data consumption; a lightweight interface is important for usability on limited plans but does not block core functionality.{/td}
+ {td}{jira:GMS-57|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When accessing the dashboard on a limited mobile data plan, I want pages to load quickly and consume minimal bandwidth so I can use the system cost-effectively.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-59|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td rowspan=2 style="vertical-align: middle;"}*Web Dashboard*{/td}
+ {td}As a small-scale farmer, I want the website to look and work well on my phone so that I do not need a computer to use the system.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Must Have{/td}
+ {td rowspan=2}55.6% of sites rely exclusively on mobile data and smartphones are the primary device among surveyed operators; mobile-responsive design is essential for field usability.{/td}
+ {td}{jira:GMS-36|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When checking the greenhouse on-the-go, I want the interface to be fully functional on my smartphone so I can manage everything without needing a computer.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-39|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td rowspan=2 style="vertical-align: middle;"}*Historical Data and Reports*{/td}
+ {td}As a business owner, I want to export sensor data to a spreadsheet so that I can share it with my agronomist or include it in business reports.{/td}
+ {td}US{/td}
+ {td rowspan=2 style="vertical-align: middle;"}Should Have{/td}
+ {td rowspan=2}Multiple survey respondents and technical experts explicitly requested Excel/CSV export for sharing with agronomists, investors, and regulatory authorities.{/td}
+ {td}{jira:GMS-44|showSummary=false}{/td}
+ {/tr}
+ {tr}
+ {td}When preparing records for compliance or advisory meetings, I want to export sensor data to Excel or CSV so I can share it with agronomists or authorities.{/td}
+ {td}JS{/td}
+ {td}{jira:GMS-51|showSummary=false}{/td}
+ {/tr}
+ {/table}
+ 
 == **Classes**
-
-=== **Environmental Monitoring and Control{jira:GMS-1}**
-
+ 
+=== **Environmental Monitoring and Control{jira:GMS-1|showSummary=false}**
+ 
 Stakeholder Requirement: The system should continuously monitor, control and display all key greenhouse parameters in real time.
-
+ 
 ==== User Stories:
-
-- As a farmer, I want the system to monitor soil moisture continuously so that my crops receive water only when needed.{jira:GMS-10}
-- As a greenhouse operator, I want real-time temperature monitoring so that I can prevent crop damage from overheating or frost.{jira:GMS-11}
-- As an operator, I want humidity levels tracked automatically so that I can prevent fungal diseases caused by excessive moisture.{jira:GMS-12}
-- As a greenhouse operator, I want CO₂ levels tracked so that I can optimize growing conditions and increase yield.{jira:GMS-13}
-- As a greenhouse operator, I want up-to-date readings on my screen so that I can catch problems as soon as they happen.{jira:GMS-14}
-- As a farmer, I want to receive a warning when conditions become dangerous so that I can act before my crops are damaged.{jira:GMS-15}
-
+  
+- As a farmer, I want the system to monitor soil moisture continuously so that my crops receive water only when needed.{jira:GMS-10|showSummary=false} 
+- As a greenhouse operator, I want real-time temperature monitoring so that I can prevent crop damage from overheating or frost.{jira:GMS-11|showSummary=false} 
+- As an operator, I want humidity levels tracked automatically so that I can prevent fungal diseases caused by excessive moisture.{jira:GMS-12|showSummary=false} 
+- As a greenhouse operator, I want CO₂ levels tracked so that I can optimize growing conditions and increase yield.{jira:GMS-13|showSummary=false} 
+- As a greenhouse operator, I want up-to-date readings on my screen so that I can catch problems as soon as they happen.{jira:GMS-14|showSummary=false} 
+- As a farmer, I want to receive a warning when conditions become dangerous so that I can act before my crops are damaged.{jira:GMS-15|showSummary=false} 
+ 
 ==== Job Stories:
-
-- When soil moisture drops below a set threshold, I want the system to automatically activate irrigation so I can avoid crop stress without being on-site.{jira:GMS-16}
-- When temperature falls below 10°C or exceeds 35°C, I want the system to activate heating or ventilation automatically so I can protect my crops without manual intervention.{jira:GMS-17}
-- When humidity exceeds safe levels, I want the system to trigger ventilation so I can reduce disease risk without constant manual checks.{jira:GMS-18}
-- When CO₂ drops below optimal levels, I want the system to alert me so I can adjust enrichment and improve crop productivity.{jira:GMS-19}
-- When conditions change rapidly, I want the dashboard to refresh automatically so I can respond before crop damage occurs.{jira:GMS-20}
-- When a parameter exceeds a safe range, I want an immediate alert so I can intervene before plants are stressed.{jira:GMS-21}
-
+  
+- When soil moisture drops below a set threshold, I want the system to automatically activate irrigation so I can avoid crop stress without being on-site.{jira:GMS-16|showSummary=false} 
+- When temperature falls below 10°C or exceeds 35°C, I want the system to activate heating or ventilation automatically so I can protect my crops without manual intervention.{jira:GMS-17|showSummary=false} 
+- When humidity exceeds safe levels, I want the system to trigger ventilation so I can reduce disease risk without constant manual checks.{jira:GMS-18|showSummary=false} 
+- When CO₂ drops below optimal levels, I want the system to alert me so I can adjust enrichment and improve crop productivity.{jira:GMS-19|showSummary=false} 
+- When conditions change rapidly, I want the dashboard to refresh automatically so I can respond before crop damage occurs.{jira:GMS-20|showSummary=false} 
+- When a parameter exceeds a safe range, I want an immediate alert so I can intervene before plants are stressed.{jira:GMS-21|showSummary=false} 
+ 
 ----
-
-=== **Automated Irrigation and Climate Control{jira:GMS-2}**
-
+ 
+=== **Automated Irrigation and Climate Control{jira:GMS-2|showSummary=false}**
+ 
 Stakeholder Requirement: The system should allow users to configure and schedule irrigation and climate parameters remotely, enabling fully autonomous greenhouse operation without requiring on-site presence.
-
+ 
 ==== User Stories:
-
-- As a farmer, I want irrigation to follow a timed schedule so that my greenhouse can run for months without anyone on-site.{jira:GMS-22}
-- As a farmer, I want to define my own comfort zones for the greenhouse so that the system reacts according to my specific crop needs.{jira:GMS-23}
-- As a farmer, I want soil moisture to be the first thing shown on my dashboard so that I always know if my crops need water.{jira:GMS-24}
-- As a greenhouse owner abroad, I want to start watering from my browser so that I can react to unexpected dry spells even when I am not in the country.{jira:GMS-25}
-- As a farmer, I want irrigation to stop automatically when the soil is wet enough so that I do not waste water or damage the roots.{jira:GMS-26}
-- As a farmer, I want different alerts for heat and cold so that I know exactly what kind of problem I am dealing with.{jira:GMS-27} 
-
+  
+- As a farmer, I want irrigation to follow a timed schedule so that my greenhouse can run for months without anyone on-site.{jira:GMS-22|showSummary=false} 
+- As a farmer, I want to define my own comfort zones for the greenhouse so that the system reacts according to my specific crop needs.{jira:GMS-23|showSummary=false} 
+- As a farmer, I want soil moisture to be the first thing shown on my dashboard so that I always know if my crops need water.{jira:GMS-24|showSummary=false} 
+- As a greenhouse owner abroad, I want to start watering from my browser so that I can react to unexpected dry spells even when I am not in the country.{jira:GMS-25|showSummary=false} 
+- As a farmer, I want irrigation to stop automatically when the soil is wet enough so that I do not waste water or damage the roots.{jira:GMS-26|showSummary=false} 
+- As a farmer, I want different alerts for heat and cold so that I know exactly what kind of problem I am dealing with.{jira:GMS-27|showSummary=false}  
+ 
 ==== Job Stories:
-
-- When I am abroad for extended periods, I want a timed irrigation schedule to run autonomously so I can keep the greenhouse operational without being on-site.{jira:GMS-28}
-- When I switch to a different crop, I want to reconfigure temperature and humidity ranges so I can adapt the system to new plant requirements.{jira:GMS-29}
-- When opening the dashboard, I want soil moisture to appear prominently so I can immediately see if irrigation is needed.{jira:GMS-30}
-- When I am outside the country for weeks, I want to remotely activate irrigation from my browser so I can respond to unexpected dry spells.{jira:GMS-31}
-- When soil reaches the target moisture level, I want irrigation to stop automatically so I can prevent over-watering and root damage.{jira:GMS-32}
-- When nighttime temperatures drop unexpectedly, I want a frost-specific alert separate from heat warnings so I can take the right corrective action.{jira:GMS-33}
-
+  
+- When I am abroad for extended periods, I want a timed irrigation schedule to run autonomously so I can keep the greenhouse operational without being on-site.{jira:GMS-28|showSummary=false} 
+- When I switch to a different crop, I want to reconfigure temperature and humidity ranges so I can adapt the system to new plant requirements.{jira:GMS-29|showSummary=false} 
+- When opening the dashboard, I want soil moisture to appear prominently so I can immediately see if irrigation is needed.{jira:GMS-30|showSummary=false} 
+- When I am outside the country for weeks, I want to remotely activate irrigation from my browser so I can respond to unexpected dry spells.{jira:GMS-31|showSummary=false} 
+- When soil reaches the target moisture level, I want irrigation to stop automatically so I can prevent over-watering and root damage.{jira:GMS-32|showSummary=false} 
+- When nighttime temperatures drop unexpectedly, I want a frost-specific alert separate from heat warnings so I can take the right corrective action.{jira:GMS-33|showSummary=false} 
+ 
 ----
-
-=== **Web Dashboard & Mobile Accessibility{jira:GMS-3}**
-
+ 
+=== **Web Dashboard & Mobile Accessibility{jira:GMS-3|showSummary=false}**
+ 
 Stakeholder Requirement: The system should provide a browser-accessible, mobile-friendly dashboard with a clear and lightweight interface.
-
+ 
 ==== User Stories:
-
-- As a greenhouse owner, I want to check my greenhouse from a browser on any device so that I am not tied to a specific phone or application.{jira:GMS-34}
-- As an operator, I want a simple overview page so that I can understand the state of my greenhouse at a glance.{jira:GMS-35}
-- As a small-scale farmer, I want the website to look and work well on my phone so that I do not need a computer to use the system.{jira:GMS-36}
-
+  
+- As a greenhouse owner, I want to check my greenhouse from a browser on any device so that I am not tied to a specific phone or application.{jira:GMS-34|showSummary=false} 
+- As an operator, I want a simple overview page so that I can understand the state of my greenhouse at a glance.{jira:GMS-35|showSummary=false} 
+- As a small-scale farmer, I want the website to look and work well on my phone so that I do not need a computer to use the system.{jira:GMS-36|showSummary=false} 
+ 
 ==== Job Stories:
-
-- When I am traveling, I want to access the dashboard from any browser so I can monitor my greenhouse without carrying specific hardware.{jira:GMS-37}
-- When checking greenhouse status quickly, I want a clear single-page overview so I can assess all critical conditions at a glance.{jira:GMS-38}
-- When checking the greenhouse on-the-go, I want the interface to be fully functional on my smartphone so I can manage everything without needing a computer.{jira:GMS-39}
-
+  
+- When I am traveling, I want to access the dashboard from any browser so I can monitor my greenhouse without carrying specific hardware.{jira:GMS-37|showSummary=false} 
+- When checking greenhouse status quickly, I want a clear single-page overview so I can assess all critical conditions at a glance.{jira:GMS-38|showSummary=false} 
+- When checking the greenhouse on-the-go, I want the interface to be fully functional on my smartphone so I can manage everything without needing a computer.{jira:GMS-39|showSummary=false} 
+ 
 ----
-
-=== **Alerts & Notifications{jira:GMS-4}**
-
+ 
+=== **Alerts & Notifications{jira:GMS-4|showSummary=false}**
+ 
 Stakeholder Requirement: The system should deliver timely alerts through SMS, push notifications, or on-screen warnings when thresholds are exceeded.
-
+ 
 ==== User Stories:
-
-- As a farmer, I want to be notified on my phone when something goes wrong so that I can react even when I am away from the computer.{jira:GMS-40}
-
+  
+- As a farmer, I want to be notified on my phone when something goes wrong so that I can react even when I am away from the computer.{jira:GMS-40|showSummary=false} 
+ 
 ==== Job Stories:
-
-- When a critical threshold is exceeded, I want a push notification on my phone so I can react immediately even when away from the site.{jira:GMS-41}
-
+  
+- When a critical threshold is exceeded, I want a push notification on my phone so I can react immediately even when away from the site.{jira:GMS-41|showSummary=false} 
+ 
 ----
-
-=== **Historical Data, Reports & Analytics{jira:GMS-5}**
-
+ 
+=== **Historical Data, Reports & Analytics{jira:GMS-5|showSummary=false}**
+ 
 Stakeholder Requirement: The system should store environmental history, visualize trends, and support data export for reporting and compliance.
-
+ 
 ==== User Stories:
-
-- As a greenhouse operator, I want to see how conditions have changed over the past weeks and months so that I can make better planting and management decisions.{jira:GMS-42}
-- As a business owner, I want to download reports from the system so that I can share them with investors or agronomists.{jira:GMS-43}
-- As a business owner, I want to export sensor data to a spreadsheet so that I can share it with my agronomist or include it in business reports.{jira:GMS-44}
-
+  
+- As a greenhouse operator, I want to see how conditions have changed over the past weeks and months so that I can make better planting and management decisions.{jira:GMS-42|showSummary=false} 
+- As a business owner, I want to download reports from the system so that I can share them with investors or agronomists.{jira:GMS-43|showSummary=false} 
+- As a business owner, I want to export sensor data to a spreadsheet so that I can share it with my agronomist or include it in business reports.{jira:GMS-44|showSummary=false} 
+ 
 ==== Job Stories:
-
-- When planning the next growing season, I want to review environmental trends from previous months so I can optimize conditions for better yield.{jira:GMS-49}
-- When meeting with investors or agronomists, I want to export a formatted data report so I can present evidence of system performance.{jira:GMS-50}
-- When preparing records for compliance or advisory meetings, I want to export sensor data to Excel or CSV so I can share it with agronomists or authorities.{jira:GMS-51}
-
+  
+- When planning the next growing season, I want to review environmental trends from previous months so I can optimize conditions for better yield.{jira:GMS-49|showSummary=false} 
+- When meeting with investors or agronomists, I want to export a formatted data report so I can present evidence of system performance.{jira:GMS-50|showSummary=false} 
+- When preparing records for compliance or advisory meetings, I want to export sensor data to Excel or CSV so I can share it with agronomists or authorities.{jira:GMS-51|showSummary=false} 
+ 
 ----
-
-=== **Connectivity & Network Reliability{jira:GMS-6}**
-
+ 
+=== **Connectivity & Network Reliability{jira:GMS-6|showSummary=false}**
+ 
 Stakeholder Requirement: The system must operate reliably over 4G/5G mobile networks and function on low-bandwidth connections.
-
+ 
 ==== User Stories:
-
-- As a rural farmer, I want the system to work well over mobile internet so that I can use it without needing to install a wired connection at my greenhouse.{jira:GMS-52}
-- As a small-scale farmer using a mobile data plan, I want the website to be lightweight so that it does not consume too much data or load too slowly.{jira:GMS-57}
-
+  
+- As a rural farmer, I want the system to work well over mobile internet so that I can use it without needing to install a wired connection at my greenhouse.{jira:GMS-52|showSummary=false} 
+- As a small-scale farmer using a mobile data plan, I want the website to be lightweight so that it does not consume too much data or load too slowly.{jira:GMS-57|showSummary=false} 
+ 
 ==== Job Stories:
-
-- When located in a rural area with only mobile internet, I want the system to connect reliably over 4G/5G so I can use all features without a fixed broadband line.{jira:GMS-58}
-- When accessing the dashboard on a limited mobile data plan, I want pages to load quickly and consume minimal bandwidth so I can use the system cost-effectively.{jira:GMS-59}
-
+  
+- When located in a rural area with only mobile internet, I want the system to connect reliably over 4G/5G so I can use all features without a fixed broadband line.{jira:GMS-58|showSummary=false} 
+- When accessing the dashboard on a limited mobile data plan, I want pages to load quickly and consume minimal bandwidth so I can use the system cost-effectively.{jira:GMS-59|showSummary=false} 
+ 
 ----
-
-=== **Affordability & Cost Optimization{jira:GMS-7}**
-
+ 
+=== **Affordability & Cost Optimization{jira:GMS-7|showSummary=false}**
+ 
 Stakeholder Requirement: The system should be affordable for small-scale farmers and demonstrate measurable savings in water and energy costs.
-
+ 
 ==== User Stories:
-
-- As a small farmer, I want a solution I can actually afford so that I do not need to take on significant financial risk to automate my greenhouse.{jira:GMS-53}
-- As an investor, I want to see proven reductions in operational costs so that I can evaluate the return on investment before committing funds.{jira:GMS-54}
-
+  
+- As a small farmer, I want a solution I can actually afford so that I do not need to take on significant financial risk to automate my greenhouse.{jira:GMS-53|showSummary=false} 
+- As an investor, I want to see proven reductions in operational costs so that I can evaluate the return on investment before committing funds.{jira:GMS-54|showSummary=false} 
+ 
 ==== Job Stories:
-
-- When deciding to invest in automation, I want transparent pricing and a cost estimate so I can assess whether the system fits my budget.{jira:GMS-55}
-- When reviewing operational results, I want measurable data on water and energy savings so I can calculate the return on investment.{jira:GMS-56}
-
+  
+- When deciding to invest in automation, I want transparent pricing and a cost estimate so I can assess whether the system fits my budget.{jira:GMS-55|showSummary=false} 
+- When reviewing operational results, I want measurable data on water and energy savings so I can calculate the return on investment.{jira:GMS-56|showSummary=false} 
+ 
 ----
-
-=== **Multi-Site/ Multi-Zone Management{jira:GMS-8}**
-
+ 
+=== **Multi-Site/ Multi-Zone Management{jira:GMS-8|showSummary=false}**
+ 
 Stakeholder Requirement: The system should enable centralized monitoring and management of multiple greenhouse sites or zones, allowing users to compare performance data and allocate resources without visiting each location.
-
+ 
 ==== User Stories:
-
-- As a large agricultural enterprise manager, I want a unified dashboard for all my greenhouse sites so that I can manage operations without visiting each location.{jira:GMS-45}
-
+  
+- As a large agricultural enterprise manager, I want a unified dashboard for all my greenhouse sites so that I can manage operations without visiting each location.{jira:GMS-45|showSummary=false} 
+ 
 ==== Job Stories:
-
-- When managing multiple zones, I want to compare environmental data across sites so I can identify under-performance and allocate resources efficiently.{jira:GMS-46}
-
+  
+- When managing multiple zones, I want to compare environmental data across sites so I can identify under-performance and allocate resources efficiently.{jira:GMS-46|showSummary=false} 
+ 
 ----
-
-=== **Cybersecurity{jira:GMS-9}**
-
+ 
+=== **Cybersecurity{jira:GMS-9|showSummary=false}**
+ 
 Stakeholder Requirement: The system should ensure all cloud communications and actuator controls are protected through encryption and authentication mechanisms, preventing unauthorized access or manipulation by external parties.
-
+ 
 ==== User Stories:
-
-- As a system administrator, I want all data transmissions encrypted so that unauthorized parties cannot access or manipulate greenhouse controls.{jira:GMS-47}
-
+  
+- As a system administrator, I want all data transmissions encrypted so that unauthorized parties cannot access or manipulate greenhouse controls.{jira:GMS-47|showSummary=false} 
+ 
 ==== Job Stories:
-
-- When connecting the greenhouse controller to the cloud, I want secure authentication so I can prevent unauthorized access to critical actuator controls.{jira:GMS-48}
-
+  
+- When connecting the greenhouse controller to the cloud, I want secure authentication so I can prevent unauthorized access to critical actuator controls.{jira:GMS-48|showSummary=false} 
+ 
 {br}
-
+ 
 {br}

@@ -1,0 +1,356 @@
+--- gcm ---
+title: 04 - GMS -WP5.2 Develop System Requirements
+page_id: 42634148
+version: 7
+source: http://confluence.microlab.club/rest/api/content/42634148
+---
+
+{table width=118.021% class="wrapped relative-table"}
+{colgroup}
+{col style="width: 3.31872%;"}
+{col style="width: 35.5041%;"}
+{col style="width: 9.76832%;"}
+{col style="width: 5.94865%;"}
+{col style="width: 5.13463%;"}
+{col style="width: 40.263%;"}
+{/colgroup}
+{thead}
+{tr}
+{th}**Req ID**{/th}
+{th}**System Requirement**{/th}
+{th}**Template Used**{/th}
+{th}**Type**{/th}
+{th}**Priority**{/th}
+{th}**Comments (Template details, Traceability, Acceptance Criteria)**{/th}
+{/tr}
+{/thead}
+{tr}
+{td colspan=6}**Chapter 1 – Environmental Monitoring and Control**{/td}
+{/tr}
+{tr}
+{td}SR-1.1{/td}
+{td}The GMS system SHALL continuously read and transmit soil moisture, air temperature, relative humidity, CO₂ concentration, and light intensity sensor values to the cloud at intervals not exceeding 60 seconds.{/td}
+{td}*MASTER-Constraint — The system SHALL [transmit] [sensor data] at [interval constraint]*{/td}
+{td}Functional{/td}
+{td}Must Have{/td}
+{td}Derived from GMS-10, GMS-11, GMS-12, GMS-13, GMS-14. Covers all five monitored parameters defined in Project Charter objective O1. The 60-second interval matches the O1 target. Acceptance criterion: time-series database contains an entry for every sensor within 60 seconds of the previous entry under normal connectivity conditions.{/td}
+{/tr}
+{tr}
+{td}SR-1.2{/td}
+{td}WHEN any monitored parameter value falls outside its configured minimum or maximum threshold, the system SHALL generate an alert event within 5 seconds of the breach being detected by the edge controller.{/td}
+{td}*EARS-Event — WHEN [trigger event], the system SHALL [action] within [time]*{/td}
+{td}Functional{/td}
+{td}Must Have{/td}
+{td}Derived from GMS-15 and GMS-21. The 5-second window covers sensor polling latency plus edge processing time. Alert event feeds both the in-dashboard banner (SR-4.1) and the critical push/SMS tier (SR-4.2) depending on severity. Acceptance criterion: in test conditions, a simulated threshold breach triggers a logged alert event within 5 seconds as measured at the cloud broker.{/td}
+{/tr}
+{tr}
+{td}SR-1.3{/td}
+{td}WHEN air temperature falls below 10°C or exceeds 35°C, the system SHALL automatically activate the corresponding heating or ventilation actuator within 30 seconds of the threshold being crossed.{/td}
+{td}*EARS-Event — WHEN [trigger event], the system SHALL [activate actuator] within [time]*{/td}
+{td}Functional{/td}
+{td}Must Have{/td}
+{td}Derived from GMS-11 and GMS-17. The 10°C/35°C thresholds are specified in the stakeholder Job Story and reflect Moldova's climate range. The 30-second actuation window allows for sensor polling + edge decision + actuator switching time. Acceptance criterion: in test conditions, a simulated temperature breach results in the actuator receiving an ON command within 30 seconds.{/td}
+{/tr}
+{tr}
+{td}SR-1.4{/td}
+{td}WHEN relative humidity exceeds its configured maximum threshold, the system SHALL activate the ventilation actuator within 30 seconds to reduce humidity and prevent fungal pathogen growth conditions.{/td}
+{td}*EARS-Event — WHEN [trigger event], the system SHALL [activate actuator] within [time]*{/td}
+{td}Functional{/td}
+{td}Must Have{/td}
+{td}Derived from GMS-12 and GMS-18. Humidity control is tightly coupled with temperature and ventilation (same actuator may serve both). The edge controller must arbitrate between simultaneous temperature and humidity ventilation demands. Acceptance criterion: ventilation actuator activates within 30 seconds of humidity threshold breach in test conditions.{/td}
+{/tr}
+{tr}
+{td}SR-1.5{/td}
+{td}WHEN CO₂ concentration drops below 800 ppm, the system SHALL generate an informational alert visible on the dashboard, notifying the operator to consider manual CO₂ enrichment adjustment.{/td}
+{td}*EARS-Event — WHEN [trigger event], the system SHALL [generate alert]*{/td}
+{td}Functional{/td}
+{td}Should Have{/td}
+{td}Derived from GMS-13 and GMS-19. CO₂ enrichment control is not automated in the pilot scope (no dedicated actuator specified); the system alerts the operator for manual action. The 800 ppm lower bound is drawn from the WP4.2 rationale (800–1,200 ppm optimal range). Acceptance criterion: dashboard displays a CO₂ alert banner when the value falls below 800 ppm, distinct from critical parameter alerts.{/td}
+{/tr}
+{tr}
+{td colspan=6}**Chapter 2 – Automated Irrigation and Climate Control**{/td}
+{/tr}
+{tr}
+{td}SR-2.1{/td}
+{td}WHEN soil moisture drops below the operator-configured minimum threshold, the system SHALL automatically activate the irrigation valve actuator within 30 seconds of the threshold breach being detected.{/td}
+{td}*EARS-Event — WHEN [trigger event], the system SHALL [activate actuator] within [time]*{/td}
+{td}Functional{/td}
+{td}Must Have{/td}
+{td}Derived from GMS-16 and GMS-30 (SHR-21). The trigger is sensor-driven. The 30-second window covers polling interval + edge processing + actuator switching. Must co-exist with schedule-based irrigation (SR-2.3) without conflict — edge controller must prevent simultaneous double-activation. Acceptance criterion: irrigation valve receives an ON command within 30 seconds of simulated moisture threshold breach.{/td}
+{/tr}
+{tr}
+{td}SR-2.2{/td}
+{td}WHEN soil moisture reaches or exceeds the operator-configured target threshold during an active irrigation cycle, the system SHALL automatically deactivate the irrigation valve actuator within 30 seconds, regardless of whether the cycle was initiated by sensor trigger or schedule.{/td}
+{td}*EARS-Event — WHEN [trigger event], the system SHALL [deactivate actuator] within [time]*{/td}
+{td}Functional{/td}
+{td}Must Have{/td}
+{td}Derived from GMS-26 and GMS-32 (SHR-23). Automatic cutoff is safety-critical — failure results in root damage and water waste. The edge controller must execute this cutoff locally even when cloud connectivity is lost (offline autonomy dependency, cross-reference SR-6.2). Acceptance criterion: irrigation valve receives an OFF command within 30 seconds of soil moisture reaching the target value in test conditions.{/td}
+{/tr}
+{tr}
+{td}SR-2.3{/td}
+{td}The system SHALL allow the operator to define time-based irrigation schedules specifying start time, duration, and repeat frequency (daily/weekly), which execute autonomously on the edge controller independently of cloud connectivity.{/td}
+{td}*MASTER-Action — The system SHALL [allow actor] to [configure schedule] executing [autonomously]*{/td}
+{td}Functional{/td}
+{td}Must Have{/td}
+{td}Derived from GMS-22 and GMS-28. One survey respondent required up to 3 months of autonomous operation while abroad. Schedules must run locally on the edge controller without requiring a cloud connection, consistent with the offline autonomy requirement (SR-6.2). Acceptance criterion: a schedule configured by the operator continues to execute irrigation cycles during a simulated 72-hour cloud connectivity outage.{/td}
+{/tr}
+{tr}
+{td}SR-2.4{/td}
+{td}The GMS web dashboard SHALL provide a remote irrigation control panel allowing the operator to manually activate or deactivate the irrigation valve from any browser, with the command executing on the edge controller within 10 seconds of submission.{/td}
+{td}*MASTER-Action — The system SHALL [provide] [remote control] executing within [time]*{/td}
+{td}Functional{/td}
+{td}Must Have{/td}
+{td}Derived from GMS-25 and GMS-31 (SHR-22). Supports the use case of a greenhouse owner abroad triggering irrigation remotely during an unexpected dry spell. The 10-second command latency is the target over a 4G connection. Requires authentication (cross-reference SR-9.1) to prevent unauthorised activation. Acceptance criterion: manual activation command issued from a browser results in the actuator switching state within 10 seconds, measured over a 4G connection.{/td}
+{/tr}
+{tr}
+{td}SR-2.5{/td}
+{td}The GMS dashboard home screen SHALL display the current soil moisture reading as the primary prominent widget, positioned in the top section of the viewport and visible without scrolling on all screen sizes from 360 px width upward.{/td}
+{td}*MASTER-Constraint — The system SHALL [position] [widget] in [viewport location] across [screen size range]*{/td}
+{td}Functional{/td}
+{td}Must Have{/td}
+{td}Derived from GMS-24 and GMS-30 (SHR-21). Survey evidence: soil moisture scored 4.83/5 and 39% cited drought as their top incident — dashboard prominence is a validated UX requirement. Acceptance criterion: on a 360 px viewport, the soil moisture widget is fully visible without any vertical scroll from the page top.{/td}
+{/tr}
+{tr}
+{td}SR-2.6{/td}
+{td}The system SHALL allow the operator to configure minimum and maximum threshold values independently for soil moisture, air temperature, and relative humidity, with all values persisted across sessions and applied immediately to both sensor-triggered and schedule-based control logic.{/td}
+{td}MASTER-Action — *The system SHALL [allow actor] to [configure thresholds] applied to [control logic]*{/td}
+{td}Functional{/td}
+{td}Must Have{/td}
+{td}Derived from GMS-23 and GMS-29. Supports crop-specific setpoint adjustment — fixed thresholds would make automation inapplicable across varied growing scenarios. Acceptance criterion: threshold values configured by the operator survive a full server restart and are reflected in actuator behaviour within the next sensor polling cycle.{/td}
+{/tr}
+{tr}
+{td colspan=6}**Chapter 3 - Web Dashboard & Mobile Accessibility**{/td}
+{/tr}
+{tr}
+{td}SR-3.1{/td}
+{td}The GMS web application SHALL be accessible via any modern browser (Chrome >= 110, Firefox >= 110, Safari >= 16, Edge >= 110) without requiring installation of additional software or plugins.{/td}
+{td}*The system SHALL [provide access] via [browser] without [installation]*
+
+***MASTER-Constraint***{/td}
+{td}Functional{/td}
+{td}Must Have{/td}
+{td}Derived from GMS-37. 
+Addresses remote device access. 
+Acceptance criterion: dashboard loads and is fully operable in all four named browsers on both desktop and smartphone without any plugin prompt.{/td}
+{/tr}
+{tr}
+{td}SR-3.2{/td}
+{td}The GMS dashboard SHALL present a single-page overview displaying current values of all monitored parameters, active alerts, and actuator statuses simultaneously in one scrollable view.{/td}
+{td}*The system SHALL [display] [data] on [single page]*
+***MASTER-Action***{/td}
+{td}Functional{/td}
+{td}Must Have{/td}
+{td}Merged from GMS-35 and GMS-38. 
+Both stories converge on the same layout requirement. Acceptance criterion: all sensor readings, alert indicators, and actuator states visible without navigating away from the main view.{/td}
+{/tr}
+{tr}
+{td}SR-3.3{/td}
+{td}The GMS dashboard layout SHALL be fully responsive, rendering correctly and preserving all functionality at viewport widths from 360 px (smartphone) to 2560 px (desktop).{/td}
+{td}*The system SHALL [constrain behaviour] across [viewport range]  *
+**MASTER-Constraint**{/td}
+{td}Non-Functional{/td}
+{td}Must Have{/td}
+{td}Merged from GMS-36 and GMS-39.
+Acceptance criterion: no horizontal overflow, no truncated controls, and touch targets >= 44 px on a 360 px viewport.{/td}
+{/tr}
+{tr}
+{td}SR-3.4{/td}
+{td}WHILE the dashboard is open, the system SHALL automatically refresh all displayed sensor readings at intervals not exceeding 10 seconds, without requiring manual page reload.{/td}
+{td}*WHILE [condition], the system SHALL [action] *
+*** EARS-State***{/td}
+{td}Functional{/td}
+{td}Must Have{/td}
+{td}Derived from GMS-35 and GMS-38.
+ Ensures real-time awareness for operators monitoring from remote locations. 
+The 10-second interval balances freshness with bandwidth cost (linked to SR-6.3 payload budget).{/td}
+{/tr}
+{tr}
+{td}SR-3.5{/td}
+{td}The GMS interface SHALL provide feature parity between desktop and mobile views — no control, data view, or action available on desktop SHALL be unavailable on a smartphone browser.{/td}
+{td}*The system SHALL [constrain feature set] to [equivalent scope]*
+***MASTER-Constraint***{/td}
+{td}Non-Functional{/td}
+{td}Must Have{/td}
+{td}Derived from GMS-36 and GMS-39. Prevents a degraded mobile experience. 
+Acceptance criterion: a test script executed on a 360 px viewport must successfully reach and interact with every control reachable on a 1920 px viewport.{/td}
+{/tr}
+{tr}
+{td colspan=6}**Chapter 4 - Alerts & Notifications**{/td}
+{/tr}
+{tr}
+{td}SR-4.1{/td}
+{td}WHEN any monitored parameter exceeds its configured threshold, the system SHALL display a colour-coded in-dashboard alert banner within 5 seconds of breach detection (informational tier).{/td}
+{td}*WHEN [trigger event], the system SHALL [action] within [time]*
+***EARS-Event***{/td}
+{td}Functional{/td}
+{td}Should Have{/td}
+{td}Derived from GMS-41. 
+Implements the informational tier of the two-tier severity model. 
+Colour coding: yellow = warning, red = critical. The 5-second window covers sensor polling latency + UI render.{/td}
+{/tr}
+{tr}
+{td}SR-4.2{/td}
+{td}WHEN a critical event persists for more than 60 seconds (actuator failure, sensor data loss, or extreme parameter deviation), the system SHALL dispatch a push notification and/or SMS to the registered operator within 30 seconds of the 60-second threshold being crossed.{/td}
+{td}*WHEN [trigger event persists > duration], the system SHALL [action] within [time]*
+***EARS-Event***{/td}
+{td}Functional{/td}
+{td}Should Have{/td}
+{td}Derived from GMS-41. Implements the critical tier of the two-tier model (peer review R3). The 60-second persistence filter prevents alert fatigue from transient spikes. Push/SMS channel aligns with survey finding: 66.7% of respondents prefer mobile dashboard alerts, 27.8% SMS.{/td}
+{/tr}
+{tr}
+{td}SR-4.3{/td}
+{td}The system SHALL allow the operator to configure minimum and maximum threshold values independently for each monitored parameter, with changes persisted across sessions.{/td}
+{td}*The system SHALL [allow actor] to [configure] [parameters]*
+***MASTER-Action***{/td}
+{td}Functional{/td}
+{td}Should Have{/td}
+{td}Derived from GMS-41. 
+Enables crop-specific and season-specific tuning without code changes. 
+Acceptance criterion: threshold values saved by an operator survive a full browser session closure and server restart.{/td}
+{/tr}
+{tr}
+{td colspan=6}**Chapter 5 - Historical Data, Reports & Analytics**{/td}
+{/tr}
+{tr}
+{td}SR-5.1{/td}
+{td}The system SHALL store all sensor readings with associated timestamps (ISO 8601) and sensor IDs, retaining data for a minimum of 90 days.{/td}
+{td}*The system SHALL [store] [data] for [minimum retention]*
+***MASTER-Action***{/td}
+{td}Functional{/td}
+{td}Should Have{/td}
+{td}Derived from GMS-42. 90-day retention applied per peer review R2. 
+Covers a full growing season and enables year-over-year comparison when combined with export (SR-5.3).{/td}
+{/tr}
+{tr}
+{td}SR-5.2{/td}
+{td}The system SHALL provide an interactive trend visualisation allowing the operator to select any monitored parameter and any date range up to 90 days, with hourly and daily granularity options.{/td}
+{td}*The system SHALL [provide] [visualisation] with [granularity options]*
+***MASTER-Action***{/td}
+{td}Functional{/td}
+{td}Should Have{/td}
+{td}Derived from GMS-42. 
+Supports planning decisions (e.g., irrigation scheduling, disease risk assessment). 
+Acceptance criterion: chart renders within 3 seconds for any 90-day range at daily granularity; within 5 seconds at hourly granularity.{/td}
+{/tr}
+{tr}
+{td}SR-5.3{/td}
+{td}The system SHALL allow export of historical sensor data in both .xlsx and .csv formats, including the mandatory fields: timestamp (ISO 8601), sensor ID, parameter name, value, and unit.{/td}
+{td}*The system SHALL [allow export] in [formats] including [mandatory fields]*
+***MASTER-Action***{/td}
+{td}Functional{/td}
+{td}Should Have{/td}
+{td}Derived from GMS-43. GMS-44 marked INVALID (duplicate) and absorbed here. 
+Mandatory export fields defined per peer review R5 . Both .xlsx and .csv required to serve agronomists (Excel) and automated pipelines (CSV).{/td}
+{/tr}
+{tr}
+{td colspan=6}**Chapter 6  - Connectivity & Network Reliability**{/td}
+{/tr}
+{tr}
+{td}SR-6.1{/td}
+{td}The GMS system SHALL operate all dashboard and notification features over a 4G/5G mobile data connection as the primary network, using HTTPS for web traffic and MQTT for sensor telemetry.{/td}
+{td}*The system SHALL [operate] over [network type] using [protocols] *
+***MASTER-Constraint***{/td}
+{td}Non-Functional{/td}
+{td}Must Have{/td}
+{td}Derived from GMS-52 (US — rural farmer relying on 4G/5G). Survey confirms 55.6% of target sites use mobile data as primary connection. HTTPS and MQTT are the mandatory protocol stack. Acceptance criterion: full feature set accessible with signal strength >= -100 dBm (typical 4G edge coverage).{/td}
+{/tr}
+{tr}
+{td}SR-6.2{/td}
+{td}WHILE the network connection is unavailable, the system SHALL continue autonomous greenhouse control locally and buffer all sensor readings; WHEN connectivity is restored, the system SHALL synchronise all buffered data to the server with zero data loss.{/td}
+{td}*WHILE [condition], the system SHALL [action]; WHEN [event], the system SHALL [action]*
+***EARS-State + EARS-Event***{/td}
+{td}Functional{/td}
+{td}Must Have{/td}
+{td}Derived from GMS-52. 
+Addresses the 11.1% of surveyed sites with no stable connection. The dual-clause requirement covers both the offline autonomous period and the reconnection synchronisation. Minimum offline autonomy duration (72 h) to be confirmed with team. Zero data loss is the hard acceptance criterion.{/td}
+{/tr}
+{tr}
+{td colspan=6}**Chapter 7 – Affordability & Cost Optimization**{/td}
+{/tr}
+{tr}
+{td}SR-7.1{/td}
+{td}The GMS system SHALL be deployable using a hardware bill of materials with a total component cost not exceeding 2,000 EUR, covering the edge controller, sensors, actuators, enclosures, and 4G connectivity module.{/td}
+{td}*MASTER-Constraint — The system SHALL [constrain cost] within [budget ceiling]*{/td}
+{td}Non-Functional{/td}
+{td}Must Have{/td}
+{td}Derived from GMS-53 (US — small farmer affordability). 50% of survey respondents are small-scale farmers for whom cost is a prerequisite for adoption. The 2,000 EUR ceiling is taken from the Project Charter hardware budget upper bound. Acceptance criterion: a bill of materials produced at implementation phase must total ≤ 2,000 EUR using commercially available components. Does not cover cloud infrastructure costs (addressed separately).{/td}
+{/tr}
+{tr}
+{td}SR-7.2{/td}
+{td}The GMS system SHALL provide a publicly accessible cost estimate document detailing hardware, cloud infrastructure, and installation cost ranges, linked from the dashboard onboarding screen or documentation landing page.{/td}
+{td}*MASTER-Action — The system SHALL [provide] [cost estimate] accessible via [entry point]*{/td}
+{td}Functional{/td}
+{td}Should Have{/td}
+{td}Derived from GMS-55 (JS — transparent pricing before investment decision). Acceptance criterion: cost estimate document is reachable within two clicks from the dashboard login page and contains at minimum three line items: hardware, cloud/hosting, and installation. A dedicated pricing module in the MVP dashboard is not required — a linked static document satisfies this requirement at pilot stage.{/td}
+{/tr}
+{tr}
+{td}SR-7.3{/td}
+{td}The GMS system SHALL log total water volume dispensed per irrigation cycle and cumulative energy consumption of all actuators, storing these values with timestamps in the same time-series database as sensor readings, retaining data for a minimum of 90 days.{/td}
+{td}*MASTER-Action — The system SHALL [log] [consumption data] with [retention period]*{/td}
+{td}Functional{/td}
+{td}Should Have{/td}
+{td}Derived from GMS-56 (JS — measurable water and energy savings for ROI calculation). Peer review R1: a manually configured baseline value must be settable by the operator at pilot start to enable comparison. Peer review R2: 90-day retention aligns with a full growing cycle. Acceptance criterion: water volume and energy values are present in the export output alongside sensor readings (SR-5.3 dependency). Actual savings figures are a pilot-phase outcome — this requirement ensures the logging infrastructure is in place during build.{/td}
+{/tr}
+{tr}
+{td}SR-7.4{/td}
+{td}The GMS dashboard SHALL display a cumulative resource summary panel showing total water dispensed and total actuator energy consumed for a user-selected period, alongside a manually entered baseline value for direct comparison.{/td}
+{td}*MASTER-Action — The system SHALL [display] [summary panel] with [comparison baseline]*{/td}
+{td}Functional{/td}
+{td}Should Have{/td}
+{td}Derived from GMS-56 (JS). Complements SR-7.3 (logging) with a user-facing visualisation. Acceptance criterion: operator can enter a baseline figure, select a date range up to 90 days, and the panel displays actual vs. baseline values with a calculated percentage difference. Depends on SR-7.3 for data availability and SR-5.1 for retention.{/td}
+{/tr}
+{tr}
+{td colspan=6}**Chapter 8 – Multi-Site / Multi-Zone Management**{/td}
+{/tr}
+{tr}
+{td}SR-8.1{/td}
+{td}The GMS system SHALL be designed with a single-zone architecture for the initial pilot deployment, restricting all monitoring, control, and dashboard functions to one greenhouse zone, while ensuring the data model and API structure do not preclude future extension to multiple zones.{/td}
+{td}*MASTER-Constraint — The system SHALL [constrain scope] to [single zone] while [preserving extensibility]*{/td}
+{td}Non-Functional{/td}
+{td}Won't Have{/td}
+{td}Derived from GMS-45 and GMS-46. Multi-site/multi-zone management is explicitly classified as Won't Have in WP4.2 — the majority of surveyed operators manage a single greenhouse and multi-site architecture would add significant complexity outside the pilot scope. This requirement formally documents the architectural constraint while ensuring the system is not designed in a way that would make future multi-zone extension prohibitively difficult. Acceptance criterion: the data model includes a zone identifier field on all sensor and actuator records, even if only one zone ID is used during the pilot.{/td}
+{/tr}
+{tr}
+{td}SR-8.2{/td}
+{td}The GMS system documentation SHALL include a scalability note describing the architectural changes required to extend the single-zone pilot to a multi-zone or multi-site deployment, to support future project phases.{/td}
+{td}*MASTER-Action — The system SHALL [provide documentation] describing [future extension path]*{/td}
+{td}Non-Functional{/td}
+{td}Won't Have{/td}
+{td}Derived from GMS-45 and GMS-46. Although multi-zone management is out of scope for the pilot, the expert interview (Andrei Bragarenco) explicitly described the vision of a unified cloud layer supervising multiple zones. Documenting the extension path now prevents costly architectural rework in future phases. Acceptance criterion: architecture document contains a dedicated section outlining the steps needed to add a second greenhouse zone, including API changes, database schema adjustments, and dashboard modifications.{/td}
+{/tr}
+{tr}
+{td colspan=6}**Chapter 9 – Cybersecurity**{/td}
+{/tr}
+{tr}
+{td}SR-9.1{/td}
+{td}All communication between the GMS edge controller and the cloud server SHALL be encrypted using TLS 1.2 or higher, and the edge controller SHALL authenticate to the cloud broker using X.509 client certificates before any sensor data or actuator command is transmitted or received.{/td}
+{td}*MASTER-Constraint — The system SHALL [encrypt] [communications] using [standard] and [authenticate] using [mechanism]*{/td}
+{td}Non-Functional{/td}
+{td}Should Have{/td}
+{td}Derived from GMS-47 and GMS-48. Remote control of physical actuators over public 4G/5G networks is an identified security risk. TLS 1.2+ and X.509 certificate authentication are the minimum standard IoT security provisions per the WP4.2 cybersecurity rationale. Acceptance criterion: a network traffic inspection test confirms all cloud-bound traffic is TLS-encrypted and the broker rejects any connection attempt that does not present a valid client certificate.{/td}
+{/tr}
+{tr}
+{td}SR-9.2{/td}
+{td}The GMS web dashboard SHALL implement role-based access control with a minimum of two roles — Operator (full read/write access to controls and configuration) and Viewer (read-only access to sensor data and alerts) — with role assignments persisted per user account.{/td}
+{td}*MASTER-Action — The system SHALL [implement] [role-based access control] with [minimum role set]*{/td}
+{td}Functional{/td}
+{td}Should Have{/td}
+{td}Derived from GMS-47. Prevents unauthorised parties from activating actuators (irrigation, ventilation, heating) via the dashboard. The two-role minimum covers the primary use cases: a greenhouse owner granting read-only access to an agronomist or investor without exposing control functions. Acceptance criterion: a Viewer-role account can view all sensor data but receives a permission error when attempting to activate any actuator or modify any threshold configuration.{/td}
+{/tr}
+{tr}
+{td}SR-9.3{/td}
+{td}WHEN an unauthenticated or unauthorised request is made to any GMS API endpoint or dashboard route, the system SHALL reject the request with an HTTP 401 or 403 response and log the attempt with a timestamp and source IP address.{/td}
+{td}*EARS-Event — WHEN [trigger event], the system SHALL [reject request] and [log attempt]*{/td}
+{td}Functional{/td}
+{td}Should Have{/td}
+{td}Derived from GMS-47 and GMS-48. Logging unauthorised access attempts provides an audit trail consistent with the compliance and traceability needs raised by technical experts in the survey. The distinction between 401 (unauthenticated) and 403 (authenticated but unauthorised) ensures accurate error reporting. Acceptance criterion: a penetration test using an invalid token against any protected endpoint returns the correct status code within 1 second and a log entry is present in the server audit log.{/td}
+{/tr}
+{tr}
+{td}SR-9.4{/td}
+{td}WHILE the edge controller is operating in offline autonomous mode, the system SHALL continue to enforce local authentication for any direct API access to the controller, rejecting requests that do not present a valid pre-provisioned credential.{/td}
+{td}*EARS-State — WHILE [condition], the system SHALL [enforce] [authentication]*{/td}
+{td}Non-Functional{/td}
+{td}Should Have{/td}
+{td}Derived from GMS-48. Security must not degrade during cloud connectivity loss — the offline autonomy period (cross-reference SR-6.2) must not create a window where the edge controller is reachable without authentication. Pre-provisioned credentials (e.g., a local API key or certificate stored on the device) must be configured during deployment. Acceptance criterion: during a simulated cloud outage, a direct HTTP request to the edge controller API without valid credentials is rejected with a 401 response.{/td}
+{/tr}
+{/table}

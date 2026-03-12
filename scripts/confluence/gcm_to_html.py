@@ -13,13 +13,15 @@ from gcm_spec import parse_frontmatter, escape_xhtml, parse_tag_attrs
 
 # ── Jira macro generation ───────────────────────────────────────────────────
 
-def _jira_macro(key, server="", server_id=""):
+def _jira_macro(key, server="", server_id="", extra_params=None):
     parts = []
     if server:
         parts.append(f'<ac:parameter ac:name="server">{escape_xhtml(server)}</ac:parameter>')
     if server_id:
         parts.append(f'<ac:parameter ac:name="serverId">{server_id}</ac:parameter>')
     parts.append(f'<ac:parameter ac:name="key">{escape_xhtml(key)}</ac:parameter>')
+    for k, v in (extra_params or {}).items():
+        parts.append(f'<ac:parameter ac:name="{escape_xhtml(k)}">{escape_xhtml(v)}</ac:parameter>')
     return f'<ac:structured-macro ac:name="jira" ac:schema-version="1">{"".join(parts)}</ac:structured-macro>'
 
 
@@ -35,10 +37,19 @@ def _convert_inline(text, server="", server_id=""):
         phs.append(xhtml)
         return f"\x00PH{idx}\x00"
 
-    # {jira:KEY}
+    # {jira:KEY} or {jira:KEY|param=value|...}
+    def _parse_jira(m):
+        key = m.group(1)
+        extras_str = m.group(2) or ""
+        extra_params = {}
+        for part in extras_str.split("|"):
+            if "=" in part:
+                k, _, v = part.partition("=")
+                extra_params[k.strip()] = v.strip()
+        return _ph(_jira_macro(key, server, server_id, extra_params))
     text = re.sub(
-        r'\{jira:([A-Z][A-Z0-9]*-\d+)\}',
-        lambda m: _ph(_jira_macro(m.group(1), server, server_id)),
+        r'\{jira:([A-Z][A-Z0-9]*-\d+)((?:\|[^}]+)*)\}',
+        _parse_jira,
         text
     )
 

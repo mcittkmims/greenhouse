@@ -441,9 +441,13 @@ User mentions inside ac:link structures are handled as `{user:...}` (see below).
 
 ```
 {jira:GMS-10}
+{jira:GMS-10|showSummary=false}
+{jira:GMS-10|showSummary=false|columns=key,summary,status}
 ```
 
-This is the most common inline element in the GMS project. On conversion back to HTML, it expands to a full `<ac:structured-macro ac:name="jira">` block with all required parameters (server, serverId, key, etc.).
+This is the most common inline element in the GMS project. The key is always the first segment. Any additional Jira macro parameters (e.g. `showSummary`, `columns`, `maximumIssues`, `jqlQuery`) are preserved as `|name=value` pairs after the key.
+
+`server` and `serverId` are **not** stored in GCM — they are re-added at push time from the `jira` config in `confluence_pages.json`.
 
 Can appear both inline (within paragraphs, table cells) and as a standalone block.
 
@@ -613,8 +617,8 @@ from gcm_to_html import gcm_to_html
 
 storage_html, metadata = gcm_to_html(
     gcm_text,                # GCM markup string (with or without front-matter)
-    jira_server="",          # Jira server URL (for {jira:KEY} expansion)
-    jira_server_id=""        # Jira server ID (for {jira:KEY} expansion)
+    jira_server="",          # Jira server name (for {jira:KEY} expansion — from confluence_pages.json)
+    jira_server_id=""        # Jira server ID (for {jira:KEY} expansion — from confluence_pages.json)
 )
 # storage_html: Confluence storage-format XHTML string
 # metadata: dict from front-matter (title, page_id, version, etc.)
