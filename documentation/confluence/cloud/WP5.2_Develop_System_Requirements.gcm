@@ -1,19 +1,19 @@
 --- gcm ---
 title: 04 - GMS -WP5.2 Develop System Requirements
 page_id: 42634148
-version: 7
+version: 39
 source: http://confluence.microlab.club/rest/api/content/42634148
 ---
 
 {table width=118.021% class="wrapped relative-table"}
 {colgroup}
-{col style="width: 3.31872%;"}
-{col style="width: 35.5041%;"}
-{col style="width: 9.76832%;"}
-{col style="width: 5.94865%;"}
-{col style="width: 5.13463%;"}
-{col style="width: 40.263%;"}
-{/colgroup}
+ {col style="width: 3.31872%;"}
+ {col style="width: 35.5041%;"}
+ {col style="width: 9.76832%;"}
+ {col style="width: 5.94865%;"}
+ {col style="width: 5.13463%;"}
+ {col style="width: 40.263%;"}
+ {/colgroup}
 {thead}
 {tr}
 {th}**Req ID**{/th}
@@ -29,7 +29,7 @@ source: http://confluence.microlab.club/rest/api/content/42634148
 {/tr}
 {tr}
 {td}SR-1.1{/td}
-{td}The GMS system SHALL continuously read and transmit soil moisture, air temperature, relative humidity, CO₂ concentration, and light intensity sensor values to the cloud at intervals not exceeding 60 seconds.{/td}
+{td}The GMS system SHALL continuously read and transmit soil moisture, air temperature, relative humidity, CO₂ concentration, and light intensity sensor values to the cloud at intervals not exceeding 60 seconds.{jira:GMS-71|showSummary=false}{/td}
 {td}*MASTER-Constraint — The system SHALL [transmit] [sensor data] at [interval constraint]*{/td}
 {td}Functional{/td}
 {td}Must Have{/td}
@@ -37,7 +37,7 @@ source: http://confluence.microlab.club/rest/api/content/42634148
 {/tr}
 {tr}
 {td}SR-1.2{/td}
-{td}WHEN any monitored parameter value falls outside its configured minimum or maximum threshold, the system SHALL generate an alert event within 5 seconds of the breach being detected by the edge controller.{/td}
+{td}WHEN any monitored parameter value falls outside its configured minimum or maximum threshold, the system SHALL generate an alert event within 5 seconds of the breach being detected by the edge controller.{jira:GMS-72|showSummary=false}{/td}
 {td}*EARS-Event — WHEN [trigger event], the system SHALL [action] within [time]*{/td}
 {td}Functional{/td}
 {td}Must Have{/td}
@@ -45,7 +45,7 @@ source: http://confluence.microlab.club/rest/api/content/42634148
 {/tr}
 {tr}
 {td}SR-1.3{/td}
-{td}WHEN air temperature falls below 10°C or exceeds 35°C, the system SHALL automatically activate the corresponding heating or ventilation actuator within 30 seconds of the threshold being crossed.{/td}
+{td}WHEN air temperature falls below 10°C or exceeds 35°C, the system SHALL automatically activate the corresponding heating or ventilation actuator within 30 seconds of the threshold being crossed.{jira:GMS-73|showSummary=false}{/td}
 {td}*EARS-Event — WHEN [trigger event], the system SHALL [activate actuator] within [time]*{/td}
 {td}Functional{/td}
 {td}Must Have{/td}
@@ -53,7 +53,7 @@ source: http://confluence.microlab.club/rest/api/content/42634148
 {/tr}
 {tr}
 {td}SR-1.4{/td}
-{td}WHEN relative humidity exceeds its configured maximum threshold, the system SHALL activate the ventilation actuator within 30 seconds to reduce humidity and prevent fungal pathogen growth conditions.{/td}
+{td}WHEN relative humidity exceeds its configured maximum threshold, the system SHALL activate the ventilation actuator within 30 seconds to reduce humidity and prevent fungal pathogen growth conditions.{jira:GMS-74|showSummary=false}{/td}
 {td}*EARS-Event — WHEN [trigger event], the system SHALL [activate actuator] within [time]*{/td}
 {td}Functional{/td}
 {td}Must Have{/td}
@@ -61,7 +61,7 @@ source: http://confluence.microlab.club/rest/api/content/42634148
 {/tr}
 {tr}
 {td}SR-1.5{/td}
-{td}WHEN CO₂ concentration drops below 800 ppm, the system SHALL generate an informational alert visible on the dashboard, notifying the operator to consider manual CO₂ enrichment adjustment.{/td}
+{td}WHEN CO₂ concentration drops below 800 ppm, the system SHALL generate an informational alert visible on the dashboard, notifying the operator to consider manual CO₂ enrichment adjustment.{jira:GMS-91|showSummary=false}{/td}
 {td}*EARS-Event — WHEN [trigger event], the system SHALL [generate alert]*{/td}
 {td}Functional{/td}
 {td}Should Have{/td}
@@ -72,7 +72,7 @@ source: http://confluence.microlab.club/rest/api/content/42634148
 {/tr}
 {tr}
 {td}SR-2.1{/td}
-{td}WHEN soil moisture drops below the operator-configured minimum threshold, the system SHALL automatically activate the irrigation valve actuator within 30 seconds of the threshold breach being detected.{/td}
+{td}WHEN soil moisture drops below the operator-configured minimum threshold, the system SHALL automatically activate the irrigation valve actuator within 30 seconds of the threshold breach being detected.{jira:GMS-83|showSummary=false}{/td}
 {td}*EARS-Event — WHEN [trigger event], the system SHALL [activate actuator] within [time]*{/td}
 {td}Functional{/td}
 {td}Must Have{/td}
@@ -80,7 +80,7 @@ source: http://confluence.microlab.club/rest/api/content/42634148
 {/tr}
 {tr}
 {td}SR-2.2{/td}
-{td}WHEN soil moisture reaches or exceeds the operator-configured target threshold during an active irrigation cycle, the system SHALL automatically deactivate the irrigation valve actuator within 30 seconds, regardless of whether the cycle was initiated by sensor trigger or schedule.{/td}
+{td}WHEN soil moisture reaches or exceeds the operator-configured target threshold during an active irrigation cycle, the system SHALL automatically deactivate the irrigation valve actuator within 30 seconds, regardless of whether the cycle was initiated by sensor trigger or schedule.{jira:GMS-92|showSummary=false}{/td}
 {td}*EARS-Event — WHEN [trigger event], the system SHALL [deactivate actuator] within [time]*{/td}
 {td}Functional{/td}
 {td}Must Have{/td}
@@ -88,7 +88,7 @@ source: http://confluence.microlab.club/rest/api/content/42634148
 {/tr}
 {tr}
 {td}SR-2.3{/td}
-{td}The system SHALL allow the operator to define time-based irrigation schedules specifying start time, duration, and repeat frequency (daily/weekly), which execute autonomously on the edge controller independently of cloud connectivity.{/td}
+{td}The system SHALL allow the operator to define time-based irrigation schedules specifying start time, duration, and repeat frequency (daily/weekly), which execute autonomously on the edge controller independently of cloud connectivity.{jira:GMS-93|showSummary=false}{/td}
 {td}*MASTER-Action — The system SHALL [allow actor] to [configure schedule] executing [autonomously]*{/td}
 {td}Functional{/td}
 {td}Must Have{/td}
@@ -123,29 +123,28 @@ source: http://confluence.microlab.club/rest/api/content/42634148
 {/tr}
 {tr}
 {td}SR-3.1{/td}
-{td}The GMS web application SHALL be accessible via any modern browser (Chrome >= 110, Firefox >= 110, Safari >= 16, Edge >= 110) without requiring installation of additional software or plugins.{/td}
+{td}The GMS web application SHALL be accessible via any modern browser (Chrome >= 110, Firefox >= 110, Safari >= 16, Edge >= 110) without requiring installation of additional software or plugins.{jira:GMS-63|showSummary=false}{/td}
 {td}*The system SHALL [provide access] via [browser] without [installation]*
-
 ***MASTER-Constraint***{/td}
 {td}Functional{/td}
 {td}Must Have{/td}
-{td}Derived from GMS-37. 
-Addresses remote device access. 
+{td}Derived from GMS-37.
+Addresses remote device access.
 Acceptance criterion: dashboard loads and is fully operable in all four named browsers on both desktop and smartphone without any plugin prompt.{/td}
 {/tr}
 {tr}
 {td}SR-3.2{/td}
-{td}The GMS dashboard SHALL present a single-page overview displaying current values of all monitored parameters, active alerts, and actuator statuses simultaneously in one scrollable view.{/td}
+{td}The GMS dashboard SHALL present a single-page overview displaying current values of all monitored parameters, active alerts, and actuator statuses simultaneously in one scrollable view.{jira:GMS-64|showSummary=false}{/td}
 {td}*The system SHALL [display] [data] on [single page]*
 ***MASTER-Action***{/td}
 {td}Functional{/td}
 {td}Must Have{/td}
-{td}Merged from GMS-35 and GMS-38. 
+{td}Merged from GMS-35 and GMS-38.
 Both stories converge on the same layout requirement. Acceptance criterion: all sensor readings, alert indicators, and actuator states visible without navigating away from the main view.{/td}
 {/tr}
 {tr}
 {td}SR-3.3{/td}
-{td}The GMS dashboard layout SHALL be fully responsive, rendering correctly and preserving all functionality at viewport widths from 360 px (smartphone) to 2560 px (desktop).{/td}
+{td}The GMS dashboard layout SHALL be fully responsive, rendering correctly and preserving all functionality at viewport widths from 360 px (smartphone) to 2560 px (desktop).{jira:GMS-65|showSummary=false}{/td}
 {td}*The system SHALL [constrain behaviour] across [viewport range]  *
 **MASTER-Constraint**{/td}
 {td}Non-Functional{/td}
@@ -155,91 +154,106 @@ Acceptance criterion: no horizontal overflow, no truncated controls, and touch t
 {/tr}
 {tr}
 {td}SR-3.4{/td}
-{td}WHILE the dashboard is open, the system SHALL automatically refresh all displayed sensor readings at intervals not exceeding 10 seconds, without requiring manual page reload.{/td}
+{td}WHILE the dashboard is open, the system SHALL automatically refresh all displayed sensor readings at intervals not exceeding 10 seconds, without requiring manual page reload.{jira:GMS-66|showSummary=false}{/td}
 {td}*WHILE [condition], the system SHALL [action] *
 *** EARS-State***{/td}
 {td}Functional{/td}
 {td}Must Have{/td}
-{td}Derived from GMS-35 and GMS-38.
- Ensures real-time awareness for operators monitoring from remote locations. 
-The 10-second interval balances freshness with bandwidth cost (linked to SR-6.3 payload budget).{/td}
+{td}Derived from GMS-14 and GMS-20. Cross-references GMS-35 and GMS-38 (single-page overview layout where refresh is visible). Ensures real-time awareness for operators monitoring from remote locations. The 10-second interval balances freshness with bandwidth cost (linked to SR-6.3 payload budget) and exceeds the ≤60s safety constraint identified in GMS-20 analysis.{/td}
 {/tr}
 {tr}
 {td}SR-3.5{/td}
-{td}The GMS interface SHALL provide feature parity between desktop and mobile views — no control, data view, or action available on desktop SHALL be unavailable on a smartphone browser.{/td}
+{td}The GMS interface SHALL provide feature parity between desktop and mobile views — no control, data view, or action available on desktop SHALL be unavailable on a smartphone browser.{jira:GMS-67|showSummary=false}{/td}
 {td}*The system SHALL [constrain feature set] to [equivalent scope]*
 ***MASTER-Constraint***{/td}
 {td}Non-Functional{/td}
 {td}Must Have{/td}
-{td}Derived from GMS-36 and GMS-39. Prevents a degraded mobile experience. 
+{td}Derived from GMS-36 and GMS-39. Prevents a degraded mobile experience.
 Acceptance criterion: a test script executed on a 360 px viewport must successfully reach and interact with every control reachable on a 1920 px viewport.{/td}
+{/tr}
+{tr}
+{td}SR-3.6{/td}
+{td}The GMS dashboard SHALL permanently display a data freshness timestamp indicating the time of the last successful sensor data reception. WHEN a refresh cycle is delayed beyond 60 seconds due to network latency or connectivity degradation, the system SHALL display a visible staleness warning indicator until data is successfully refreshed.{jira:GMS-84|showSummary=false}{/td}
+{td}*EARS-State + EARS-Event — WHILE [dashboard open], the system SHALL [display timestamp]; WHEN [delay > threshold], the system SHALL [display warning]*{/td}
+{td}Functional{/td}
+{td}Should Have{/td}
+{td}Derived from GMS-20. The WP5.1 analysis of GMS-20 identified that 4G/5G latency must not silently delay the refresh cycle — the operator must always be able to verify data currency. The freshness timestamp satisfies this at all times; the staleness warning activates the moment the 60s safety constraint identified in GMS-20 is breached. Cross-references: SR-3.4 (refresh mechanism), SR-6.1 (4G primary network). Acceptance criterion: a visible timestamp of last data reception is always present on the dashboard; when a simulated network delay causes no data for 60 seconds, a staleness warning appears and clears automatically upon the next successful refresh.{/td}
 {/tr}
 {tr}
 {td colspan=6}**Chapter 4 - Alerts & Notifications**{/td}
 {/tr}
 {tr}
 {td}SR-4.1{/td}
-{td}WHEN any monitored parameter exceeds its configured threshold, the system SHALL display a colour-coded in-dashboard alert banner within 5 seconds of breach detection (informational tier).{/td}
+{td}WHEN any monitored parameter exceeds its configured threshold, the system SHALL display a colour-coded in-dashboard alert banner within 5 seconds of breach detection (informational tier).{jira:GMS-68|showSummary=false}{/td}
 {td}*WHEN [trigger event], the system SHALL [action] within [time]*
 ***EARS-Event***{/td}
 {td}Functional{/td}
 {td}Should Have{/td}
-{td}Derived from GMS-41. 
-Implements the informational tier of the two-tier severity model. 
+{td}Derived from GMS-41.
+Implements the informational tier of the two-tier severity model.
 Colour coding: yellow = warning, red = critical. The 5-second window covers sensor polling latency + UI render.{/td}
 {/tr}
 {tr}
 {td}SR-4.2{/td}
-{td}WHEN a critical event persists for more than 60 seconds (actuator failure, sensor data loss, or extreme parameter deviation), the system SHALL dispatch a push notification and/or SMS to the registered operator within 30 seconds of the 60-second threshold being crossed.{/td}
+{td}WHEN a critical event persists for more than 60 seconds (actuator failure, sensor data loss, or extreme parameter deviation), the system SHALL dispatch a push notification and/or SMS to the registered operator within 30 seconds of the 60-second threshold being crossed.{jira:GMS-69|showSummary=false}{/td}
 {td}*WHEN [trigger event persists > duration], the system SHALL [action] within [time]*
 ***EARS-Event***{/td}
 {td}Functional{/td}
 {td}Should Have{/td}
-{td}Derived from GMS-41. Implements the critical tier of the two-tier model (peer review R3). The 60-second persistence filter prevents alert fatigue from transient spikes. Push/SMS channel aligns with survey finding: 66.7% of respondents prefer mobile dashboard alerts, 27.8% SMS.{/td}
+{td}Derived from GMS-40 and GMS-41. Implements the critical tier of the two-tier model (peer review R3). The 60-second persistence filter prevents alert fatigue from transient spikes. Push/SMS channel aligns with survey finding: 66.7% of respondents prefer mobile dashboard alerts, 27.8% SMS. GMS-40 explicitly requests phone notification for off-site awareness.{/td}
 {/tr}
 {tr}
 {td}SR-4.3{/td}
-{td}The system SHALL allow the operator to configure minimum and maximum threshold values independently for each monitored parameter, with changes persisted across sessions.{/td}
+{td}The system SHALL allow the operator to configure minimum and maximum threshold values independently for each monitored parameter, with changes persisted across sessions.{jira:GMS-70|showSummary=false}{/td}
 {td}*The system SHALL [allow actor] to [configure] [parameters]*
 ***MASTER-Action***{/td}
 {td}Functional{/td}
 {td}Should Have{/td}
-{td}Derived from GMS-41. 
-Enables crop-specific and season-specific tuning without code changes. 
+{td}Derived from GMS-41.
+Enables crop-specific and season-specific tuning without code changes.
 Acceptance criterion: threshold values saved by an operator survive a full browser session closure and server restart.{/td}
 {/tr}
 {tr}
-{td colspan=6}**Chapter 5 - Historical Data, Reports & Analytics**{/td}
+{td}SR-4.4{/td}
+{td}The system SHALL categorize temperature alerts into distinct types - "Heat Warning" for high temperature threshold breaches and "Frost Warning" for low temperature threshold breaches - displaying the alert type label alongside the severity indicator in both in-dashboard banners and push/SMS notifications.{/td}
+{td}*The system SHALL [categorize] [alerts] into [distinct types] with [type label]*
+***MASTER-Action***{/td}
+{td}Functional{/td}
+{td}Could Have{/td}
+{td}Derived from GMS-27 and GMS-33. Survey respondents described needing to distinguish heat and cold events; the distinction improves response accuracy by enabling the operator to select the correct corrective action (activate heating vs ventilation) without first reviewing the raw sensor reading. While a generic threshold alert (SR-1.2, SR-4.1) satisfies the baseline need, typed alerts reduce operator cognitive load and response time. Moldova's climate extremes (-15°C winter to +35°C+ summer per expert interview) make both frost and heat scenarios operationally relevant. Acceptance criterion: a simulated low-temperature breach displays "Frost Warning" label; a simulated high-temperature breach displays "Heat Warning" label; both labels appear in the push/SMS message text when the critical tier (SR-4.2) is triggered.{/td}
+{/tr}
+{tr}
+{td colspan=6}**Chapter 5 - Historical Data, Reports & Analytics**{/td}
 {/tr}
 {tr}
 {td}SR-5.1{/td}
-{td}The system SHALL store all sensor readings with associated timestamps (ISO 8601) and sensor IDs, retaining data for a minimum of 90 days.{/td}
+{td}The system SHALL store all sensor readings with associated timestamps (ISO 8601) and sensor IDs, retaining data for a minimum of 90 days.{jira:GMS-82|showSummary=false}{/td}
 {td}*The system SHALL [store] [data] for [minimum retention]*
 ***MASTER-Action***{/td}
 {td}Functional{/td}
 {td}Should Have{/td}
-{td}Derived from GMS-42. 90-day retention applied per peer review R2. 
+{td}Derived from GMS-42. 90-day retention applied per peer review R2.
 Covers a full growing season and enables year-over-year comparison when combined with export (SR-5.3).{/td}
 {/tr}
 {tr}
 {td}SR-5.2{/td}
-{td}The system SHALL provide an interactive trend visualisation allowing the operator to select any monitored parameter and any date range up to 90 days, with hourly and daily granularity options.{/td}
+{td}The system SHALL provide an interactive trend visualisation allowing the operator to select any monitored parameter and any date range up to 90 days, with hourly and daily granularity options.{jira:GMS-78|showSummary=false}{/td}
 {td}*The system SHALL [provide] [visualisation] with [granularity options]*
 ***MASTER-Action***{/td}
 {td}Functional{/td}
 {td}Should Have{/td}
-{td}Derived from GMS-42. 
-Supports planning decisions (e.g., irrigation scheduling, disease risk assessment). 
+{td}Derived from GMS-42.
+Supports planning decisions (e.g., irrigation scheduling, disease risk assessment).
 Acceptance criterion: chart renders within 3 seconds for any 90-day range at daily granularity; within 5 seconds at hourly granularity.{/td}
 {/tr}
 {tr}
 {td}SR-5.3{/td}
-{td}The system SHALL allow export of historical sensor data in both .xlsx and .csv formats, including the mandatory fields: timestamp (ISO 8601), sensor ID, parameter name, value, and unit.{/td}
+{td}The system SHALL allow export of historical sensor data in both .xlsx and .csv formats, including the mandatory fields: timestamp (ISO 8601), sensor ID, parameter name, value, and unit.{jira:GMS-79|showSummary=false}{/td}
 {td}*The system SHALL [allow export] in [formats] including [mandatory fields]*
 ***MASTER-Action***{/td}
 {td}Functional{/td}
 {td}Should Have{/td}
-{td}Derived from GMS-43. GMS-44 marked INVALID (duplicate) and absorbed here. 
+{td}Derived from GMS-43. GMS-44 marked INVALID (duplicate) and absorbed here.
 Mandatory export fields defined per peer review R5 . Both .xlsx and .csv required to serve agronomists (Excel) and automated pipelines (CSV).{/td}
 {/tr}
 {tr}
@@ -247,7 +261,7 @@ Mandatory export fields defined per peer review R5 . Both .xlsx and .csv require
 {/tr}
 {tr}
 {td}SR-6.1{/td}
-{td}The GMS system SHALL operate all dashboard and notification features over a 4G/5G mobile data connection as the primary network, using HTTPS for web traffic and MQTT for sensor telemetry.{/td}
+{td}The GMS system SHALL operate all dashboard and notification features over a 4G/5G mobile data connection as the primary network, using HTTPS for web traffic and MQTT for sensor telemetry.{jira:GMS-80|showSummary=false}{/td}
 {td}*The system SHALL [operate] over [network type] using [protocols] *
 ***MASTER-Constraint***{/td}
 {td}Non-Functional{/td}
@@ -256,12 +270,12 @@ Mandatory export fields defined per peer review R5 . Both .xlsx and .csv require
 {/tr}
 {tr}
 {td}SR-6.2{/td}
-{td}WHILE the network connection is unavailable, the system SHALL continue autonomous greenhouse control locally and buffer all sensor readings; WHEN connectivity is restored, the system SHALL synchronise all buffered data to the server with zero data loss.{/td}
+{td}WHILE the network connection is unavailable, the system SHALL continue autonomous greenhouse control locally and buffer all sensor readings; WHEN connectivity is restored, the system SHALL synchronise all buffered data to the server with zero data loss.{jira:GMS-81|showSummary=false}{/td}
 {td}*WHILE [condition], the system SHALL [action]; WHEN [event], the system SHALL [action]*
 ***EARS-State + EARS-Event***{/td}
 {td}Functional{/td}
 {td}Must Have{/td}
-{td}Derived from GMS-52. 
+{td}Derived from GMS-52.
 Addresses the 11.1% of surveyed sites with no stable connection. The dual-clause requirement covers both the offline autonomous period and the reconnection synchronisation. Minimum offline autonomy duration (72 h) to be confirmed with team. Zero data loss is the hard acceptance criterion.{/td}
 {/tr}
 {tr}
@@ -269,7 +283,7 @@ Addresses the 11.1% of surveyed sites with no stable connection. The dual-clause
 {/tr}
 {tr}
 {td}SR-7.1{/td}
-{td}The GMS system SHALL be deployable using a hardware bill of materials with a total component cost not exceeding 2,000 EUR, covering the edge controller, sensors, actuators, enclosures, and 4G connectivity module.{/td}
+{td}The GMS system SHALL be deployable using a hardware bill of materials with a total component cost not exceeding 2,000 EUR, covering the edge controller, sensors, actuators, enclosures, and 4G connectivity module.{jira:GMS-76|showSummary=false}{/td}
 {td}*MASTER-Constraint — The system SHALL [constrain cost] within [budget ceiling]*{/td}
 {td}Non-Functional{/td}
 {td}Must Have{/td}
@@ -277,7 +291,7 @@ Addresses the 11.1% of surveyed sites with no stable connection. The dual-clause
 {/tr}
 {tr}
 {td}SR-7.2{/td}
-{td}The GMS system SHALL provide a publicly accessible cost estimate document detailing hardware, cloud infrastructure, and installation cost ranges, linked from the dashboard onboarding screen or documentation landing page.{/td}
+{td}The GMS system SHALL provide a publicly accessible cost estimate document detailing hardware, cloud infrastructure, and installation cost ranges, linked from the dashboard onboarding screen or documentation landing page.{jira:GMS-60|showSummary=false}{/td}
 {td}*MASTER-Action — The system SHALL [provide] [cost estimate] accessible via [entry point]*{/td}
 {td}Functional{/td}
 {td}Should Have{/td}
@@ -285,7 +299,7 @@ Addresses the 11.1% of surveyed sites with no stable connection. The dual-clause
 {/tr}
 {tr}
 {td}SR-7.3{/td}
-{td}The GMS system SHALL log total water volume dispensed per irrigation cycle and cumulative energy consumption of all actuators, storing these values with timestamps in the same time-series database as sensor readings, retaining data for a minimum of 90 days.{/td}
+{td}The GMS system SHALL log total water volume dispensed per irrigation cycle and cumulative energy consumption of all actuators, storing these values with timestamps in the same time-series database as sensor readings, retaining data for a minimum of 90 days.{jira:GMS-61|showSummary=false}{/td}
 {td}*MASTER-Action — The system SHALL [log] [consumption data] with [retention period]*{/td}
 {td}Functional{/td}
 {td}Should Have{/td}
@@ -293,7 +307,7 @@ Addresses the 11.1% of surveyed sites with no stable connection. The dual-clause
 {/tr}
 {tr}
 {td}SR-7.4{/td}
-{td}The GMS dashboard SHALL display a cumulative resource summary panel showing total water dispensed and total actuator energy consumed for a user-selected period, alongside a manually entered baseline value for direct comparison.{/td}
+{td}The GMS dashboard SHALL display a cumulative resource summary panel showing total water dispensed and total actuator energy consumed for a user-selected period, alongside a manually entered baseline value for direct comparison.{jira:GMS-62|showSummary=false}{/td}
 {td}*MASTER-Action — The system SHALL [display] [summary panel] with [comparison baseline]*{/td}
 {td}Functional{/td}
 {td}Should Have{/td}
@@ -304,7 +318,7 @@ Addresses the 11.1% of surveyed sites with no stable connection. The dual-clause
 {/tr}
 {tr}
 {td}SR-8.1{/td}
-{td}The GMS system SHALL be designed with a single-zone architecture for the initial pilot deployment, restricting all monitoring, control, and dashboard functions to one greenhouse zone, while ensuring the data model and API structure do not preclude future extension to multiple zones.{/td}
+{td}The GMS system SHALL be designed with a single-zone architecture for the initial pilot deployment, restricting all monitoring, control, and dashboard functions to one greenhouse zone, while ensuring the data model and API structure do not preclude future extension to multiple zones.{jira:GMS-85|showSummary=false}{/td}
 {td}*MASTER-Constraint — The system SHALL [constrain scope] to [single zone] while [preserving extensibility]*{/td}
 {td}Non-Functional{/td}
 {td}Won't Have{/td}
@@ -312,7 +326,7 @@ Addresses the 11.1% of surveyed sites with no stable connection. The dual-clause
 {/tr}
 {tr}
 {td}SR-8.2{/td}
-{td}The GMS system documentation SHALL include a scalability note describing the architectural changes required to extend the single-zone pilot to a multi-zone or multi-site deployment, to support future project phases.{/td}
+{td}The GMS system documentation SHALL include a scalability note describing the architectural changes required to extend the single-zone pilot to a multi-zone or multi-site deployment, to support future project phases.{jira:GMS-86|showSummary=false}{/td}
 {td}*MASTER-Action — The system SHALL [provide documentation] describing [future extension path]*{/td}
 {td}Non-Functional{/td}
 {td}Won't Have{/td}
@@ -323,7 +337,7 @@ Addresses the 11.1% of surveyed sites with no stable connection. The dual-clause
 {/tr}
 {tr}
 {td}SR-9.1{/td}
-{td}All communication between the GMS edge controller and the cloud server SHALL be encrypted using TLS 1.2 or higher, and the edge controller SHALL authenticate to the cloud broker using X.509 client certificates before any sensor data or actuator command is transmitted or received.{/td}
+{td}All communication between the GMS edge controller and the cloud server SHALL be encrypted using TLS 1.2 or higher, and the edge controller SHALL authenticate to the cloud broker using X.509 client certificates before any sensor data or actuator command is transmitted or received.{jira:GMS-87|showSummary=false}{/td}
 {td}*MASTER-Constraint — The system SHALL [encrypt] [communications] using [standard] and [authenticate] using [mechanism]*{/td}
 {td}Non-Functional{/td}
 {td}Should Have{/td}
@@ -331,7 +345,7 @@ Addresses the 11.1% of surveyed sites with no stable connection. The dual-clause
 {/tr}
 {tr}
 {td}SR-9.2{/td}
-{td}The GMS web dashboard SHALL implement role-based access control with a minimum of two roles — Operator (full read/write access to controls and configuration) and Viewer (read-only access to sensor data and alerts) — with role assignments persisted per user account.{/td}
+{td}The GMS web dashboard SHALL implement role-based access control with a minimum of two roles — Operator (full read/write access to controls and configuration) and Viewer (read-only access to sensor data and alerts) — with role assignments persisted per user account.{jira:GMS-88|showSummary=false}{/td}
 {td}*MASTER-Action — The system SHALL [implement] [role-based access control] with [minimum role set]*{/td}
 {td}Functional{/td}
 {td}Should Have{/td}
@@ -339,7 +353,7 @@ Addresses the 11.1% of surveyed sites with no stable connection. The dual-clause
 {/tr}
 {tr}
 {td}SR-9.3{/td}
-{td}WHEN an unauthenticated or unauthorised request is made to any GMS API endpoint or dashboard route, the system SHALL reject the request with an HTTP 401 or 403 response and log the attempt with a timestamp and source IP address.{/td}
+{td}WHEN an unauthenticated or unauthorised request is made to any GMS API endpoint or dashboard route, the system SHALL reject the request with an HTTP 401 or 403 response and log the attempt with a timestamp and source IP address.{jira:GMS-89|showSummary=false}{/td}
 {td}*EARS-Event — WHEN [trigger event], the system SHALL [reject request] and [log attempt]*{/td}
 {td}Functional{/td}
 {td}Should Have{/td}
@@ -347,7 +361,7 @@ Addresses the 11.1% of surveyed sites with no stable connection. The dual-clause
 {/tr}
 {tr}
 {td}SR-9.4{/td}
-{td}WHILE the edge controller is operating in offline autonomous mode, the system SHALL continue to enforce local authentication for any direct API access to the controller, rejecting requests that do not present a valid pre-provisioned credential.{/td}
+{td}WHILE the edge controller is operating in offline autonomous mode, the system SHALL continue to enforce local authentication for any direct API access to the controller, rejecting requests that do not present a valid pre-provisioned credential.{jira:GMS-90|showSummary=false}{/td}
 {td}*EARS-State — WHILE [condition], the system SHALL [enforce] [authentication]*{/td}
 {td}Non-Functional{/td}
 {td}Should Have{/td}

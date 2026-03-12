@@ -1,0 +1,67 @@
+{
+  "name": "gcm-preview",
+  "displayName": "GCM Preview",
+  "description": "Side-by-side preview for GMS Confluence Markup (.gcm) files",
+  "version": "0.1.0",
+  "engines": { "vscode": "^1.70.0" },
+  "categories": ["Other"],
+  "activationEvents": [
+    "onLanguage:gcm",
+    "onCommand:gcm.openPreview"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "gcm",
+        "aliases": ["GCM", "gcm"],
+        "extensions": [".gcm"]
+      }
+    ],
+    "commands": [
+      {
+        "command": "gcm.openPreview",
+        "title": "Open GCM Preview",
+        "category": "GCM",
+        "icon": "$(open-preview)"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "gcm.openPreview",
+          "when": "resourceExtname == .gcm",
+          "group": "navigation"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "gcm.openPreview",
+          "when": "resourceExtname == .gcm",
+          "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "gcm.openPreview",
+          "when": "resourceExtname == .gcm",
+          "group": "navigation"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "gcm.openPreview",
+          "when": "resourceExtname == .gcm"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "gcm.openPreview",
+        "key": "ctrl+shift+v",
+        "mac": "cmd+shift+v",
+        "when": "resourceExtname == .gcm"
+      }
+    ]
+  }
+}

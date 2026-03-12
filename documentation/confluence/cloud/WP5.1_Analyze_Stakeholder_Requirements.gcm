@@ -1,7 +1,7 @@
 --- gcm ---
 title: 04 - GMS -WP5.1 Analyze Stakeholder Requirements
 page_id: 42634147
-version: 9
+version: 11
 source: http://confluence.microlab.club/rest/api/content/42634147
 ---
 
@@ -115,28 +115,28 @@ source: http://confluence.microlab.club/rest/api/content/42634147
 {tr}
 {td}SHR-7{/td}
 {td}{jira:GMS-13}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
+{td}User Story{/td}
+{td}Greenhouse Operator{/td}
+{td}Should Have{/td}
+{td}Monitor CO₂ concentration levels in the greenhouse environment and display live readings on the dashboard{/td}
+{td}During all growing periods when photosynthetic activity is occurring and CO₂ levels may fall below the optimal 800–1200 ppm enrichment range, particularly in sealed or poorly ventilated greenhouse conditions{/td}
+{td}Operator has visibility into CO₂ conditions; suboptimal levels are detected early enabling manual or future automated enrichment to boost yield by up to 20–30%{/td}
+{td}Lowest environmental survey rating (4.22/5) with zero respondents citing CO₂ as a production-impacting incident — classified as Should Have rather than Must Have because monitoring alone has limited protective value without an automated enrichment actuator (which is out of scope for the pilot). However, CO₂ enrichment in the 800–1200 ppm range is well-documented to increase crop yield by 20–30%, making monitoring the prerequisite for any future enrichment capability. Expert Bragarenco interview noted MQ-4 type gas sensors are commonly used — per WP2.1, an NDIR CO₂ sensor is recommended for precision over MQ-series resistive sensors. Monitoring interval: 60s per Project Charter O1. Acceptance: CO₂ readings at ≤60s intervals displayed on dashboard; alert generated per GMS-19 when level drops below configured threshold. Cross-references: GMS-19 (Job Story pair), GMS-14/20 (dashboard auto-refresh — CO₂ data included), GMS-15/21 (threshold alerts — applies to CO₂), GMS-23/29 (configurable CO₂ setpoint).{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Requirement analyzed and refined. Decomposed into: User = greenhouse operator, Action = monitor CO₂ concentration and display on dashboard, Circumstances = all growing periods when photosynthesis is active, Outcome = early detection of suboptimal CO₂ for yield optimization. Confirmed Should Have — lowest environmental survey score (4.22/5), no production incidents cited, but enrichment (800–1200 ppm) documented to boost yield 20–30%. Sensor selection deferred to SRS (MQ-series vs NDIR). Monitoring interval: 60s per Project Charter O1. Acceptance: readings at ≤60s on dashboard; alert via GMS-19 on threshold breach. Linked to GMS-19 (JS pair). Moving to Proposed.{/td}
 {/tr}
 {tr}
 {td}SHR-8{/td}
 {td}{jira:GMS-19}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
+{td}Job Story{/td}
+{td}Greenhouse Operator{/td}
+{td}Should Have{/td}
+{td}Generate an alert notification when CO₂ concentration drops below the configured optimal threshold (default: 800 ppm){/td}
+{td}When CO₂ levels fall below the optimal enrichment range during active growing periods, particularly in sealed or poorly ventilated greenhouse conditions where CO₂ depletion occurs due to photosynthetic consumption{/td}
+{td}Operator is notified of suboptimal CO₂ conditions and can manually adjust enrichment (e.g., open CO₂ valve or adjust ventilation schedule) to improve crop productivity{/td}
+{td}Job Story counterpart to GMS-13 (SHR-7, already Proposed). CO₂ depletion is a real but often unnoticed phenomenon in sealed greenhouses — plants consume CO₂ during photosynthesis, and without ventilation or enrichment, levels can drop significantly below ambient (~420 ppm). The alert function is the primary value of CO₂ monitoring in the pilot, since automated CO₂ injection is out of scope. Alert should trigger on a user-configurable threshold (default: 800 ppm per horticultural best practice). The alert must be classified as informational (in-dashboard only) per the two-tier severity model defined in GMS-15/21 and peer review R3 — CO₂ drop is not an immediate crop danger, so push/SMS escalation is not warranted. Acceptance: in-dashboard alert generated within ≤60s of CO₂ reading dropping below configured threshold; alert carries parameter name, current value, threshold value, and timestamp per GMS-21 requirements. Cross-references: GMS-13 (User Story pair), GMS-15/21 (alert framework and severity tiering), GMS-23/29 (configurable thresholds for CO₂ setpoint).{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Requirement analyzed and refined. Decomposed into: User = greenhouse operator, Action = generate alert on CO₂ threshold breach, Circumstances = CO₂ depletion during active growing periods in sealed/poorly ventilated greenhouses, Outcome = operator informed to manually adjust enrichment for productivity. Confirmed Should Have — Job Story pair to GMS-13 (4.22/5 survey score, no incidents). Alert category: informational (in-dashboard only per two-tier severity model, R3), since CO₂ drop is not an immediate crop danger. Threshold user-configurable (default 800 ppm per horticultural best practice). Acceptance: alert within ≤60s of breach with full context fields per GMS-21. Linked to GMS-13 (US pair). Moving to Proposed.{/td}
 {/tr}
 {tr}
 {td}SHR-9{/td}
@@ -206,41 +206,41 @@ source: http://confluence.microlab.club/rest/api/content/42634147
 {tr}
 {td}SHR-14{/td}
 {td}{jira:GMS-28}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
+{td}Job Story{/td}
+{td}Farmer (abroad){/td}
+{td}Must Have{/td}
+{td}Execute pre-configured timed irrigation schedules (start time, duration, frequency) autonomously without requiring sensor input, cloud connectivity, or operator presence{/td}
+{td}When the farmer is abroad for extended periods (days to months) and cannot physically intervene, or when sensor-based control (GMS-16) is temporarily unavailable due to hardware failure, sensor calibration drift, or connectivity loss{/td}
+{td}Greenhouse irrigation continues on a reliable schedule regardless of farmer absence, connectivity status, or sensor availability; crops are sustained autonomously for the full absence period{/td}
+{td}Job Story counterpart to GMS-22 (SHR-13, already Proposed). One survey respondent explicitly required fully autonomous operation for up to 3 months while abroad — this is the flagship absence use case. The edge controller must store and execute schedules locally without cloud connection — hard offline autonomy requirement per Project Charter O5 (72h minimum; this use case demands indefinite offline schedule execution). Critical co-existence rule with sensor-triggered irrigation (GMS-16): a scheduled irrigation run must be automatically skipped or aborted if soil moisture is already at or above the target setpoint — this prevents over-watering when the soil is already wet (cross-reference GMS-26/32 auto-stop). Expert Bragarenco described operational rules: '0.5 liters in the morning, 1 liter at noon, 2 liters in the evening' — confirming the real-world need for configurable time-based irrigation profiles. Schedule management UI must support: create, edit, delete, and view upcoming scheduled runs from dashboard. Each schedule execution event must be logged with: timestamp, planned time, actual start time, duration, and skip reason (if skipped due to adequate soil moisture). Acceptance: scheduled irrigation runs at configured time during cloud outage; skipped if soil already at or above setpoint; full CRUD from dashboard; execution logged with all required fields. Cross-references: GMS-22 (User Story pair, SHR-13), GMS-16 (sensor-triggered control — co-existence and conflict resolution required), GMS-26/32 (auto-stop applies to scheduled runs too), GMS-23/29 (configurable setpoints used for skip-if-wet logic).{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Requirement analyzed and refined. Decomposed into: User = farmer abroad for extended periods, Action = execute autonomous timed irrigation schedules without sensor or cloud dependency, Circumstances = extended absence (days to months) or sensor unavailability, Outcome = crops sustained autonomously for the full absence period. Confirmed Must Have — Job Story pair to GMS-22 (survey evidence: 3-month autonomous operation; fallback when GMS-16 sensor control unavailable). Key clarifications: (1) schedule co-exists with sensor-triggered control — skip if soil already at setpoint (prevents over-watering); (2) edge controller executes locally without cloud (Project Charter O5 — indefinite offline required for this use case); (3) auto-stop (GMS-26/32) still applies during scheduled runs. Expert Bragarenco confirmed time-based irrigation profiles as real operational need. Full CRUD from dashboard required; execution events logged. Linked to GMS-22 (US pair, SHR-13). Moving to Proposed.{/td}
 {/tr}
 {tr}
 {td}SHR-15{/td}
 {td}{jira:GMS-23}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
+{td}User Story{/td}
+{td}Farmer{/td}
+{td}Must Have{/td}
+{td}Configure custom acceptable operating ranges (setpoints) for temperature and humidity parameters through the dashboard, defining crop-specific comfort zones that trigger automated system responses when breached{/td}
+{td}When the farmer grows different crop types with distinct environmental needs, or when switching between crops between growing seasons, requiring the system to adapt its automated response thresholds accordingly{/td}
+{td}The automation system responds according to specific crop requirements rather than fixed factory defaults; the system is applicable across varied growing scenarios with different crops and seasonal conditions{/td}
+{td}This is the foundational configurability requirement — without user-configurable setpoints, all automation responses (irrigation GMS-16, heating/ventilation GMS-17, humidity ventilation GMS-18) would be locked to fixed factory defaults, making the system unusable for operators growing different crop types. Crop temperature comfort zones vary significantly: tomatoes (18–27°C), lettuce (15–20°C), peppers (21–30°C). Humidity ranges similarly vary by species. Expert Bragarenco interview confirmed threshold-based control: 'there are threshold systems where you set the acceptable range and the system operates within it.' The UI must allow per-parameter threshold configuration with clearly defined min/max/target values. Configuration changes must be stored on the edge controller and persist through power cycles and connectivity loss (offline autonomy requirement, Project Charter O5). A crop-presets feature (pre-loaded profiles for common crops like tomatoes, peppers, lettuce) is recommended but not required for the pilot — Could Have enhancement. Acceptance criteria: operator can set custom min/max thresholds for temperature and humidity via dashboard; thresholds persist on edge controller; actuator responses (GMS-17/18) use the configured thresholds. Cross-references: GMS-29 (Job Story pair — reconfiguration context), GMS-16/17/18 (all automated responses depend on these configurable thresholds), GMS-22/28 (schedule skip logic uses setpoints), GMS-26/32 (auto-stop uses soil moisture setpoint).{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Requirement analyzed and refined. Decomposed into: User = farmer growing varied crop types, Action = configure custom temperature and humidity setpoints via dashboard, Circumstances = different crops with distinct environmental needs or season transitions, Outcome = automation adapts to specific crop requirements instead of fixed defaults. Confirmed Must Have — without configurable setpoints, all automation (GMS-16/17/18) is locked to factory defaults making the system unusable for varied crops. Crop ranges cited: tomatoes 18–27°C, lettuce 15–20°C, peppers 21–30°C. Expert Bragarenco confirmed threshold-based operational model. Configurations must persist on edge controller through power cycles and connectivity loss. Crop-presets feature flagged as Could Have enhancement. Acceptance: custom min/max thresholds configurable via dashboard; persist on edge; actuator responses use configured values. Linked to GMS-29 (JS pair). Moving to Proposed.{/td}
 {/tr}
 {tr}
 {td}SHR-16{/td}
 {td}{jira:GMS-29}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
+{td}Job Story{/td}
+{td}Farmer{/td}
+{td}Must Have{/td}
+{td}Reconfigure temperature and humidity operating ranges through the dashboard when transitioning between different crop types, with the new setpoints taking effect on all automated system responses immediately{/td}
+{td}When the farmer switches to a different crop between growing seasons or within the same season, and the new crop has distinct environmental requirements that differ from the currently configured thresholds{/td}
+{td}The automated system seamlessly adapts to the new crop's environmental needs; the farmer does not need to manually monitor or override the system after reconfiguration; transition between crops does not require any hardware changes{/td}
+{td}Job Story counterpart to GMS-23 (SHR-15, already Proposed). This requirement formalizes the crop-transition scenario — the most common real-world use case for threshold reconfiguration. Moldovan greenhouses frequently rotate between tomatoes, peppers, cucumbers, and lettuce across seasons, each with distinct temperature and humidity needs. When new setpoints are saved, all dependent automated responses (heating GMS-17, ventilation GMS-17/18, irrigation GMS-16) must immediately use the updated values — there must be no stale-setpoint delay. The reconfiguration must propagate to the edge controller and take effect locally even without cloud connectivity — this is a subset of the offline autonomy requirement. Important: the dashboard should clearly show the currently active setpoints and confirm successful application to the edge controller. A setpoint change history log is recommended for traceability (e.g., 'temperature range changed from 18–27°C to 15–20°C at timestamp by operator'). Acceptance: setpoints reconfigurable from dashboard; changes take effect within one control loop cycle (≤60s); edge controller adopts new values even during cloud outage; dashboard confirms active setpoints after change. Cross-references: GMS-23 (User Story pair, SHR-15), GMS-16/17/18 (dependent automated responses), GMS-22/28 (schedule skip logic — uses setpoints).{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Requirement analyzed and refined. Decomposed into: User = farmer switching crops, Action = reconfigure temperature/humidity setpoints via dashboard, Circumstances = crop transition requiring different environmental thresholds, Outcome = seamless automation adaptation to new crop needs without hardware changes. Confirmed Must Have — Job Story pair to GMS-23. Moldovan greenhouses rotate between tomatoes, peppers, cucumbers, lettuce with distinct needs. Key clarification: new setpoints must propagate to edge controller and take effect within one control cycle (≤60s) including during cloud outage. Dashboard must confirm active setpoints. Setpoint change history log recommended for traceability. Acceptance: setpoints reconfigurable from dashboard; effect within ≤60s; edge adopts during cloud outage; confirmation displayed. Linked to GMS-23 (US pair, SHR-15). Moving to Proposed.{/td}
 {/tr}
 {tr}
 {td}SHR-17{/td}
@@ -300,15 +300,15 @@ Moving to Proposed.{/td}
 {tr}
 {td}SHR-21{/td}
 {td}{jira:GMS-40}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
+{td}User Story{/td}
+{td}Farmer{/td}
+{td}Should Have{/td}
+{td}Deliver push notifications or SMS alerts to the operator's mobile phone when a critical threshold is exceeded or a system malfunction is detected{/td}
+{td}When the operator is not on-site and cannot view the in-dashboard alert — particularly during off-hours, nighttime, or extended absences when the dashboard is not actively displayed{/td}
+{td}Operator is immediately made aware of dangerous conditions regardless of their physical location or current activity; response time is minimized even when not actively monitoring the dashboard{/td}
+{td}27.8% of survey respondents preferred SMS/push as their primary alert channel — however, in-dashboard alerts (GMS-15/21) cover the baseline need, which is why this is classified as Should Have rather than Must Have. Expert Bragarenco confirmed alerts are 'obligatory' as a concept but did not specify a channel. The two-tier severity model defined in peer review R3 (WP4.2) applies directly: this requirement implements the escalation layer — only critical events (temperature >35°C, soil moisture <10%, actuator failure, connectivity loss) should trigger push/SMS to avoid alert fatigue. Informational events (minor deviations, first-cycle threshold touches) remain in-dashboard only per GMS-15/21. The critical event list must be formally defined in the SRS acceptance criteria phase. Implementation options: Firebase Cloud Messaging (FCM) for push notifications (requires service worker in the web app — compatible with PWA approach); SMS via Twilio or local GSM module. SMS has the advantage of working without smartphone internet (relevant for the 11.1% of survey respondents with no stable connection). For pilot: push notification via web browser (FCM) is the recommended minimum; SMS integration can be deferred to post-pilot. Acceptance: push notification received on operator’s phone within 60s of critical threshold breach; notification includes parameter name, value, and severity; operator can configure which events trigger phone notification. Cross-references: GMS-41 (Job Story pair, SHR-22 — already Proposed), GMS-15/21 (in-dashboard alert baseline — this is the escalation layer), GMS-17/18/16 (actuator events that could trigger notifications).{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Requirement analyzed and refined. Decomposed into: User = farmer away from dashboard, Action = receive push/SMS notification on phone for critical events, Circumstances = off-site periods when dashboard is not visible, Outcome = immediate awareness of dangerous conditions regardless of location. Confirmed Should Have — 27.8% preferred SMS/push; in-dashboard alerts cover baseline (GMS-15/21). Expert Bragarenco confirmed alerts as obligatory. Two-tier severity model per peer review R3: only critical events (temp >35°C, moisture <10%, actuator failure) escalate to phone notification. Critical event list to be formally defined in SRS. Pilot recommendation: web push via FCM as minimum; SMS deferred to post-pilot. Acceptance: notification within 60s of critical breach; includes parameter, value, severity. Linked to GMS-41 (JS pair, SHR-22 — already Proposed). Moving to Proposed.{/td}
 {/tr}
 {tr}
 {td}SHR-22{/td}
@@ -482,15 +482,15 @@ Moving to Proposed.{/td}
 {tr}
 {td}SHR-35{/td}
 {td}{jira:GMS-24}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
+{td}User Story{/td}
+{td}Farmer{/td}
+{td}Must Have{/td}
+{td}Display soil moisture reading as the primary, top-priority widget on the dashboard, positioned above all other parameters on initial page load{/td}
+{td}When the farmer opens or navigates to the dashboard at any time — during routine daily checks, emergency assessments, or remote monitoring sessions{/td}
+{td}Farmer immediately sees irrigation status without scrolling or navigating; immediate visual assessment of whether crops need water is guaranteed on every dashboard access{/td}
+{td}Survey-extracted stakeholder requirement. Soil moisture received the highest survey score (4.83/5) and was cited by 39% of respondents as their most frequent production-impacting incident — this evidence mandates that soil moisture occupies the most prominent visual position on the dashboard. 'First thing shown' must be formally defined in UX acceptance criteria: the soil moisture widget must appear above the fold on all screen sizes (desktop, tablet, mobile), meaning visible without any scrolling on initial page load. The widget should include: current moisture percentage, threshold indicator (visual marker showing configured min/max setpoints from GMS-23/29), last-reading timestamp, and a color-coded status indicator (green = within range, amber = approaching threshold, red = below/above threshold). Given that GMS-36/39 mandates full mobile functionality, the prominent position must be maintained on mobile viewports (≥360px width). Acceptance: soil moisture widget is the first data element visible on dashboard load across all supported screen sizes; widget displays current value, threshold indicator, and color-coded status; no scrolling required to view on initial load. Cross-references: GMS-30 (Job Story pair, SHR-36 — already Proposed), GMS-10/16 (soil moisture monitoring and irrigation trigger — this is the display layer), GMS-26/32 (auto-stop — status reflected in widget), GMS-36/39 (mobile responsive — position must be maintained).{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Requirement analyzed and refined. Decomposed into: User = farmer, Action = display soil moisture as the primary/top-priority dashboard widget, Circumstances = any dashboard access event (routine checks, emergencies, remote monitoring), Outcome = immediate irrigation assessment without navigation or scrolling. Confirmed Must Have — highest survey score (4.83/5), 39% cited drought as top incident; prominence is a direct UX mandate. 'First thing shown' defined as above-the-fold on all screen sizes. Widget must include: current value, threshold indicator, timestamp, color-coded status. Mobile prominence maintained per GMS-36/39. Linked to GMS-30 (JS pair, SHR-36 — already Proposed). Moving to Proposed.{/td}
 {/tr}
 {tr}
 {td}SHR-36{/td}
@@ -508,15 +508,15 @@ Moving to Proposed.{/td}
 {tr}
 {td}SHR-37{/td}
 {td}{jira:GMS-25}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
+{td}User Story{/td}
+{td}Greenhouse Owner (abroad){/td}
+{td}Must Have{/td}
+{td}Remotely trigger irrigation activation from the web browser dashboard while located outside the country{/td}
+{td}When the greenhouse owner is abroad for an extended period and an unexpected dry spell occurs at the greenhouse location, requiring immediate manual irrigation intervention that cannot wait for the next scheduled or sensor-triggered cycle{/td}
+{td}Crops are protected from drought stress during extended absences; the owner retains manual override capability from any location with internet access; the system bridges the gap between automated triggers and unexpected environmental events{/td}
+{td}Survey-extracted stakeholder requirement. One survey respondent explicitly described needing to trigger watering while abroad for extended periods — this directly validates the remote manual override use case. Remote irrigation activation must function reliably over 4G/5G mobile connections (cross-reference GMS-52/58 — the owner may be accessing from a mobile device while abroad). Critical security requirement: remote actuation must be authenticated — GMS-47/48 (TLS/X.509/RBAC) must be in place before this feature is deployed to prevent unauthorized irrigation triggering. Important interaction with automated control: the manual remote trigger must co-exist with threshold-based automation (GMS-16) and schedule-based automation (GMS-22/28) — the system must handle the case where a manual trigger occurs while a scheduled or sensor-triggered cycle is already in progress (either queue or ignore duplicate activation). Auto-stop (GMS-26/32) must still apply to remotely-triggered irrigation — the pump must halt when soil reaches the target setpoint regardless of how the cycle was started. Expert Bragarenco emphasized the importance of industrial-grade relay-based solenoid valve control for remote actuation reliability. The dashboard must provide clear visual feedback: current irrigation status (active/inactive), confirmation upon remote trigger, and current soil moisture reading so the owner can make an informed decision before triggering. Acceptance: authenticated user can trigger irrigation from browser while abroad; confirmation displayed; auto-stop (GMS-26/32) applies; works over 4G/5G; event logged with timestamp, trigger source (manual-remote), and operator identity. Cross-references: GMS-31 (Job Story pair, SHR-38 — already Proposed), GMS-16 (sensor-triggered co-existence), GMS-22/28 (schedule co-existence), GMS-26/32 (auto-stop applies), GMS-47/48 (authentication required), GMS-52/58 (4G connectivity).{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Requirement analyzed and refined. Decomposed into: User = greenhouse owner abroad, Action = remotely trigger irrigation from browser dashboard, Circumstances = unexpected dry spell during extended international absence, Outcome = crop drought protection via manual override from any location. Confirmed Must Have — survey evidence of abroad use case. Security dependency: authentication (GMS-47/48) required before deployment. Co-existence with GMS-16 (sensor) and GMS-22/28 (schedule) clarified — duplicate activation handling needed. Auto-stop (GMS-26/32) applies to remotely-triggered cycles. Expert Bragarenco confirmed industrial-grade solenoid valve control for reliability. Dashboard must show irrigation status and soil moisture for informed triggering. Event logged with trigger source and operator identity. Linked to GMS-31 (JS pair, SHR-38 — already Proposed). Moving to Proposed.{/td}
 {/tr}
 {tr}
 {td}SHR-38{/td}
@@ -534,15 +534,15 @@ Moving to Proposed.{/td}
 {tr}
 {td}SHR-39{/td}
 {td}{jira:GMS-26}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
+{td}User Story{/td}
+{td}Farmer{/td}
+{td}Must Have{/td}
+{td}Automatically halt any active irrigation cycle when the soil moisture sensor reading reaches the user-configured target threshold{/td}
+{td}During any active irrigation cycle — whether triggered by sensor threshold breach (GMS-16), timed schedule (GMS-22/28), or manual remote activation (GMS-25/31) — at the moment soil moisture reaches the configured target setpoint{/td}
+{td}Over-watering is prevented; water waste is eliminated; root damage from waterlogging is avoided; the irrigation system is self-regulating regardless of the trigger source{/td}
+{td}Survey-extracted stakeholder requirement. 17% of respondents cited irrigation failures as a direct production problem — automatic cutoff is the essential safety mechanism that completes the irrigation automation loop. Without auto-stop, every automated irrigation trigger (sensor-based GMS-16, schedule-based GMS-22/28, remote manual GMS-25/31) carries a risk of over-watering if conditions change during the cycle. The target moisture threshold must be user-configurable per crop type (cross-reference GMS-23/29 — crop-specific setpoints). The edge controller must execute the cutoff locally and immediately, even during cloud connectivity loss — this is a critical subset of the offline autonomy requirement (Project Charter O5). Given that the auto-stop function involves halting an actuator to prevent crop damage, it is a safety-critical control path. Sensor read latency must be accounted for: if the soil moisture sensor has a settling time after water application, the auto-stop logic should prevent premature cutoff by requiring N consecutive readings at or above the target before halting. This hysteresis behavior prevents oscillating on/off cycles (chattering). Acceptance: irrigation stops within 30 seconds of soil moisture reaching the configured target setpoint; applies to all trigger sources (sensor, schedule, manual remote); executes locally during cloud outage; event logged with timestamp, trigger source, soil moisture at start and at cutoff. Cross-references: GMS-32 (Job Story pair, SHR-40 — already Proposed), GMS-16 (sensor-triggered irrigation — auto-stop completes the loop), GMS-22/28 (scheduled irrigation — auto-stop overrides schedule if soil is wet), GMS-25/31 (remote manual — auto-stop still applies), GMS-23/29 (configurable target setpoint).{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Requirement analyzed and refined. Decomposed into: User = farmer, Action = automatically halt irrigation when soil moisture reaches target, Circumstances = any active irrigation cycle regardless of trigger source (sensor/schedule/manual), Outcome = prevention of over-watering, water waste, and root damage. Confirmed Must Have — 17% cited irrigation failures as production problem; auto-stop completes the irrigation automation loop. Safety-critical control path: edge controller must execute cutoff locally during cloud outage. Hysteresis recommended to prevent chattering (N consecutive readings at setpoint before halt). Threshold user-configurable per crop (GMS-23/29). Acceptance: stops within 30s of reaching setpoint; applies to all trigger sources; offline execution; event logged. Linked to GMS-32 (JS pair, SHR-40 — already Proposed). Moving to Proposed.{/td}
 {/tr}
 {tr}
 {td}SHR-40{/td}
@@ -560,28 +560,28 @@ Moving to Proposed.{/td}
 {tr}
 {td}SHR-41{/td}
 {td}{jira:GMS-27}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
+{td}User Story{/td}
+{td}Farmer{/td}
+{td}Could Have{/td}
+{td}Generate differentiated alert notifications for heat events (temperature exceeding upper threshold) and cold/frost events (temperature dropping below lower threshold), each carrying distinct alert type labels and recommended response guidance{/td}
+{td}When temperature thresholds are breached in either direction — during summer overheating events when internal greenhouse temperatures can reach 60–80°C (expert Bragarenco interview) or during winter frost periods when external temperatures drop to -15°C{/td}
+{td}Farmer immediately knows the type of thermal problem and can take the correct corrective action without needing to interpret raw temperature data; heat events trigger ventilation-oriented responses while frost events trigger heating-oriented responses{/td}
+{td}Survey-extracted stakeholder requirement. Respondents described needing to distinguish heat and cold events — the distinction improves response accuracy but a single threshold alert already covers both scenarios at the baseline (GMS-15/21). Classification: Could Have per WP4.2 analysis — the baseline alert system (GMS-15/21) already alerts on any threshold breach, so the differentiation adds UX value but is not functionally blocking. The implementation is straightforward: the alert generation logic (GMS-15/21) already knows the parameter name and breach direction (above upper vs below lower threshold) — adding a label ('HEAT ALERT' vs 'FROST ALERT') and a recommended action string ('Check ventilation' vs 'Check heating') requires minimal additional development. Expert Bragarenco confirmed that summer internal temperatures can reach 60–80°C and that motor-controlled ventilation is essential — a heat-specific alert reinforces this operational reality. The frost response and heat response require fundamentally different actions from the operator, so undifferentiated alerts force the operator to check the dashboard for context, adding latency to the response. If implemented, the alert type label should also flow to push/SMS notifications (GMS-40/41) so off-site operators know which action to take without opening the dashboard. Peer review R4 (WP4.2, Vremere Adrian) flagged that this requirement does not cover rate-of-change events (e.g., rapid temperature drop) — this is acknowledged and explicitly deferred to a future phase. Acceptance: heat threshold breach generates alert labeled 'HEAT' with ventilation guidance; frost threshold breach generates alert labeled 'FROST' with heating guidance; alert type included in push/SMS if GMS-40/41 is active. Cross-references: GMS-33 (Job Story pair, SHR-42), GMS-15/21 (baseline alert framework — differentiation builds on top), GMS-17 (heating/ventilation autoresponse — alert type mirrors actuator action), GMS-40/41 (push/SMS — alert type should propagate).{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Requirement analyzed and refined. Decomposed into: User = farmer, Action = receive differentiated heat vs frost alerts with specific type labels and response guidance, Circumstances = summer overheating (up to 60–80°C internally per Bragarenco) or winter frost (down to -15°C externally), Outcome = immediate identification of thermal problem type enabling correct corrective action. Classified as Could Have — baseline alert (GMS-15/21) already covers threshold breach; differentiation adds UX accuracy but is not functionally blocking. Implementation is low-effort: alert logic already knows breach direction — adding type label and response guidance is minimal. Expert testimony supports the operational value. Peer review R4: rate-of-change detection deferred to future phase. Alert type should propagate to push/SMS (GMS-40/41) if implemented. Linked to GMS-33 (JS pair, SHR-42). Moving to Proposed.{/td}
 {/tr}
 {tr}
 {td}SHR-42{/td}
 {td}{jira:GMS-33}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
+{td}Job Story{/td}
+{td}Farmer{/td}
+{td}Could Have{/td}
+{td}Generate and deliver a frost-specific alert notification — distinct from heat warnings — when nighttime temperature drops unexpectedly below the configured lower threshold, carrying a 'FROST' label and recommended heating-related corrective action{/td}
+{td}During nighttime hours when temperatures can drop unexpectedly in Moldova's continental climate (winter lows reaching -15°C), particularly during spring and autumn transition periods when frost events are less predictable and crops are most vulnerable to sudden cold damage{/td}
+{td}Farmer receives a clearly distinguished frost alert enabling the correct cold-response action (check heating, close ventilation) rather than a generic temperature warning that could be confused with a heat event requiring the opposite response{/td}
+{td}Job Story counterpart to GMS-27 (SHR-41, already Proposed). This Job Story emphasizes the nighttime frost scenario — the most dangerous context for undifferentiated alerts because the operator is likely asleep and may be woken by a push notification (GMS-40/41). If the notification simply says 'temperature threshold exceeded,' the operator must open the dashboard to determine whether to activate heating or ventilation — these are opposite responses, and a wrong decision can worsen the problem. Moldova's continental climate makes nighttime frost a recurring seasonal risk, especially during March–April and October–November transitions when crops are still active. Implementation: the alert system (GMS-15/21) already captures breach direction — adding a 'FROST' label and a 'Recommended: check heating system' guidance string is a low-effort addition with high UX value for nighttime scenarios. If push/SMS (GMS-40/41) is implemented, the frost label and guidance must be included in the notification payload. Peer review R4 (WP4.2, Vremere Adrian) flagged that this requirement does not cover rate-of-change events (e.g., rapid temperature drop) — this is acknowledged and explicitly deferred to a future phase. Acceptance: nighttime frost breach generates alert labeled 'FROST' distinct from 'HEAT'; includes recommended corrective action; frost label propagates to push/SMS if active; alert appears within ≤60s of breach. Cross-references: GMS-27 (User Story pair, SHR-41), GMS-15/21 (baseline alert framework), GMS-17 (automated heating response — frost alert mirrors heating actuation), GMS-40/41 (push/SMS — label must propagate for nighttime notifications).{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Requirement analyzed and refined. Decomposed into: User = farmer (likely asleep during nighttime frost), Action = frost-specific alert distinct from heat warning with corrective guidance, Circumstances = unexpected nighttime temperature drop in Moldova’s continental climate (winter lows -15°C, spring/autumn transition frost risk), Outcome = correct cold-response action taken without dashboard consultation. Classified as Could Have — Job Story pair to GMS-27 (SHR-41). High UX value for nighttime scenarios where operator is woken by notification. Implementation low-effort: breach direction already captured by alert system. Peer review R4: rate-of-change detection deferred to future phase. Frost label and guidance must propagate to push/SMS if GMS-40/41 is active. Acceptance: frost-labeled alert within ≤60s; distinct from heat; guidance included. Linked to GMS-27 (US pair, SHR-41). Moving to Proposed.{/td}
 {/tr}
 {tr}
 {td}SHR-43{/td}
@@ -678,15 +678,15 @@ Moving to Proposed.{/td}
 {tr}
 {td}SHR-50{/td}
 {td}{jira:GMS-51}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
-{td}{/td}
+{td}Job Story{/td}
+{td}Business Owner / Greenhouse Operator{/td}
+{td}Should Have{/td}
+{td}Export raw sensor data to Excel or CSV format from the dashboard for compliance record-keeping or external analysis{/td}
+{td}When preparing compliance records, advisory meeting materials, or sharing sensor data with agronomists, investors, or regulatory authorities{/td}
+{td}Sensor data is available in a structured, interoperable spreadsheet format that external professionals and regulatory bodies can directly use{/td}
+{td}IMPORTANT — overlap risk with GMS-43 (SHR-25) and GMS-50 (SHR-26). GMS-44 (SHR-49) was already marked INVALID as a duplicate of GMS-43. This ticket (GMS-51) covers the same core outcome (CSV/Excel export) already absorbed into GMS-43. Team must evaluate at the review session: if GMS-43 already fully covers raw CSV/Excel export with the minimum field specification (timestamp, sensor ID, parameter name, value, unit — per peer review R5), then this ticket should also be marked INVALID. If a distinct scope exists — specifically the compliance and regulatory use case as a separately documented output with regulatory-specific fields — that distinction must be explicitly defined to justify keeping this open. Multiple survey respondents and the expert (Bragarenco mentioned Excel export) confirmed this format is needed. Cross-references: GMS-43 (SHR-25), GMS-50 (SHR-26), GMS-44/SHR-49 (INVALID — absorbed).{/td}
+{td}{status:PROPOSED|color=Yellow}{/td}
+{td}Requirement analyzed and refined. Decomposed into: User = business owner/operator, Action = export raw sensor data to Excel/CSV, Circumstances = compliance record-keeping or regulatory/advisory meeting preparation, Outcome = structured data available for external sharing with authorities and professionals. ATTENTION: GMS-44 (SHR-49) was marked INVALID as a duplicate absorbed into GMS-43. This ticket covers overlapping scope. Team must confirm at review: does unique scope remain (compliance-specific regulatory output) vs GMS-43's updated coverage? If not, this ticket should be marked INVALID. Minimum fields: timestamp, sensor ID, parameter name, value, unit per R5. Moving to Proposed pending team scope review.{/td}
 {/tr}
 {/table}
 

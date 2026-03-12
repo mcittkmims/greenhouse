@@ -354,11 +354,25 @@ def gcm_to_html(gcm_text, jira_server="", jira_server_id=""):
                                 cell_parts.append(f"<p>{ptxt}</p>")
                                 para_buf.clear()
 
-                        for cl in cell_lines:
+                        cli = 0
+                        while cli < len(cell_lines):
+                            cl = cell_lines[cli]
                             stripped = cl.strip()
+                            cli += 1
                             if not stripped:
                                 if not in_list_block:
                                     flush_cell_para()
+                                continue
+
+                            # Multi-line {raw}...{/raw} passthrough inside cell
+                            if stripped == "{raw}":
+                                flush_cell_para()
+                                raw_cell_lines = []
+                                while cli < len(cell_lines) and cell_lines[cli].strip() != "{/raw}":
+                                    raw_cell_lines.append(cell_lines[cli])
+                                    cli += 1
+                                cli += 1  # skip {/raw}
+                                cell_parts.append("\n".join(raw_cell_lines))
                                 continue
 
                             # List block markers

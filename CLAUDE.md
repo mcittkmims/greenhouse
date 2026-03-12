@@ -94,6 +94,14 @@ python3 scripts/jira/jira_board_server.py <subcommand>
 #              comment, bulk-comment, create, users
 ```
 
+Key flags available on `create`, `update`, and `bulk-update`:
+- `--epic GMS-X` — link issue to an epic (sets Epic Link field)
+- `--labels "Functional,EARS-Event"` — comma-separated labels
+- `--priority Highest` — priority name (Highest/High/Medium/Low/Lowest)
+
+Key flags available on `move` and `bulk-move`:
+- `--force` — walk through intermediate transitions when no direct path exists (e.g. Backlog → In Work → Proposed)
+
 Only GMS board content and automation live under `documentation/jira/` and `scripts/jira/`.
 
 ### PBL26 Course Board — `scripts/logging/log_work.py`

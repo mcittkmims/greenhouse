@@ -74,12 +74,13 @@ The same script also exposes direct CLI commands for faster agentic operations:
 python3 scripts/jira/jira_board_server.py users --query "Adrian Vremere"
 python3 scripts/jira/jira_board_server.py assign --assignee adrian.vremere GMS-16 GMS-17
 python3 scripts/jira/jira_board_server.py move --column proposed GMS-35
-python3 scripts/jira/jira_board_server.py bulk-move --column proposed GMS-35 GMS-36
-python3 scripts/jira/jira_board_server.py update --key GMS-35 --summary "New summary"
-python3 scripts/jira/jira_board_server.py bulk-update --assignee adrian.vremere GMS-35 GMS-36
+python3 scripts/jira/jira_board_server.py move --column proposed --force GMS-35        # multi-hop (e.g. Backlog → Proposed)
+python3 scripts/jira/jira_board_server.py bulk-move --column proposed --force GMS-35 GMS-36
+python3 scripts/jira/jira_board_server.py update --key GMS-35 --summary "New summary" --epic GMS-2 --labels "Functional,EARS-Event" --priority Highest
+python3 scripts/jira/jira_board_server.py bulk-update --epic GMS-9 --labels "Functional,EARS-Event" --priority High GMS-35 GMS-36
 python3 scripts/jira/jira_board_server.py comment --key GMS-35 --text "Reviewed"
 python3 scripts/jira/jira_board_server.py bulk-comment --text "Reviewed" GMS-35 GMS-36
-python3 scripts/jira/jira_board_server.py create --issue-type Task --summary "New task"
+python3 scripts/jira/jira_board_server.py create --issue-type Story --summary "New SR" --epic GMS-2 --labels "Functional,EARS-Event" --priority Highest --assignee adrian.vremere
 ```
 
 ---

@@ -145,6 +145,9 @@ class JiraClient:
                 fields["priority"] = {"name": priority_name}
         if "labels" in payload:
             fields["labels"] = payload["labels"]
+        if "epicKey" in payload:
+            epic_key = (payload["epicKey"] or "").strip()
+            fields["customfield_10100"] = epic_key if epic_key else None
         if not fields:
             return
         self.request("PUT", f"/rest/api/2/issue/{key}", json={"fields": fields})
@@ -157,7 +160,14 @@ class JiraClient:
         for key in keys:
             self.update_issue(key, payload)
 
-    def move_issue_to_column(self, key, column):
+    def _apply_transition(self, key, transition):
+        self.request(
+            "POST",
+            f"/rest/api/2/issue/{key}/transitions",
+            json={"transition": {"id": transition["id"]}},
+        )
+
+    def move_issue_to_column(self, key, column, force=False):
         transitions = self.fetch_transitions(key)
         target_status_ids = {str(status["id"]) for status in column["statuses"] if status.get("id")}
         target_status_names = {status["name"] for status in column["statuses"] if status.get("name")}
@@ -169,13 +179,25 @@ class JiraClient:
             if to_id in target_status_ids or to_name in target_status_names or transition.get("name") in target_status_names:
                 chosen = transition
                 break
-        if not chosen:
-            raise ValueError(f"No valid transition from {key} to column '{column['name']}'")
-        self.request(
-            "POST",
-            f"/rest/api/2/issue/{key}/transitions",
-            json={"transition": {"id": chosen["id"]}},
-        )
+        if chosen:
+            self._apply_transition(key, chosen)
+            return
+        if not force:
+            raise ValueError(
+                f"No direct transition from {key} to column '{column['name']}'. "
+                f"Use --force to attempt a multi-hop transition."
+            )
+        # Multi-hop: try every available transition and recurse once
+        for transition in transitions:
+            self._apply_transition(key, transition)
+            hop_transitions = self.fetch_transitions(key)
+            for t in hop_transitions:
+                to = t.get("to") or {}
+                if str(to.get("id", "")) in target_status_ids or to.get("name", "") in target_status_names:
+                    self._apply_transition(key, t)
+                    return
+            # Undo by moving back — not feasible; just try next hop
+        raise ValueError(f"Could not reach column '{column['name']}' from {key} even with --force")
 
     def add_comment(self, key, text):
         self.request("POST", f"/rest/api/2/issue/{key}/comment", json={"body": text})
@@ -202,4 +224,6 @@ class JiraClient:
             fields["duedate"] = payload["dueDate"]
         if payload.get("parentKey"):
             fields["parent"] = {"key": payload["parentKey"]}
+        if payload.get("epicKey"):
+            fields["customfield_10100"] = payload["epicKey"]
         return self.request("POST", "/rest/api/2/issue", json={"fields": fields})

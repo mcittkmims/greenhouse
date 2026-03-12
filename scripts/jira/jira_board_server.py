@@ -140,14 +140,14 @@ def cmd_assign(client, args):
 def cmd_move(client, args):
     column = resolve_column(client, args.column)
     for key in args.keys:
-        client.move_issue_to_column(key, column)
+        client.move_issue_to_column(key, column, force=args.force)
         print(f"Moved {key} -> {column['name']}")
 
 
 def cmd_bulk_move(client, args):
     column = resolve_column(client, args.column)
     for key in args.keys:
-        client.move_issue_to_column(key, column)
+        client.move_issue_to_column(key, column, force=args.force)
     print(f"Moved {len(args.keys)} issues -> {column['name']}")
 
 
@@ -165,10 +165,12 @@ def cmd_update(client, args):
         payload["priority"] = args.priority
     if args.labels is not None:
         payload["labels"] = split_csv(args.labels)
+    if args.epic is not None:
+        payload["epicKey"] = args.epic
     client.update_issue(args.key, payload)
     if args.column is not None:
         column = resolve_column(client, args.column)
-        client.move_issue_to_column(args.key, column)
+        client.move_issue_to_column(args.key, column, force=args.force)
     print(f"Updated {args.key}")
 
 
@@ -186,11 +188,13 @@ def cmd_bulk_update(client, args):
         payload["priority"] = args.priority
     if args.labels is not None:
         payload["labels"] = split_csv(args.labels)
+    if args.epic is not None:
+        payload["epicKey"] = args.epic
     client.bulk_update(args.keys, payload)
     if args.column is not None:
         column = resolve_column(client, args.column)
         for key in args.keys:
-            client.move_issue_to_column(key, column)
+            client.move_issue_to_column(key, column, force=args.force)
     print(f"Updated {len(args.keys)} issues")
 
 
@@ -215,6 +219,7 @@ def cmd_create(client, args):
         "labels": split_csv(args.labels),
         "dueDate": args.due_date,
         "parentKey": args.parent,
+        "epicKey": args.epic,
     })
     print(created.get("key", json.dumps(created, ensure_ascii=True)))
 
@@ -259,10 +264,12 @@ def build_parser():
 
     move = subparsers.add_parser("move", help="Move issues to a column via Jira transitions")
     move.add_argument("--column", required=True, help="Column id or display name")
+    move.add_argument("--force", action="store_true", help="Allow multi-hop transitions (e.g. Backlog -> In Work -> Proposed)")
     move.add_argument("keys", nargs="+", help="Issue keys")
 
     bulk_move = subparsers.add_parser("bulk-move", help="Move multiple issues to a column via Jira transitions")
     bulk_move.add_argument("--column", required=True, help="Column id or display name")
+    bulk_move.add_argument("--force", action="store_true", help="Allow multi-hop transitions (e.g. Backlog -> In Work -> Proposed)")
     bulk_move.add_argument("keys", nargs="+", help="Issue keys")
 
     update = subparsers.add_parser("update", help="Update one issue")
@@ -273,7 +280,9 @@ def build_parser():
     update.add_argument("--assignee", help="Jira username, empty string clears it")
     update.add_argument("--priority", help="Priority name")
     update.add_argument("--labels", help="Comma-separated labels")
+    update.add_argument("--epic", help="Epic issue key to link (e.g. GMS-2)")
     update.add_argument("--column", help="Move to column after update")
+    update.add_argument("--force", action="store_true", help="Allow multi-hop column transitions")
 
     bulk_update = subparsers.add_parser("bulk-update", help="Update multiple issues with the same fields")
     bulk_update.add_argument("--summary", help="New summary")
@@ -282,7 +291,9 @@ def build_parser():
     bulk_update.add_argument("--assignee", help="Jira username, empty string clears it")
     bulk_update.add_argument("--priority", help="Priority name")
     bulk_update.add_argument("--labels", help="Comma-separated labels")
+    bulk_update.add_argument("--epic", help="Epic issue key to link (e.g. GMS-2)")
     bulk_update.add_argument("--column", help="Move all issues to column after update")
+    bulk_update.add_argument("--force", action="store_true", help="Allow multi-hop column transitions")
     bulk_update.add_argument("keys", nargs="+", help="Issue keys")
 
     comment = subparsers.add_parser("comment", help="Add a comment to an issue")
@@ -300,6 +311,7 @@ def build_parser():
     create.add_argument("--assignee", help="Jira username")
     create.add_argument("--priority", help="Priority name")
     create.add_argument("--labels", help="Comma-separated labels")
+    create.add_argument("--epic", help="Epic issue key to link (e.g. GMS-2)")
     create.add_argument("--due-date", help="Due date as YYYY-MM-DD")
     create.add_argument("--parent", help="Parent issue key")
     create.add_argument("--project", help="Project key, defaults to board project")
