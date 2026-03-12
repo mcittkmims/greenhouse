@@ -1,4 +1,4 @@
-# GitHub Copilot — GMS Workspace Instructions
+# GMS Workspace Instructions
 
 ## Project
 **Greenhouse Management System (GMS)** — PBL IoT course, Technical University of Moldova (UTM)
@@ -87,80 +87,7 @@ Only Jira content and automation live under `documentation/jira/` and `scripts/j
 
 Use that script both for the local interactive board server and direct Jira automation commands such as assignee changes, comments, issue updates, moves, and issue creation.
 
-**Agent rule:** Always prefer the built-in CLI commands (`jira_board_server.py`, `confluence_sync.py`, `confluence_push.py`, `log_work.py`) over writing inline Python. Only write custom Python when the built-in scripts provably do not support the required operation. Check available subcommands with `--help` before resorting to custom code.
-
----
-
-## Work Logging
-
-**When to log:** After completing any task that is **GMS project development work** — writing or editing GMS documentation (Confluence pages, WP files), or writing code that belongs to the Greenhouse Management System itself (sensors, firmware, backend, cloud logic, etc.).
-
-**When NOT to log:** Tooling/codespace work — changes to sync scripts (`confluence_sync.py`, `confluence_push.py`, `gcm_*.py`), Jira board scripts, the logging system itself, or any infrastructure/automation that supports the workspace but is not part of the GMS product.
-
-**Script:** `scripts/logging/log_work.py`
-
-### Logging a task
-
-```sh
-python3 scripts/logging/log_work.py log \
-  --task "Short description of what was done" \
-  --score 7 \
-  --files "documentation/confluence/wip/WP5.4_foo.gcm" \
-  [--details "Optional extra context"] \
-  [--ticket PBL26-563]
-```
-
-- `--score` — effort weight 1–10 (default 5). Higher score = more time allocated when posting worklogs.
-- `--ticket` — auto-detected from the WP number in `--task` or `--files`. Prints candidates and exits code 2 if it can't match.
-- Writes a timestamped JSON to `logging/YYYY-MM-DDTHHMMSS.json`.
-
-### Posting worklogs to Jira
-
-```sh
-python3 scripts/logging/log_work.py worklog \
-  --from 2026-03-10 [--to 2026-03-12] [--hours 6]
-```
-
-Reads log entries in the date range, divides `--hours` (default 6) proportionally by `score`, and POSTs a worklog to each entry's `pbl26_ticket`. Time is rounded to the nearest 5 minutes. **Duplicate-safe:** skips any entry whose task description exactly matches an already-posted worklog comment on that ticket.
-
-### Logging work done outside Claude (direct Jira worklog)
-
-```sh
-python3 scripts/logging/log_work.py log-direct \
-  --ticket 5.4 \
-  --task "Filled in WP5.4 risk table" \
-  --hours 1.5 \
-  [--date 2026-03-11]
-```
-
-Posts a worklog directly to Jira without creating a local log file. Use for work done manually or outside of Claude sessions. `--ticket` accepts WP number or full key; `--date` defaults to today.
-
-### Workshop day logging (report-log)
-
-```sh
-python3 scripts/logging/log_work.py report-log --date 2026-03-12
-python3 scripts/logging/log_work.py report-log --date 2026-03-12 --task "Custom desc 1" "Custom desc 2"
-```
-
-Posts two fixed worklogs to `PBL26-1362` (the tracking/attendance ticket) for a class workshop day. Fixed slots: `15:15` and `19:00`, each 1h 30m. Descriptions default to generic workshop text; `--task` overrides them (up to 2 strings). `--date` defaults to today.
-
-### Weekly standup report
-
-```sh
-python3 scripts/logging/log_work.py report --from 2026-03-10 [--to 2026-03-16]
-```
-
-Fetches all worklogs from every PBL26 ticket in the date range and prints a standup-style summary: what was done, what's next (first WP with no worklogs ever), total hours. `--to` defaults to now.
-
-### PBL26 ticket management
-
-```sh
-python3 scripts/logging/log_work.py list-tickets
-python3 scripts/logging/log_work.py list-transitions PBL26-563
-python3 scripts/logging/log_work.py move --to "Resolve Issue" PBL26-563 PBL26-558
-```
-
-These target the **PBL26 course board** for `adrian.vremere`, not the GMS board. Do not use `jira_board_server.py` for PBL26 operations. Available transitions: **Start Progress**, **Resolve Issue**, **Close Issue**, **Rejected**.
+**Agent rule:** Always prefer the built-in CLI commands (`jira_board_server.py`, `confluence_sync.py`, `confluence_push.py`) over writing inline Python. Only write custom Python when the built-in scripts provably do not support the required operation. Check available subcommands with `--help` before resorting to custom code.
 
 ---
 
@@ -207,6 +134,97 @@ python3 scripts/confluence/confluence_push.py --file WP4.2_Analyze_Stakeholder_R
 - Updates the local version + hash cache after a successful push
 - Use `--dry-run` to preview the converted XHTML without pushing
 - Use `--no-confirm` to skip the confirmation prompt
+
+---
+
+## Work Logging
+
+**When to log:** After completing any task that is **GMS project development work** — writing or editing GMS documentation (Confluence pages, WP files), or writing code that belongs to the Greenhouse Management System itself (sensors, firmware, backend, cloud logic, etc.).
+
+**When NOT to log:** Tooling/codespace work — changes to sync scripts (`confluence_sync.py`, `confluence_push.py`, `gcm_*.py`), Jira board scripts, the logging system itself, CLAUDE.md updates, or any infrastructure/automation that supports the workspace but is not part of the GMS product.
+
+**Script:** `scripts/logging/log_work.py`
+
+### Logging a task
+
+```sh
+python3 scripts/logging/log_work.py log \
+  --task "Short description of what was done" \
+  --score 7 \
+  --files "documentation/confluence/wip/WP5.4_foo.gcm" \
+  [--details "Optional extra context"] \
+  [--ticket PBL26-563]
+```
+
+- `--score` — effort weight 1–10 (default 5). Used to proportionally split hours when posting worklogs. Higher score = more time allocated.
+- `--ticket` — auto-detected from the WP number in `--task` or `--files`. If it can't match, prints candidates and exits with code 2; re-run with `--ticket`.
+- Writes a timestamped JSON to `logging/YYYY-MM-DDTHHMMSS.json`.
+
+### Posting worklogs to Jira
+
+```sh
+python3 scripts/logging/log_work.py worklog \
+  --from 2026-03-10 \
+  [--to 2026-03-12] \
+  [--hours 6]
+```
+
+- Reads all log entries in the date range, divides `--hours` (default 6) proportionally by `score`, and POSTs a worklog to each entry's `pbl26_ticket`.
+- Time per task is rounded to the nearest 5 minutes (minimum 5m).
+- `--to` defaults to now; a date-only value (e.g. `2026-03-12`) is treated as end of that day.
+- **Duplicate-safe:** before posting, fetches existing worklogs for each ticket and skips any entry whose task description exactly matches an already-posted comment.
+
+### Logging work done outside Claude (direct Jira worklog)
+
+```sh
+python3 scripts/logging/log_work.py log-direct \
+  --ticket 5.4 \
+  --task "Filled in WP5.4 risk table" \
+  --hours 1.5 \
+  [--date 2026-03-11]
+```
+
+- Posts a worklog directly to Jira without creating a local log file. Use this for work done manually, on another device, or in any session without Claude.
+- `--ticket` accepts a WP number (e.g. `5.4`) or a full key (e.g. `PBL26-563`).
+- `--hours` supports decimals (`1.5` = 1h 30m), rounded to nearest 5 minutes.
+- `--date` defaults to today.
+
+### Workshop day logging (report-log)
+
+Posts two fixed worklogs to the PBL26 tracking ticket (`PBL26-1362`) for a class workshop day. Used to fill in the daily attendance/participation report without specifying times manually.
+
+```sh
+python3 scripts/logging/log_work.py report-log --date 2026-03-12
+python3 scripts/logging/log_work.py report-log --date 2026-03-12 --task "Custom desc 1" "Custom desc 2"
+```
+
+Always posts exactly two entries:
+- `15:15` — 1h 30m — default: `"Attended PBL26 workshop session"`
+- `19:00` — 1h 30m — default: `"Continued GMS project work during lab"`
+
+`--task` is optional; supply 1 or 2 strings to override the defaults. `--date` defaults to today.
+
+### Weekly standup report
+
+```sh
+python3 scripts/logging/log_work.py report --from 2026-03-10 [--to 2026-03-16]
+```
+
+Fetches all worklogs from every PBL26 ticket in the date range and prints a standup-style summary: what was done, what's next (first WP with no worklogs), total hours logged. `--to` defaults to now.
+
+### PBL26 ticket management
+
+```sh
+python3 scripts/logging/log_work.py list-tickets
+python3 scripts/logging/log_work.py list-transitions PBL26-563
+python3 scripts/logging/log_work.py move --to "Resolve Issue" PBL26-563 PBL26-558
+```
+
+- `list-tickets` — shows all PBL26 tickets for `adrian.vremere` (excluding PBL26-1362 tracking).
+- `list-transitions KEY` — shows available status transitions for a ticket.
+- `move --to NAME KEY...` — transitions one or more tickets; `--to` matches case-insensitively (e.g. `--to resolve`). Available transitions: **Start Progress**, **Resolve Issue**, **Close Issue**, **Rejected**.
+
+> These commands target the **PBL26 course board**, not the GMS board. Do not use `jira_board_server.py` for PBL26 operations.
 
 ---
 

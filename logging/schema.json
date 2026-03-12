@@ -1,0 +1,9 @@
+{
+  "_comment": "Schema for GMS work log entries. Files named YYYY-MM-DDTHHMMSS.json",
+  "timestamp": "ISO 8601 datetime of when the work was completed",
+  "task": "Short description of what was done",
+  "score": "Effort score 1-10 (used to proportionally split hours in worklog; default 5 if omitted)",
+  "details": "Optional: additional context, decisions made, or notes",
+  "files_changed": ["List of files created or modified (relative paths)"],
+  "pbl26_ticket": "PBL26-XXX — the matching ticket from the PBL26 board for adrian.vremere"
+}
