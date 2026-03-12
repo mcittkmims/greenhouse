@@ -46,10 +46,10 @@ worklog --from DATE [--to DATE] [--hours N] — Post time entries to Jira for a 
 
     python3 scripts/logging/log_work.py worklog --from 2026-03-10 --to 2026-03-12 --hours 6
 
-report --from DATE [--to DATE] — Generate a weekly standup-style summary.
-    Pulls all worklogs from each PBL26 ticket within the date range and formats them
-    as a readable report showing time logged per ticket, total hours, and which WP to
-    work on next (first WP with no worklogs posted yet).
+report --from DATE [--to DATE] [--no-post] — Generate a weekly standup-style summary.
+    Pulls all worklogs from each PBL26 ticket within the date range, formats them
+    as a standup report, prints it, and posts it as a comment on PBL26-1362.
+    Use --no-post to print only without posting.
 
     python3 scripts/logging/log_work.py report --from 2026-03-10 --to 2026-03-16
 
@@ -378,6 +378,8 @@ def cmd_log_direct(env, args):
     if args.date:
         try:
             dt = parse_date(args.date)
+            if "T" not in args.date:
+                dt = dt.replace(hour=12, minute=0, second=0)
         except ValueError as e:
             print(f"ERROR: {e}", file=sys.stderr)
             sys.exit(1)
@@ -521,39 +523,51 @@ def cmd_report(env, args):
     total_seconds = sum(s for _, _, s in in_range)
     total_time = seconds_to_display(total_seconds)
 
-    # Next ticket: first WP in order with no worklogs at all
+    # Next ticket: first WP in order whose status is Backlog or In Work
+    NEXT_VALID_STATUSES = {"backlog", "in work"}
     next_action = None
     next_ticket_key = None
     for wp in sorted_wps:
-        if wp not in has_any_worklog:
-            next_ticket_key = WP_TO_TICKET[wp]
-            try:
-                issue = jira_get(env, f"/rest/api/2/issue/{next_ticket_key}?fields=summary")
-                next_action = extract_action(issue["fields"]["summary"])
-            except Exception:
-                next_action = next_ticket_key
-            break
+        candidate = WP_TO_TICKET[wp]
+        try:
+            issue = jira_get(env, f"/rest/api/2/issue/{candidate}?fields=summary,status")
+            status = issue["fields"]["status"]["name"].lower()
+            if status not in NEXT_VALID_STATUSES:
+                continue
+            next_ticket_key = candidate
+            next_action = extract_action(issue["fields"]["summary"])
+        except Exception:
+            continue
+        break
 
     # Build report
     lines = []
-    lines.append("What did you do last week to advance the project?\n")
+    lines.append("What did you do last week to advance the project?")
     for _, comment, _ in in_range:
         if comment:
-            lines.append(f"    {comment}\n")
+            lines.append(f"* {comment}")
     lines.append("")
-    lines.append("What will you do this week to advance the project?\n")
-    lines.append(f"    {next_action or '-'}\n")
+    lines.append("What will you do this week to advance the project?")
+    lines.append(f"* {next_action or '-'}")
     lines.append("")
-    lines.append("What are the impediments in your way?\n")
-    lines.append("    -\n")
+    lines.append("What are the impediments in your way?")
+    lines.append("* -")
     lines.append("")
-    lines.append("How many hours did you invest and track in the project last week.\n")
-    lines.append(f"    {total_time} - to advance the project\n")
+    lines.append("How many hours did you invest and track in the project last week.")
+    lines.append(f"* {total_time} - to advance the project")
     lines.append("")
-    lines.append("How many hours do you plan to invest and track in the project next week.\n")
-    lines.append("    6h")
+    lines.append("How many hours do you plan to invest and track in the project next week.")
+    lines.append("* 6h")
 
-    print("\n" + "\n".join(lines))
+    report_text = "\n".join(lines)
+    print("\n" + report_text)
+
+    if not args.no_post:
+        try:
+            jira_post(env, f"/rest/api/2/issue/{TRACKING_TICKET}/comment", {"body": report_text})
+            print(f"\nPosted as comment on {TRACKING_TICKET}.", file=sys.stderr)
+        except Exception as e:
+            print(f"\nWARN: could not post comment to {TRACKING_TICKET}: {e}", file=sys.stderr)
 
 
 def cmd_move(env, args):
@@ -636,11 +650,13 @@ def main():
     move_p.add_argument("--to", required=True, help='Transition name (e.g. "Start Progress", "Resolve Issue")')
     move_p.add_argument("keys", nargs="+", help="PBL26 ticket keys")
 
-    rp = sub.add_parser("report", help="Generate weekly standup report from Jira worklogs")
+    rp = sub.add_parser("report", help="Generate weekly standup report from Jira worklogs and post it to the tracking ticket")
     rp.add_argument("--from", dest="start", required=True, metavar="DATE",
                     help="Start of the reporting period (YYYY-MM-DD)")
     rp.add_argument("--to", dest="end", metavar="DATE",
                     help="End of the reporting period (default: now)")
+    rp.add_argument("--no-post", action="store_true",
+                    help=f"Print report only, do not post as comment on {TRACKING_TICKET}")
 
     wl_p = sub.add_parser("worklog", help="Post Jira worklogs for log entries in a date range")
     wl_p.add_argument("--from", dest="start", required=True, metavar="DATE",

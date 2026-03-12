@@ -1,9 +1,12 @@
 ---
-description: Manage PBL26 Jira tickets transitions
+description: Manage PBL26 Jira ticket transitions (course board, NOT GMS board)
 ---
 # PBL26 Ticket Management
 
-Target the **PBL26 course board** for `adrian.vremere`, not the GMS board. Do not use `jira_board_server.py` for PBL26 operations. Available transitions: **Start Progress**, **Resolve Issue**, **Close Issue**, **Rejected**.
+> **Board:** PBL26 course board (`scripts/logging/log_work.py`)
+> **NOT the GMS board** — never use `jira_board_server.py` here.
+
+Tickets are WP work packages (e.g. `PBL26-548` = WP5.1). Available transitions: **Start Progress**, **Resolve Issue**, **Close Issue**, **Rejected**.
 
 ## List tickets
 ```sh

@@ -17,7 +17,7 @@ documentation/
     wip/                    ← files currently being actively worked on
     resources/              ← large local reference/learning materials (Markdown, not synced)
   jira/
-    board.html              ← local Jira board shell
+    board.html              ← local GMS board shell (open while server runs)
   GCM_Documentation.md     ← comprehensive GCM format documentation
 logging/
   schema.json               ← log entry format reference
@@ -30,10 +30,10 @@ scripts/
     gcm_to_html.py          ← converter: GCM → Confluence storage HTML
     gcm_spec.py             ← shared GCM constants and utilities
     GCM_SPEC.md             ← GCM format specification
-  jira/
-    jira_board_server.py    ← local Jira board server + GMS board automation commands
-  logging/
-    log_work.py             ← work logging + PBL26 ticket management
+  jira/                     ← GMS board (issue management: assignments, moves, comments)
+    jira_board_server.py    ← local board server + GMS issue automation
+  logging/                  ← PBL26 course board (work logging & time tracking per WP)
+    log_work.py             ← log tasks locally + post worklogs to PBL26 tickets
 .env                        ← credentials (never commit)
 ```
 
@@ -76,18 +76,35 @@ Converter modules:
 
 ## Jira
 
+There are **two separate Jira boards** — use the correct script for each. Never mix them up.
+
 - **URL:** `http://jira.microlab.club`
 - **Auth:** `JIRA_USER`, `JIRA_PASS`, `JIRA_URL` in `.env` (falls back to `CONFLUENCE_USER`/`CONFLUENCE_PASS` when needed)
-- **Board shell:** `documentation/jira/board.html`
-- **Automation and local board server:** `scripts/jira/jira_board_server.py`
 
-Only Jira content and automation live under `documentation/jira/` and `scripts/jira/`.
+### GMS Board — `scripts/jira/jira_board_server.py`
 
-**Command:** `python3 scripts/jira/jira_board_server.py`
+The **GMS board** contains the actual project issues (user stories, tasks, job stories). Use this for issue management: creating issues, changing assignees, moving to columns, adding comments, updating fields.
 
-Use that script both for the local interactive board server and direct Jira automation commands such as assignee changes, comments, issue updates, moves, and issue creation.
+- **Board shell:** `documentation/jira/board.html` (open in browser while server runs)
+- **Script:** `scripts/jira/jira_board_server.py`
 
-**Agent rule:** Always prefer the built-in CLI commands (`jira_board_server.py`, `confluence_sync.py`, `confluence_push.py`) over writing inline Python. Only write custom Python when the built-in scripts provably do not support the required operation. Check available subcommands with `--help` before resorting to custom code.
+```sh
+python3 scripts/jira/jira_board_server.py <subcommand>
+# subcommands: serve, list, assign, move, bulk-move, update, bulk-update,
+#              comment, bulk-comment, create, users
+```
+
+Only GMS board content and automation live under `documentation/jira/` and `scripts/jira/`.
+
+### PBL26 Course Board — `scripts/logging/log_work.py`
+
+The **PBL26 course board** tracks work packages (WP1.1, WP2.1 … WP10.x) for `adrian.vremere` as part of the university course. Use this for work logging, posting time entries (worklogs), and transitioning WP tickets. **Never use `jira_board_server.py` for PBL26 operations.**
+
+- **Script:** `scripts/logging/log_work.py`
+- **Ticket format:** `PBL26-XXX` (e.g. `PBL26-548` for WP5.1)
+- **WP → ticket lookup:** built into `log_work.py`; also visible via `list-tickets`
+
+**Agent rule:** Always prefer the built-in CLI commands (`jira_board_server.py`, `confluence_sync.py`, `confluence_push.py`, `log_work.py`) over writing inline Python. Only write custom Python when the built-in scripts provably do not support the required operation. Check available subcommands with `--help` before resorting to custom code.
 
 ---
 
@@ -137,7 +154,9 @@ python3 scripts/confluence/confluence_push.py --file WP4.2_Analyze_Stakeholder_R
 
 ---
 
-## Work Logging
+## Work Logging (PBL26 Course Board)
+
+All logging commands below post time entries to the **PBL26 course board** via `scripts/logging/log_work.py`. They have no effect on the GMS board.
 
 **When to log:** After completing any task that is **GMS project development work** — writing or editing GMS documentation (Confluence pages, WP files), or writing code that belongs to the Greenhouse Management System itself (sensors, firmware, backend, cloud logic, etc.).
 
@@ -210,7 +229,7 @@ Always posts exactly two entries:
 python3 scripts/logging/log_work.py report --from 2026-03-10 [--to 2026-03-16]
 ```
 
-Fetches all worklogs from every PBL26 ticket in the date range and prints a standup-style summary: what was done, what's next (first WP with no worklogs), total hours logged. `--to` defaults to now.
+Fetches all worklogs from every PBL26 ticket in the date range, prints a standup-style summary (what was done, what's next, total hours), and **posts it as a comment on `PBL26-1362`**. `--to` defaults to now. Use `--no-post` to print only without posting.
 
 ### PBL26 ticket management
 

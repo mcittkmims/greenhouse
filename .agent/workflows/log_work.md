@@ -1,7 +1,10 @@
 ---
-description: Log local work done on GMS project and post to Jira
+description: Log GMS project work and post time entries to the PBL26 course board
 ---
 # Work Logging and Posting
+
+> **Board:** PBL26 course board (`scripts/logging/log_work.py`)
+> **NOT the GMS board** — this script posts worklogs to `PBL26-XXX` WP tickets, not GMS issues.
 
 **When to log:** After completing any task that is **GMS project development work** (Confluence pages, WP files, GMS code).
 **When NOT to log:** Tooling/codespace work (`confluence_sync.py`, `log_work.py`, `CLAUDE.md` updates, etc.)
@@ -54,12 +57,14 @@ python3 scripts/logging/log_work.py report-log \
 - `--date` defaults to today.
 
 ## 5. Weekly standup report
-Fetches all worklogs from every PBL26 ticket in the date range and prints a standup-style summary.
+Fetches all worklogs from every PBL26 ticket in the date range, prints a standup-style summary, and posts it as a comment on `PBL26-1362`.
 
 ```sh
 python3 scripts/logging/log_work.py report \
   --from <YYYY-MM-DD> \
-  [--to <YYYY-MM-DD>]
+  [--to <YYYY-MM-DD>] \
+  [--no-post]
 ```
 - Shows what was done, total hours, and which WP to work on next (first WP with no worklogs).
 - `--to` defaults to now.
+- `--no-post` prints only, skips posting to `PBL26-1362`.
