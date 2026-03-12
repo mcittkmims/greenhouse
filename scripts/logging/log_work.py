@@ -587,9 +587,20 @@ def cmd_report_log(env, args):
     slots = [(h, m, user_tasks[i] if i < len(user_tasks) else default)
              for i, (h, m, default) in enumerate(REPORT_SLOTS)]
 
+    try:
+        wl_data = jira_get(env, f"/rest/api/2/issue/{TRACKING_TICKET}/worklog")
+        # Index existing worklogs by "YYYY-MM-DDTHH:MM" (date + time, ignore tz offset)
+        existing_times = {wl.get("started", "")[:16] for wl in wl_data.get("worklogs", [])}
+    except Exception:
+        existing_times = set()
+
     errors = []
     for hour, minute, task in slots:
         dt = base_dt.replace(hour=hour, minute=minute, second=0)
+        slot_key = dt.strftime("%Y-%m-%dT%H:%M")
+        if slot_key in existing_times:
+            print(f"  SKIP  {TRACKING_TICKET}  [{dt.strftime('%Y-%m-%d %H:%M')}]  (already posted)")
+            continue
         started = to_jira_started(dt)
         payload = {"started": started, "timeSpent": REPORT_DURATION, "comment": task}
         try:
