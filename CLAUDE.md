@@ -91,7 +91,7 @@ The **GMS board** contains the actual project issues (user stories, tasks, job s
 ```sh
 python3 scripts/jira/jira_board_server.py <subcommand>
 # subcommands: serve, list, assign, move, bulk-move, update, bulk-update,
-#              comment, bulk-comment, create, users
+#              comment, bulk-comment, create, link, unlink, users
 ```
 
 Key flags available on `create`, `update`, and `bulk-update`:
@@ -101,6 +101,11 @@ Key flags available on `create`, `update`, and `bulk-update`:
 
 Key flags available on `move` and `bulk-move`:
 - `--force` — walk through intermediate transitions when no direct path exists (e.g. Backlog → In Work → Proposed)
+
+Key flags available on `link` and `unlink`:
+- `--from KEY` — source issue key
+- `--to KEY [KEY ...]` — one or more target issue keys
+- `--type NAME` — link type name (default: `Relates`; others: `Blocks`, `Duplicate`, `Cloners`, `Satisfy`)
 
 Only GMS board content and automation live under `documentation/jira/` and `scripts/jira/`.
 
@@ -166,9 +171,11 @@ python3 scripts/confluence/confluence_push.py --file WP4.2_Analyze_Stakeholder_R
 
 All logging commands below post time entries to the **PBL26 course board** via `scripts/logging/log_work.py`. They have no effect on the GMS board.
 
-**When to log:** After completing any task that is **GMS project development work** — writing or editing GMS documentation (Confluence pages, WP files), or writing code that belongs to the Greenhouse Management System itself (sensors, firmware, backend, cloud logic, etc.).
+**When to log:** After completing any task that is **GMS project development work** — writing or editing GMS documentation (Confluence pages, WP files), or writing code that belongs to the Greenhouse Management System itself (sensors, firmware, backend, cloud logic, etc.). Log immediately after the task is done, without waiting to be asked.
 
 **When NOT to log:** Tooling/codespace work — changes to sync scripts (`confluence_sync.py`, `confluence_push.py`, `gcm_*.py`), Jira board scripts, the logging system itself, CLAUDE.md updates, or any infrastructure/automation that supports the workspace but is not part of the GMS product.
+
+**Logging corrections:** Do **not** log a revision as a separate task. If the user rejects the output and asks for a change, fix it — the original log entry stands. Only log work that the user accepted; never log "changed X" or "fixed X per feedback."
 
 **Script:** `scripts/logging/log_work.py`
 

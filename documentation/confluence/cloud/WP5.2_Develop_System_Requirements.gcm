@@ -1,7 +1,7 @@
 --- gcm ---
 title: 04 - GMS -WP5.2 Develop System Requirements
 page_id: 42634148
-version: 39
+version: 43
 source: http://confluence.microlab.club/rest/api/content/42634148
 ---
 
@@ -96,7 +96,10 @@ source: http://confluence.microlab.club/rest/api/content/42634148
 {/tr}
 {tr}
 {td}SR-2.4{/td}
-{td}The GMS web dashboard SHALL provide a remote irrigation control panel allowing the operator to manually activate or deactivate the irrigation valve from any browser, with the command executing on the edge controller within 10 seconds of submission.{/td}
+{td}The GMS web dashboard SHALL provide a remote irrigation control panel allowing the operator to manually activate or deactivate the irrigation valve from any browser, with the command executing on the edge controller within 10 seconds of submission.
+{raw}
+<ac:macro ac:name="jira"><ac:parameter ac:name="showSummary">false</ac:parameter><ac:parameter ac:name="server">Microlab Jira</ac:parameter><ac:parameter ac:name="serverId">5b8ef41d-7a73-399f-9666-c949acb53653</ac:parameter><ac:parameter ac:name="key">GMS-94</ac:parameter>&quot;</ac:macro>
+{/raw}{/td}
 {td}*MASTER-Action — The system SHALL [provide] [remote control] executing within [time]*{/td}
 {td}Functional{/td}
 {td}Must Have{/td}
@@ -104,7 +107,10 @@ source: http://confluence.microlab.club/rest/api/content/42634148
 {/tr}
 {tr}
 {td}SR-2.5{/td}
-{td}The GMS dashboard home screen SHALL display the current soil moisture reading as the primary prominent widget, positioned in the top section of the viewport and visible without scrolling on all screen sizes from 360 px width upward.{/td}
+{td}The GMS dashboard home screen SHALL display the current soil moisture reading as the primary prominent widget, positioned in the top section of the viewport and visible without scrolling on all screen sizes from 360 px width upward.
+{raw}
+<ac:macro ac:name="jira"><ac:parameter ac:name="showSummary">false</ac:parameter><ac:parameter ac:name="server">Microlab Jira</ac:parameter><ac:parameter ac:name="serverId">5b8ef41d-7a73-399f-9666-c949acb53653</ac:parameter><ac:parameter ac:name="key">GMS-96</ac:parameter>&quot;</ac:macro>
+{/raw}{/td}
 {td}*MASTER-Constraint — The system SHALL [position] [widget] in [viewport location] across [screen size range]*{/td}
 {td}Functional{/td}
 {td}Must Have{/td}
@@ -112,7 +118,10 @@ source: http://confluence.microlab.club/rest/api/content/42634148
 {/tr}
 {tr}
 {td}SR-2.6{/td}
-{td}The system SHALL allow the operator to configure minimum and maximum threshold values independently for soil moisture, air temperature, and relative humidity, with all values persisted across sessions and applied immediately to both sensor-triggered and schedule-based control logic.{/td}
+{td}The system SHALL allow the operator to configure minimum and maximum threshold values independently for soil moisture, air temperature, and relative humidity, with all values persisted across sessions and applied immediately to both sensor-triggered and schedule-based control logic.
+{raw}
+<ac:macro ac:name="jira"><ac:parameter ac:name="showSummary">false</ac:parameter><ac:parameter ac:name="server">Microlab Jira</ac:parameter><ac:parameter ac:name="serverId">5b8ef41d-7a73-399f-9666-c949acb53653</ac:parameter><ac:parameter ac:name="key">GMS-95</ac:parameter>&quot;</ac:macro>
+{/raw}{/td}
 {td}MASTER-Action — *The system SHALL [allow actor] to [configure thresholds] applied to [control logic]*{/td}
 {td}Functional{/td}
 {td}Must Have{/td}
@@ -215,7 +224,10 @@ Acceptance criterion: threshold values saved by an operator survive a full brows
 {/tr}
 {tr}
 {td}SR-4.4{/td}
-{td}The system SHALL categorize temperature alerts into distinct types - "Heat Warning" for high temperature threshold breaches and "Frost Warning" for low temperature threshold breaches - displaying the alert type label alongside the severity indicator in both in-dashboard banners and push/SMS notifications.{/td}
+{td}The system SHALL categorize temperature alerts into distinct types - "Heat Warning" for high temperature threshold breaches and "Frost Warning" for low temperature threshold breaches - displaying the alert type label alongside the severity indicator in both in-dashboard banners and push/SMS notifications.
+{raw}
+<ac:macro ac:name="jira"><ac:parameter ac:name="showSummary">false</ac:parameter><ac:parameter ac:name="server">Microlab Jira</ac:parameter><ac:parameter ac:name="serverId">5b8ef41d-7a73-399f-9666-c949acb53653</ac:parameter><ac:parameter ac:name="key">GMS-97</ac:parameter>&quot;</ac:macro>
+{/raw}{/td}
 {td}*The system SHALL [categorize] [alerts] into [distinct types] with [type label]*
 ***MASTER-Action***{/td}
 {td}Functional{/td}

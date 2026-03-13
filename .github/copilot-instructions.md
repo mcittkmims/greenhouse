@@ -88,6 +88,12 @@ The **GMS board** contains the actual project issues (user stories, tasks, job s
 - **Board shell:** `documentation/jira/board.html` (open in browser while server runs)
 - **Script:** `scripts/jira/jira_board_server.py`
 
+```sh
+python3 scripts/jira/jira_board_server.py <subcommand>
+# subcommands: serve, list, assign, move, bulk-move, update, bulk-update,
+#              comment, bulk-comment, create, link, unlink, users
+```
+
 Key flags available on `create`, `update`, and `bulk-update`:
 - `--epic GMS-X` — link issue to an epic (sets Epic Link field)
 - `--labels "Functional,EARS-Event"` — comma-separated labels
@@ -95,6 +101,11 @@ Key flags available on `create`, `update`, and `bulk-update`:
 
 Key flags available on `move` and `bulk-move`:
 - `--force` — walk through intermediate transitions when no direct path exists (e.g. Backlog → In Work → Proposed)
+
+Key flags available on `link` and `unlink`:
+- `--from KEY` — source issue key
+- `--to KEY [KEY ...]` — one or more target issue keys
+- `--type NAME` — link type name (default: `Relates`; others: `Blocks`, `Duplicate`, `Cloners`, `Satisfy`)
 
 Only GMS board content and automation live under `documentation/jira/` and `scripts/jira/`.
 
@@ -111,9 +122,11 @@ The **PBL26 course board** tracks work packages (WP1.1, WP2.1 … WP10.x) for `a
 
 ## Work Logging
 
-**When to log:** After completing any task that is **GMS project development work** — writing or editing GMS documentation (Confluence pages, WP files), or writing code that belongs to the Greenhouse Management System itself (sensors, firmware, backend, cloud logic, etc.).
+**When to log:** After completing any task that is **GMS project development work** — writing or editing GMS documentation (Confluence pages, WP files), or writing code that belongs to the Greenhouse Management System itself (sensors, firmware, backend, cloud logic, etc.). Log immediately after the task is done, without waiting to be asked.
 
 **When NOT to log:** Tooling/codespace work — changes to sync scripts (`confluence_sync.py`, `confluence_push.py`, `gcm_*.py`), Jira board scripts, the logging system itself, or any infrastructure/automation that supports the workspace but is not part of the GMS product.
+
+**Logging corrections:** Do **not** log a revision as a separate task. If the user rejects the output and asks for a change, fix it — the original log entry stands. Only log work that the user accepted; never log "changed X" or "fixed X per feedback."
 
 **Script:** `scripts/logging/log_work.py`
 

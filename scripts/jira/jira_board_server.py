@@ -17,6 +17,9 @@ Usage:
     python3 scripts/jira/jira_board_server.py list --assignee adrian.vremere
     python3 scripts/jira/jira_board_server.py list --assignee adrian.vremere --status Backlog
     python3 scripts/jira/jira_board_server.py list --status "In Work"
+    python3 scripts/jira/jira_board_server.py link --from GMS-83 --to GMS-16 GMS-30
+    python3 scripts/jira/jira_board_server.py link --from GMS-83 --to GMS-16 --type Duplicate
+    python3 scripts/jira/jira_board_server.py unlink --from GMS-83 --to GMS-16
 
 Open http://127.0.0.1:8765/ while the server runs.
 """
@@ -208,6 +211,21 @@ def cmd_bulk_comment(client, args):
     print(f"Added comment to {len(args.keys)} issues")
 
 
+def cmd_link(client, args):
+    for to_key in args.to:
+        client.add_issue_link(args.from_key, to_key, link_type=args.type)
+        print(f"Linked {args.from_key} -{args.type}-> {to_key}")
+
+
+def cmd_unlink(client, args):
+    for to_key in args.to:
+        removed = client.remove_issue_link(args.from_key, to_key, link_type=args.type)
+        if removed:
+            print(f"Removed {removed} link(s) between {args.from_key} and {to_key}")
+        else:
+            print(f"No matching link found between {args.from_key} and {to_key}")
+
+
 def cmd_create(client, args):
     created = client.create_issue({
         "projectKey": args.project,
@@ -316,6 +334,16 @@ def build_parser():
     create.add_argument("--parent", help="Parent issue key")
     create.add_argument("--project", help="Project key, defaults to board project")
 
+    link = subparsers.add_parser("link", help="Add an issue link between two issues")
+    link.add_argument("--from", dest="from_key", required=True, help="Source issue key")
+    link.add_argument("--to", nargs="+", required=True, help="Target issue key(s)")
+    link.add_argument("--type", default="Relates", help="Link type name (default: Relates)")
+
+    unlink = subparsers.add_parser("unlink", help="Remove an issue link between two issues")
+    unlink.add_argument("--from", dest="from_key", required=True, help="Source issue key")
+    unlink.add_argument("--to", nargs="+", required=True, help="Target issue key(s)")
+    unlink.add_argument("--type", default=None, help="Link type name to match (default: any)")
+
     list_cmd = subparsers.add_parser("list", help="List board issues with optional filters")
     list_cmd.add_argument("--assignee", help="Filter by Jira username")
     list_cmd.add_argument("--status", help="Filter by status name (e.g. Backlog, 'In Work', Proposed)")
@@ -356,6 +384,10 @@ def main():
         cmd_comment(client, args)
     elif args.command == "bulk-comment":
         cmd_bulk_comment(client, args)
+    elif args.command == "link":
+        cmd_link(client, args)
+    elif args.command == "unlink":
+        cmd_unlink(client, args)
     elif args.command == "create":
         cmd_create(client, args)
     elif args.command == "list":

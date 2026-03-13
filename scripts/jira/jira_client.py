@@ -206,6 +206,26 @@ class JiraClient:
         for key in keys:
             self.add_comment(key, text)
 
+    def add_issue_link(self, from_key, to_key, link_type="Relates"):
+        self.request("POST", "/rest/api/2/issueLink", json={
+            "type": {"name": link_type},
+            "inwardIssue": {"key": from_key},
+            "outwardIssue": {"key": to_key},
+        })
+
+    def remove_issue_link(self, from_key, to_key, link_type=None):
+        data = self.request("GET", f"/rest/api/2/issue/{from_key}?fields=issuelinks")
+        links = data.get("fields", {}).get("issuelinks", [])
+        removed = 0
+        for link in links:
+            if link_type and link.get("type", {}).get("name") != link_type:
+                continue
+            other_key = (link.get("outwardIssue") or {}).get("key") or (link.get("inwardIssue") or {}).get("key")
+            if other_key == to_key:
+                self.request("DELETE", f"/rest/api/2/issueLink/{link['id']}")
+                removed += 1
+        return removed
+
     def create_issue(self, payload):
         fields = {
             "project": {"key": payload.get("projectKey") or self.project_key()},
