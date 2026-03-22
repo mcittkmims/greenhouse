@@ -1,387 +1,504 @@
 --- gcm ---
 title: 04 - GMS -WP5.4 Review and Release System requirements
 page_id: 42634150
-version: 6
+version: 13
 source: http://confluence.microlab.club/rest/api/content/42634150
 ---
 
 {table width=100.0% class="relative-table wrapped"}
- {colgroup}
- {col style="width: 5.0%;"}
- {col style="width: 17.0%;"}
- {col style="width: 33.0%;"}
- {col style="width: 23.0%;"}
- {col style="width: 12.0%;"}
- {col style="width: 10.0%;"}
- {/colgroup}
- {thead}
- {tr}
- {th}**ID**{/th}
- {th}**System Requirement Jira Ticket**{/th}
- {th}**System Requirement**{/th}
- {th}**Actions**{/th}
- {th}**Assignee**{/th}
- {th}**Due Date**{/th}
- {/tr}
- {/thead}
- {tr}
- {td}**1.**{/td}
- {td}**{jira:GMS-1}**{/td}
- {td}**Environmental Monitoring and Control**{/td}
- {td}Review all monitoring and alert requirements; verify sensor polling SLA and actuator response times are testable; confirm light intensity scope decision{/td}
- {td}Cojocaru Daniel{/td}
- {td}2026-04-18{/td}
- {/tr}
- {tr}
- {td}**1.1**{/td}
- {td}{jira:GMS-71|showSummary=false}{/td}
- {td}The GMS system SHALL continuously read and transmit soil moisture, air temperature, relative humidity, and CO₂ concentration sensor values to the cloud at intervals not exceeding 60 seconds. Light intensity monitoring is excluded from the pilot scope: it has no corresponding stakeholder requirement in WP4.2 and no automated actuator action or alert is defined for it (review R4).{/td}
- {td}Verify time-series DB receives an entry per sensor within 60 s under normal connectivity; confirm light intensity exclusion with team; move GMS-71 to Project Accepted{/td}
- {td}Cojocaru Daniel{/td}
- {td}2026-04-25{/td}
- {/tr}
- {tr}
- {td}**1.2**{/td}
- {td}{jira:GMS-72|showSummary=false}{/td}
- {td}WHEN any monitored parameter value falls outside its configured minimum or maximum threshold, the system SHALL generate an alert event within 5 seconds of the breach being detected by the edge controller.{/td}
- {td}Simulate threshold breach; verify alert event logged at cloud broker within 5 s; move GMS-72 to Project Accepted{/td}
- {td}Cojocaru Daniel{/td}
- {td}2026-04-25{/td}
- {/tr}
- {tr}
- {td}**1.3**{/td}
- {td}{jira:GMS-73|showSummary=false}{/td}
- {td}WHEN air temperature falls below the operator-configured minimum temperature threshold or exceeds the operator-configured maximum temperature threshold, the system SHALL automatically activate the corresponding heating or ventilation actuator within 30 seconds of the configured threshold being crossed. System default minimum temperature threshold: 10°C. System default maximum temperature threshold: 35°C.{/td}
- {td}Verify actuator triggers at operator-configured threshold (test with custom values and with defaults 10°C/35°C); update GMS-73 text to reflect configurable defaults; move to Project Accepted{/td}
- {td}Cojocaru Daniel{/td}
- {td}2026-04-30{/td}
- {/tr}
- {tr}
- {td}**1.4**{/td}
- {td}{jira:GMS-74|showSummary=false}{/td}
- {td}WHEN relative humidity exceeds its configured maximum threshold, the system SHALL activate the ventilation actuator within 30 seconds to reduce humidity and prevent fungal pathogen growth conditions.{/td}
- {td}Simulate humidity threshold breach; confirm ventilation ON within 30 s; verify actuator arbitration with simultaneous temperature demand; move GMS-74 to Project Accepted{/td}
- {td}Cojocaru Daniel{/td}
- {td}2026-04-30{/td}
- {/tr}
- {tr}
- {td}**1.5**{/td}
- {td}{jira:GMS-91|showSummary=false}{/td}
- {td}WHEN CO₂ concentration drops below 800 ppm, the system SHALL generate an informational alert visible on the dashboard, notifying the operator to consider manual CO₂ enrichment adjustment.{/td}
- {td}Simulate CO₂ < 800 ppm; verify informational banner appears on dashboard distinct from critical alerts; move GMS-91 to Project Accepted{/td}
- {td}Alexei Maxim{/td}
- {td}2026-04-30{/td}
- {/tr}
- {tr}
- {td}**2.**{/td}
- {td}**{jira:GMS-2}**{/td}
- {td}**Automated Irrigation and Climate Control**{/td}
- {td}Review all irrigation trigger, cutoff, scheduling, remote control, and threshold configuration requirements; confirm conflict-avoidance logic between sensor and schedule modes{/td}
- {td}Alexei Maxim{/td}
- {td}2026-04-20{/td}
- {/tr}
- {tr}
- {td}**2.1**{/td}
- {td}{jira:GMS-83|showSummary=false}{/td}
- {td}WHEN soil moisture drops below the operator-configured minimum threshold, the system SHALL automatically activate the irrigation valve actuator within 30 seconds of the threshold breach being detected.{/td}
- {td}Simulate moisture drop below configured threshold; verify irrigation valve ON within 30 s; verify no double-activation conflict with SR-2.3 schedule; move GMS-83 to Project Accepted{/td}
- {td}Vremere Adrian{/td}
- {td}2026-04-25{/td}
- {/tr}
- {tr}
- {td}**2.2**{/td}
- {td}{jira:GMS-92|showSummary=false}{/td}
- {td}WHEN soil moisture reaches or exceeds the operator-configured target threshold during an active irrigation cycle, the system SHALL automatically deactivate the irrigation valve actuator within 30 seconds, regardless of whether the cycle was initiated by sensor trigger, schedule, or manual command.{/td}
- {td}Simulate soil reaching target during sensor-triggered, schedule-triggered, and manual irrigation; verify valve OFF within 30 s in all three cases; verify offline behaviour; move GMS-92 to Project Accepted{/td}
- {td}Alexei Maxim{/td}
- {td}2026-04-25{/td}
- {/tr}
- {tr}
- {td}**2.3**{/td}
- {td}{jira:GMS-93|showSummary=false}{/td}
- {td}The system SHALL allow the operator to define time-based irrigation schedules specifying start time, duration, and repeat frequency (daily/weekly), which execute autonomously on the edge controller independently of cloud connectivity.{/td}
- {td}Configure daily schedule; simulate 72-hour cloud outage; verify schedule executes locally throughout; verify schedule persists after edge controller restart; move GMS-93 to Project Accepted{/td}
- {td}Alexei Maxim{/td}
- {td}2026-04-30{/td}
- {/tr}
- {tr}
- {td}**2.4**{/td}
- {td}{jira:GMS-94|showSummary=false}{/td}
- {td}The GMS web dashboard SHALL provide a remote irrigation control panel allowing the operator to manually activate or deactivate the irrigation valve from any browser, with the command executing on the edge controller within 10 seconds of submission.{/td}
- {td}Issue manual ON and OFF commands from browser over 4G; verify actuator state changes within 10 s; confirm authentication guard (SR-9.1) blocks unauthenticated activation; move GMS-94 to Project Accepted{/td}
- {td}Alexei Maxim{/td}
- {td}2026-05-02{/td}
- {/tr}
- {tr}
- {td}**2.5**{/td}
- {td}{jira:GMS-96|showSummary=false}{/td}
- {td}The GMS dashboard home screen SHALL display the current soil moisture reading as the primary prominent widget, positioned in the top section of the viewport and visible without scrolling on all screen sizes from 360 px width upward.{/td}
- {td}Verify soil moisture widget is fully visible without vertical scroll on 360 px viewport; confirm widget position in top section across Chrome, Firefox, Safari, Edge; move GMS-96 to Project Accepted{/td}
- {td}Alexei Maxim{/td}
- {td}2026-05-05{/td}
- {/tr}
- {tr}
- {td}**2.6**{/td}
- {td}{jira:GMS-95|showSummary=false}{/td}
- {td}The system SHALL allow the operator to configure minimum and maximum threshold values independently for each monitored parameter (soil moisture, air temperature, relative humidity, and CO₂ concentration), with all values persisted across sessions and applied immediately to automated control logic, alert generation, and schedule-based operations. (SR-4.3 / GMS-70 has been merged into this requirement — see R1.){/td}
- {td}Configure custom thresholds for all four parameters; verify persistence after server restart; verify actuator behaviour and alerts reflect new values within next polling cycle; close GMS-70 as Invalid with reference to GMS-95; move GMS-95 to Project Accepted{/td}
- {td}Alexei Maxim{/td}
- {td}2026-05-05{/td}
- {/tr}
- {tr}
- {td}**3.**{/td}
- {td}**{jira:GMS-3}**{/td}
- {td}**Web Dashboard & Mobile Accessibility**{/td}
- {td}Review all browser compatibility, single-page layout, responsive design, auto-refresh, feature parity, and data freshness requirements{/td}
- {td}Mutruc Victoria{/td}
- {td}2026-04-20{/td}
- {/tr}
- {tr}
- {td}**3.1**{/td}
- {td}{jira:GMS-63|showSummary=false}{/td}
- {td}The GMS web application SHALL be accessible via any modern browser (Chrome >= 110, Firefox >= 110, Safari >= 16, Edge >= 110) without requiring installation of additional software or plugins.{/td}
- {td}Test full feature set in all four named browsers on both desktop and smartphone; confirm no plugin prompt; move GMS-63 to Project Accepted{/td}
- {td}Mutruc Victoria{/td}
- {td}2026-04-25{/td}
- {/tr}
- {tr}
- {td}**3.2**{/td}
- {td}{jira:GMS-64|showSummary=false}{/td}
- {td}The GMS dashboard SHALL present a single-page overview displaying current values of all monitored parameters, active alerts, and actuator statuses simultaneously in one scrollable view.{/td}
- {td}Verify all sensor readings, alert indicators, and actuator states visible without navigating away from main page; test with all parameters simultaneously active; move GMS-64 to Project Accepted{/td}
- {td}Mutruc Victoria{/td}
- {td}2026-04-25{/td}
- {/tr}
- {tr}
- {td}**3.3**{/td}
- {td}{jira:GMS-65|showSummary=false}{/td}
- {td}The GMS dashboard layout SHALL be fully responsive, rendering correctly and preserving all functionality at viewport widths from 360 px (smartphone) to 2560 px (desktop).{/td}
- {td}Verify no horizontal overflow, no truncated controls, and touch targets >= 44 px at 360 px; verify layout at 2560 px; move GMS-65 to Project Accepted{/td}
- {td}Mutruc Victoria{/td}
- {td}2026-04-28{/td}
- {/tr}
- {tr}
- {td}**3.4**{/td}
- {td}{jira:GMS-66|showSummary=false}{/td}
- {td}WHILE the dashboard is open, the system SHALL automatically refresh all displayed sensor readings at intervals not exceeding 10 seconds, without requiring manual page reload.{/td}
- {td}Measure refresh interval on open dashboard; confirm readings update without manual reload within 10 s; move GMS-66 to Project Accepted{/td}
- {td}Mutruc Victoria{/td}
- {td}2026-04-28{/td}
- {/tr}
- {tr}
- {td}**3.5**{/td}
- {td}{jira:GMS-67|showSummary=false}{/td}
- {td}The GMS interface SHALL provide feature parity between desktop and mobile views — no control, data view, or action available on desktop SHALL be unavailable on a smartphone browser.{/td}
- {td}Run feature-parity test script on 360 px viewport; verify every desktop control is reachable on mobile; move GMS-67 to Project Accepted{/td}
- {td}Mutruc Victoria{/td}
- {td}2026-04-30{/td}
- {/tr}
- {tr}
- {td}**3.6**{/td}
- {td}{jira:GMS-84|showSummary=false}{/td}
- {td}The GMS dashboard SHALL permanently display a data freshness timestamp indicating the time of the last successful sensor data reception. WHEN a refresh cycle is delayed beyond 60 seconds due to network latency or connectivity degradation, the system SHALL display a visible staleness warning indicator until data is successfully refreshed.{/td}
- {td}Verify freshness timestamp always visible; simulate 60 s network delay and confirm staleness warning appears; verify warning clears on reconnect; move GMS-84 to Project Accepted{/td}
- {td}Vremere Adrian{/td}
- {td}2026-04-30{/td}
- {/tr}
- {tr}
- {td}**4.**{/td}
- {td}**{jira:GMS-4}**{/td}
- {td}**Alerts & Notifications**{/td}
- {td}Review two-tier alert model, push/SMS dispatch, configurable thresholds, and typed temperature alert requirements; confirm SLA measurement point for SR-4.2{/td}
- {td}Mutruc Victoria{/td}
- {td}2026-04-22{/td}
- {/tr}
- {tr}
- {td}**4.1**{/td}
- {td}{jira:GMS-68|showSummary=false}{/td}
- {td}WHEN any monitored parameter exceeds its configured threshold, the system SHALL display a colour-coded in-dashboard alert banner within 5 seconds of breach detection (informational tier). Colour coding: yellow = warning, red = critical.{/td}
- {td}Simulate threshold breach; verify colour-coded banner appears on dashboard within 5 s; test both warning and critical tiers; move GMS-68 to Project Accepted{/td}
- {td}Mutruc Victoria{/td}
- {td}2026-04-28{/td}
- {/tr}
- {tr}
- {td}**4.2**{/td}
- {td}{jira:GMS-69|showSummary=false}{/td}
- {td}WHEN a critical event persists for more than 60 seconds (actuator failure, sensor data loss, or extreme parameter deviation), the system SHALL dispatch a push notification and/or SMS to the registered operator within 30 seconds of the 60-second threshold being crossed. The 30-second window is measured at the GMS server dispatch point (notification enqueued to gateway) — end-to-end delivery time to the device is outside GMS system boundary (review R5).{/td}
- {td}Simulate 60 s critical event; verify server log confirms notification enqueued to push/SMS gateway within 30 s; move GMS-69 to Project Accepted{/td}
- {td}Mutruc Victoria{/td}
- {td}2026-04-30{/td}
- {/tr}
- {tr}
- {td}**4.3**{/td}
- {td}{jira:GMS-70|showSummary=false}{/td}
- {td}**INVALID — MERGED INTO SR-2.6 (GMS-95).** The threshold configuration capability originally described here has been consolidated into SR-2.6, which now covers all monitored parameters. Review R1 (Cojocaru Daniel) identified SR-4.3 and SR-2.6 as duplicates with overlapping scope.{/td}
- {td}Close GMS-70 as Invalid; add comment referencing GMS-95 as the authoritative ticket; no implementation action required{/td}
- {td}Mutruc Victoria{/td}
- {td}2026-04-22{/td}
- {/tr}
- {tr}
- {td}**4.4**{/td}
- {td}{jira:GMS-97|showSummary=false}{/td}
- {td}The system SHALL categorize temperature alerts into distinct types — "Heat Warning" for high temperature threshold breaches and "Frost Warning" for low temperature threshold breaches — displaying the alert type label alongside the severity indicator in both in-dashboard banners and push/SMS notifications.{/td}
- {td}Simulate low-temperature breach; verify "Frost Warning" label displayed; simulate high-temperature breach; verify "Heat Warning" label in banner and push/SMS text; move GMS-97 to Project Accepted{/td}
- {td}Alexei Maxim{/td}
- {td}2026-05-05{/td}
- {/tr}
- {tr}
- {td}**5.**{/td}
- {td}**{jira:GMS-5}**{/td}
- {td}**Historical Data, Reports & Analytics**{/td}
- {td}Review 90-day retention, trend visualisation, and export requirements; confirm duplicate Jira tickets GMS-75 and GMS-77 are closed as Invalid per review R9{/td}
- {td}Rațeeva Daria{/td}
- {td}2026-04-22{/td}
- {/tr}
- {tr}
- {td}**5.1**{/td}
- {td}{jira:GMS-82|showSummary=false}{/td}
- {td}The system SHALL store all sensor readings with associated timestamps (ISO 8601) and sensor IDs, retaining data for a minimum of 90 days.{/td}
- {td}Verify 90-day data retention in DB with timestamps and sensor IDs; confirm GMS-75 and GMS-77 closed as Invalid (duplicates) per review R9; move GMS-82 to Project Accepted{/td}
- {td}Rațeeva Daria{/td}
- {td}2026-04-28{/td}
- {/tr}
- {tr}
- {td}**5.2**{/td}
- {td}{jira:GMS-78|showSummary=false}{/td}
- {td}The system SHALL provide an interactive trend visualisation allowing the operator to select any monitored parameter and any date range up to 90 days, with hourly and daily granularity options.{/td}
- {td}Test chart render for 90-day daily granularity (target: < 3 s) and hourly granularity (target: < 5 s); verify parameter and date-range selectors function; move GMS-78 to Project Accepted{/td}
- {td}Rațeeva Daria{/td}
- {td}2026-04-30{/td}
- {/tr}
- {tr}
- {td}**5.3**{/td}
- {td}{jira:GMS-79|showSummary=false}{/td}
- {td}The system SHALL allow export of historical sensor data in both .xlsx and .csv formats, including the mandatory fields: timestamp (ISO 8601), sensor ID, parameter name, value, and unit.{/td}
- {td}Export 90-day dataset in both formats; verify all five mandatory fields present and correctly typed; move GMS-79 to Project Accepted{/td}
- {td}Rațeeva Daria{/td}
- {td}2026-05-02{/td}
- {/tr}
- {tr}
- {td}**6.**{/td}
- {td}**{jira:GMS-6}**{/td}
- {td}**Connectivity & Network Reliability**{/td}
- {td}Review 4G/5G primary network requirement and offline autonomy; confirm 72-hour minimum offline duration is embedded in SR-6.2 per review R3{/td}
- {td}Rațeeva Daria{/td}
- {td}2026-04-22{/td}
- {/tr}
- {tr}
- {td}**6.1**{/td}
- {td}{jira:GMS-80|showSummary=false}{/td}
- {td}The GMS system SHALL operate all dashboard and notification features over a 4G/5G mobile data connection as the primary network, using HTTPS for web traffic and MQTT for sensor telemetry.{/td}
- {td}Verify full feature set accessible at 4G signal strength >= −100 dBm; confirm HTTPS for web traffic and MQTT for telemetry in network capture; move GMS-80 to Project Accepted{/td}
- {td}Rațeeva Daria{/td}
- {td}2026-04-28{/td}
- {/tr}
- {tr}
- {td}**6.2**{/td}
- {td}{jira:GMS-81|showSummary=false}{/td}
- {td}WHILE the network connection is unavailable, the system SHALL continue autonomous greenhouse control locally for a minimum of 72 hours and buffer all sensor readings; WHEN connectivity is restored, the system SHALL synchronise all buffered data to the server with zero data loss. (Offline duration confirmed as 72 hours per review R3; edge controller must be provisioned with sufficient local storage for 4,320 readings per sensor per 72 h at 60-second polling.){/td}
- {td}Simulate 72-hour cloud outage; verify all automated controls (irrigation, temperature, humidity) continue operating locally; verify all buffered readings synchronise with zero data loss on reconnect; update GMS-81 text; move to Project Accepted{/td}
- {td}Rațeeva Daria{/td}
- {td}2026-05-05{/td}
- {/tr}
- {tr}
- {td}**7.**{/td}
- {td}**{jira:GMS-7}**{/td}
- {td}**Affordability & Cost Optimization**{/td}
- {td}Review hardware budget ceiling, cost estimate document, resource logging, and ROI comparison panel requirements{/td}
- {td}Rațeeva Daria{/td}
- {td}2026-04-25{/td}
- {/tr}
- {tr}
- {td}**7.1**{/td}
- {td}{jira:GMS-76|showSummary=false}{/td}
- {td}The GMS system SHALL be deployable using a hardware bill of materials with a total component cost not exceeding 2,000 EUR, covering the edge controller, sensors, actuators, enclosures, and 4G connectivity module.{/td}
- {td}Produce draft bill of materials using commercially available components; verify total <= 2,000 EUR; move GMS-76 to Project Accepted{/td}
- {td}Cojocaru Daniel{/td}
- {td}2026-04-30{/td}
- {/tr}
- {tr}
- {td}**7.2**{/td}
- {td}{jira:GMS-60|showSummary=false}{/td}
- {td}The GMS system SHALL provide a publicly accessible cost estimate document detailing hardware, cloud infrastructure, and installation cost ranges, linked from the dashboard onboarding screen or documentation landing page.{/td}
- {td}Confirm cost estimate document exists with at least three line items (hardware, cloud/hosting, installation); verify it is reachable within two clicks from dashboard login; move GMS-60 to Project Accepted{/td}
- {td}Rațeeva Daria{/td}
- {td}2026-05-02{/td}
- {/tr}
- {tr}
- {td}**7.3**{/td}
- {td}{jira:GMS-61|showSummary=false}{/td}
- {td}The GMS system SHALL log total water volume dispensed per irrigation activation event and cumulative energy consumption of all actuators, storing these values with timestamps, activation trigger type (sensor-threshold / schedule / manual-remote), and irrigation duration in the same time-series database as sensor readings, retaining data for a minimum of 90 days. (Trigger type field added per review R8; covers all three activation modes: SR-2.1, SR-2.3, SR-2.4.){/td}
- {td}Trigger irrigation via sensor, schedule, and manual; verify log entry exists for each with correct trigger-type field, water volume, duration, and timestamp; verify 90-day retention; update GMS-61 text; move to Project Accepted{/td}
- {td}Rațeeva Daria{/td}
- {td}2026-05-05{/td}
- {/tr}
- {tr}
- {td}**7.4**{/td}
- {td}{jira:GMS-62|showSummary=false}{/td}
- {td}The GMS dashboard SHALL display a cumulative resource summary panel showing total water dispensed and total actuator energy consumed for a user-selected period, alongside a manually entered baseline value for direct comparison.{/td}
- {td}Enter baseline figure; select a date range; verify panel displays actual vs. baseline with percentage difference; confirm data sourced from SR-7.3 log; move GMS-62 to Project Accepted{/td}
- {td}Rațeeva Daria{/td}
- {td}2026-05-07{/td}
- {/tr}
- {tr}
- {td}**8.**{/td}
- {td}**{jira:GMS-8}**{/td}
- {td}**Multi-Site / Multi-Zone Management**{/td}
- {td}SR-8.1 and SR-8.2 invalidated per review R6 — close GMS-85 and GMS-86 as Invalid; capture architectural intent as a design note outside the requirements baseline{/td}
- {td}Vremere Adrian{/td}
- {td}2026-04-22{/td}
- {/tr}
- {tr}
- {td}**8.1**{/td}
- {td}{jira:GMS-85|showSummary=false}{/td}
- {td}**INVALID — Out of scope.** SR-8.1 is classified as Won't Have in MoSCoW priority. It is explicitly out of scope for the current release and has no acceptance criteria applicable to this pilot. Invalidated per review R6 (Rațeeva Daria).{/td}
- {td}Close GMS-85 as Invalid in Jira{/td}
- {td}Vremere Adrian{/td}
- {td}2026-04-22{/td}
- {/tr}
- {tr}
- {td}**8.2**{/td}
- {td}{jira:GMS-86|showSummary=false}{/td}
- {td}**INVALID — Out of scope.** SR-8.2 is classified as Won't Have in MoSCoW priority. It is explicitly out of scope for the current release and has no acceptance criteria applicable to this pilot. Invalidated per review R6 (Rațeeva Daria).{/td}
- {td}Close GMS-86 as Invalid in Jira{/td}
- {td}Vremere Adrian{/td}
- {td}2026-04-22{/td}
- {/tr}
- {tr}
- {td}**9.**{/td}
- {td}**{jira:GMS-9}**{/td}
- {td}**Cybersecurity**{/td}
- {td}Review TLS/certificate authentication, RBAC, audit logging, and offline authentication requirements; verify account management is included in Operator role per review R7{/td}
- {td}Vremere Adrian{/td}
- {td}2026-04-25{/td}
- {/tr}
- {tr}
- {td}**9.1**{/td}
- {td}{jira:GMS-87|showSummary=false}{/td}
- {td}All communication between the GMS edge controller and the cloud server SHALL be encrypted using TLS 1.2 or higher, and the edge controller SHALL authenticate to the cloud broker using X.509 client certificates before any sensor data or actuator command is transmitted or received.{/td}
- {td}Run network traffic inspection; confirm all cloud-bound traffic is TLS-encrypted; verify broker rejects connection without valid client certificate; move GMS-87 to Project Accepted{/td}
- {td}Vremere Adrian{/td}
- {td}2026-04-30{/td}
- {/tr}
- {tr}
- {td}**9.2**{/td}
- {td}{jira:GMS-88|showSummary=false}{/td}
- {td}The GMS web dashboard SHALL implement role-based access control with a minimum of two roles — Operator (full read/write access to controls, configuration, and user account management) and Viewer (read-only access to sensor data and alerts) — with role assignments persisted per user account. An account holding the Operator role SHALL be able to create, modify, and deactivate other user accounts and assign the Viewer role to them. The initial Operator account shall be provisioned at installation. (Account management added to Operator role per review R7.){/td}
- {td}Verify Viewer cannot activate actuators or modify thresholds (expect permission error); verify Operator can create and assign a Viewer account; update GMS-88 text; move to Project Accepted{/td}
- {td}Vremere Adrian{/td}
- {td}2026-04-30{/td}
- {/tr}
- {tr}
- {td}**9.3**{/td}
- {td}{jira:GMS-89|showSummary=false}{/td}
- {td}WHEN an unauthenticated or unauthorised request is made to any GMS API endpoint or dashboard route, the system SHALL reject the request with an HTTP 401 or 403 response and log the attempt with a timestamp and source IP address.{/td}
- {td}Submit requests with invalid token and with valid Viewer token to Operator-only endpoints; verify HTTP 401 and 403 responses respectively; confirm audit log entry with timestamp and source IP; move GMS-89 to Project Accepted{/td}
- {td}Vremere Adrian{/td}
- {td}2026-05-02{/td}
- {/tr}
- {tr}
- {td}**9.4**{/td}
- {td}{jira:GMS-90|showSummary=false}{/td}
- {td}WHILE the edge controller is operating in offline autonomous mode, the system SHALL continue to enforce local authentication for any direct API access to the controller, rejecting requests that do not present a valid pre-provisioned credential.{/td}
- {td}Simulate cloud outage; send direct HTTP request to edge controller API without credentials; verify HTTP 401 response; move GMS-90 to Project Accepted{/td}
- {td}Vremere Adrian{/td}
- {td}2026-05-05{/td}
- {/tr}
- {/table}
+{colgroup}
+{col style="width: 6.26781%;"}
+{col style="width: 22.3647%;"}
+{col style="width: 28.0627%;"}
+{col style="width: 21.3675%;"}
+{col style="width: 12.3932%;"}
+{col style="width: 9.54416%;"}
+{/colgroup}
+{thead}
+{tr}
+{th}**ID**{/th}
+{th}**System Requirement Jira Ticket**{/th}
+{th}**System Requirement**{/th}
+{th}**Actions**{/th}
+{th}**Assignee**{/th}
+{th}**Due Date**{/th}
+{/tr}
+{/thead}
+{tr}
+{td}**1.**{/td}
+{td}**{jira:GMS-1}**{/td}
+{td}**Environmental Monitoring and Control**{/td}
+{td}Review all monitoring and alert requirements; verify sensor polling SLA and actuator response times are testable; confirm light intensity scope decision{/td}
+{td}Cojocaru Daniel{/td}
+{td}2026-04-18{/td}
+{/tr}
+{tr}
+{td}**1.1**{/td}
+{td}{jira:GMS-71|showSummary=false}{/td}
+{td}The GMS system SHALL continuously read and transmit soil moisture, air temperature, relative humidity, and CO₂ concentration sensor values to the cloud at intervals not exceeding 60 seconds. Light intensity monitoring is excluded from the pilot scope: it has no corresponding stakeholder requirement in WP4.2 and no automated actuator action or alert is defined for it (review R4).{/td}
+{td}Verify time-series DB receives an entry per sensor within 60 s under normal connectivity; confirm light intensity exclusion with team; move GMS-71 to Project Accepted{/td}
+{td}Cojocaru Daniel{/td}
+{td}2026-04-25{/td}
+{/tr}
+{tr}
+{td}**1.2**{/td}
+{td}{jira:GMS-72|showSummary=false}{/td}
+{td}WHEN any monitored parameter value falls outside its configured minimum or maximum threshold, the system SHALL generate an alert event within 5 seconds of the breach being detected by the edge controller.{/td}
+{td}Simulate threshold breach; verify alert event logged at cloud broker within 5 s; move GMS-72 to Project Accepted{/td}
+{td}Cojocaru Daniel{/td}
+{td}2026-04-25{/td}
+{/tr}
+{tr}
+{td}**1.3**{/td}
+{td}{jira:GMS-73|showSummary=false}{/td}
+{td}WHEN air temperature falls below the operator-configured minimum temperature threshold or exceeds the operator-configured maximum temperature threshold, the system SHALL automatically activate the corresponding heating or ventilation actuator within 30 seconds of the configured threshold being crossed. System default minimum temperature threshold: 10°C. System default maximum temperature threshold: 35°C.{/td}
+{td}Verify actuator triggers at operator-configured threshold (test with custom values and with defaults 10°C/35°C); update GMS-73 text to reflect configurable defaults; move to Project Accepted{/td}
+{td}Cojocaru Daniel{/td}
+{td}2026-04-30{/td}
+{/tr}
+{tr}
+{td}**1.4**{/td}
+{td}{jira:GMS-74|showSummary=false}{/td}
+{td}WHEN relative humidity exceeds its configured maximum threshold, the system SHALL activate the ventilation actuator within 30 seconds to reduce humidity and prevent fungal pathogen growth conditions.{/td}
+{td}Simulate humidity threshold breach; confirm ventilation ON within 30 s; verify actuator arbitration with simultaneous temperature demand; move GMS-74 to Project Accepted{/td}
+{td}Cojocaru Daniel{/td}
+{td}2026-04-30{/td}
+{/tr}
+{tr}
+{td}**1.5**{/td}
+{td}{jira:GMS-91|showSummary=false}{/td}
+{td}WHEN CO₂ concentration drops below 800 ppm, the system SHALL generate an informational alert visible on the dashboard, notifying the operator to consider manual CO₂ enrichment adjustment.{/td}
+{td}Simulate CO₂ < 800 ppm; verify informational banner appears on dashboard distinct from critical alerts; move GMS-91 to Project Accepted{/td}
+{td}Alexei Maxim{/td}
+{td}2026-04-30{/td}
+{/tr}
+{tr}
+{td}**2.**{/td}
+{td}**{jira:GMS-2}**{/td}
+{td}**Automated Irrigation and Climate Control**{/td}
+{td}Review all irrigation trigger, cutoff, scheduling, remote control, and threshold configuration requirements; confirm conflict-avoidance logic between sensor and schedule modes{/td}
+{td}Alexei Maxim{/td}
+{td}2026-04-20{/td}
+{/tr}
+{tr}
+{td}**2.1**{/td}
+{td}{jira:GMS-83|showSummary=false}{/td}
+{td}WHEN soil moisture drops below the operator-configured minimum threshold, the system SHALL automatically activate the irrigation valve actuator within 30 seconds of the threshold breach being detected.{/td}
+{td}Simulate moisture drop below configured threshold; verify irrigation valve ON within 30 s; verify no double-activation conflict with SR-2.3 schedule; move GMS-83 to Project Accepted{/td}
+{td}Vremere Adrian{/td}
+{td}2026-04-25{/td}
+{/tr}
+{tr}
+{td}**2.2**{/td}
+{td}{jira:GMS-92|showSummary=false}{/td}
+{td}WHEN soil moisture reaches or exceeds the operator-configured target threshold during an active irrigation cycle, the system SHALL automatically deactivate the irrigation valve actuator within 30 seconds, regardless of whether the cycle was initiated by sensor trigger, schedule, or manual command.{/td}
+{td}Simulate soil reaching target during sensor-triggered, schedule-triggered, and manual irrigation; verify valve OFF within 30 s in all three cases; verify offline behaviour; move GMS-92 to Project Accepted{/td}
+{td}Alexei Maxim{/td}
+{td}2026-04-25{/td}
+{/tr}
+{tr}
+{td}**2.3**{/td}
+{td}{jira:GMS-93|showSummary=false}{/td}
+{td}The system SHALL allow the operator to define time-based irrigation schedules specifying start time, duration, and repeat frequency (daily/weekly), which execute autonomously on the edge controller independently of cloud connectivity.{/td}
+{td}Configure daily schedule; simulate 72-hour cloud outage; verify schedule executes locally throughout; verify schedule persists after edge controller restart; move GMS-93 to Project Accepted{/td}
+{td}Alexei Maxim{/td}
+{td}2026-04-30{/td}
+{/tr}
+{tr}
+{td}**2.4**{/td}
+{td}{jira:GMS-94|showSummary=false}{/td}
+{td}The GMS web dashboard SHALL provide a remote irrigation control panel allowing the operator to manually activate or deactivate the irrigation valve from any browser, with the command executing on the edge controller within 10 seconds of submission.{/td}
+{td}Issue manual ON and OFF commands from browser over 4G; verify actuator state changes within 10 s; confirm authentication guard (SR-9.1) blocks unauthenticated activation; move GMS-94 to Project Accepted{/td}
+{td}Alexei Maxim{/td}
+{td}2026-05-02{/td}
+{/tr}
+{tr}
+{td}**2.5**{/td}
+{td}{jira:GMS-96|showSummary=false}{/td}
+{td}The GMS dashboard home screen SHALL display the current soil moisture reading as the primary prominent widget, positioned in the top section of the viewport and visible without scrolling on all screen sizes from 360 px width upward.{/td}
+{td}Verify soil moisture widget is fully visible without vertical scroll on 360 px viewport; confirm widget position in top section across Chrome, Firefox, Safari, Edge; move GMS-96 to Project Accepted{/td}
+{td}Alexei Maxim{/td}
+{td}2026-05-05{/td}
+{/tr}
+{tr}
+{td}**2.6**{/td}
+{td}{jira:GMS-95|showSummary=false}{/td}
+{td}The system SHALL allow the operator to configure minimum and maximum threshold values independently for each monitored parameter (soil moisture, air temperature, relative humidity, and CO₂ concentration), with all values persisted across sessions and applied immediately to automated control logic, alert generation, and schedule-based operations. (SR-4.3 / GMS-70 has been merged into this requirement — see R1.){/td}
+{td}Configure custom thresholds for all four parameters; verify persistence after server restart; verify actuator behaviour and alerts reflect new values within next polling cycle; close GMS-70 as Invalid with reference to GMS-95; move GMS-95 to Project Accepted{/td}
+{td}Alexei Maxim{/td}
+{td}2026-05-05{/td}
+{/tr}
+{tr}
+{td}**3.**{/td}
+{td}**{jira:GMS-3}**{/td}
+{td}**Web Dashboard & Mobile Accessibility**{/td}
+{td}Review all browser compatibility, single-page layout, responsive design, auto-refresh, feature parity, and data freshness requirements{/td}
+{td}Mutruc Victoria{/td}
+{td}2026-04-20{/td}
+{/tr}
+{tr}
+{td}**3.1**{/td}
+{td}{jira:GMS-63|showSummary=false}{/td}
+{td}The GMS web application SHALL be accessible via any modern browser (Chrome >= 110, Firefox >= 110, Safari >= 16, Edge >= 110) without requiring installation of additional software or plugins.{/td}
+{td}Test full feature set in all four named browsers on both desktop and smartphone; confirm no plugin prompt; move GMS-63 to Project Accepted{/td}
+{td}Mutruc Victoria{/td}
+{td}2026-04-25{/td}
+{/tr}
+{tr}
+{td}**3.2**{/td}
+{td}{jira:GMS-64|showSummary=false}{/td}
+{td}The GMS dashboard SHALL present a single-page overview displaying current values of all monitored parameters, active alerts, and actuator statuses simultaneously in one scrollable view.{/td}
+{td}Verify all sensor readings, alert indicators, and actuator states visible without navigating away from main page; test with all parameters simultaneously active; move GMS-64 to Project Accepted{/td}
+{td}Mutruc Victoria{/td}
+{td}2026-04-25{/td}
+{/tr}
+{tr}
+{td}**3.3**{/td}
+{td}{jira:GMS-65|showSummary=false}{/td}
+{td}The GMS dashboard layout SHALL be fully responsive, rendering correctly and preserving all functionality at viewport widths from 360 px (smartphone) to 2560 px (desktop).{/td}
+{td}Verify no horizontal overflow, no truncated controls, and touch targets >= 44 px at 360 px; verify layout at 2560 px; move GMS-65 to Project Accepted{/td}
+{td}Mutruc Victoria{/td}
+{td}2026-04-28{/td}
+{/tr}
+{tr}
+{td}**3.4**{/td}
+{td}{jira:GMS-66|showSummary=false}{/td}
+{td}WHILE the dashboard is open, the system SHALL automatically refresh all displayed sensor readings at intervals not exceeding 10 seconds, without requiring manual page reload.{/td}
+{td}Measure refresh interval on open dashboard; confirm readings update without manual reload within 10 s; move GMS-66 to Project Accepted{/td}
+{td}Mutruc Victoria{/td}
+{td}2026-04-28{/td}
+{/tr}
+{tr}
+{td}**3.5**{/td}
+{td}{jira:GMS-67|showSummary=false}{/td}
+{td}The GMS interface SHALL provide feature parity between desktop and mobile views — no control, data view, or action available on desktop SHALL be unavailable on a smartphone browser.{/td}
+{td}Run feature-parity test script on 360 px viewport; verify every desktop control is reachable on mobile; move GMS-67 to Project Accepted{/td}
+{td}Mutruc Victoria{/td}
+{td}2026-04-30{/td}
+{/tr}
+{tr}
+{td}**3.6**{/td}
+{td}{jira:GMS-84|showSummary=false}{/td}
+{td}The GMS dashboard SHALL permanently display a data freshness timestamp indicating the time of the last successful sensor data reception. WHEN a refresh cycle is delayed beyond 60 seconds due to network latency or connectivity degradation, the system SHALL display a visible staleness warning indicator until data is successfully refreshed.{/td}
+{td}Verify freshness timestamp always visible; simulate 60 s network delay and confirm staleness warning appears; verify warning clears on reconnect; move GMS-84 to Project Accepted{/td}
+{td}Vremere Adrian{/td}
+{td}2026-04-30{/td}
+{/tr}
+{tr}
+{td}**4.**{/td}
+{td}**{jira:GMS-4}**{/td}
+{td}**Alerts & Notifications**{/td}
+{td}Review two-tier alert model, push/SMS dispatch, configurable thresholds, and typed temperature alert requirements; confirm SLA measurement point for SR-4.2{/td}
+{td}Mutruc Victoria{/td}
+{td}2026-04-22{/td}
+{/tr}
+{tr}
+{td}**4.1**{/td}
+{td}{jira:GMS-68|showSummary=false}{/td}
+{td}WHEN any monitored parameter exceeds its configured threshold, the system SHALL display a colour-coded in-dashboard alert banner within 5 seconds of breach detection (informational tier). Colour coding: yellow = warning, red = critical.{/td}
+{td}Simulate threshold breach; verify colour-coded banner appears on dashboard within 5 s; test both warning and critical tiers; move GMS-68 to Project Accepted{/td}
+{td}Mutruc Victoria{/td}
+{td}2026-04-28{/td}
+{/tr}
+{tr}
+{td}**4.2**{/td}
+{td}{jira:GMS-69|showSummary=false}{/td}
+{td}WHEN a critical event persists for more than 60 seconds (actuator failure, sensor data loss, or extreme parameter deviation), the system SHALL dispatch a push notification and/or SMS to the registered operator within 30 seconds of the 60-second threshold being crossed. The 30-second window is measured at the GMS server dispatch point (notification enqueued to gateway) — end-to-end delivery time to the device is outside GMS system boundary (review R5).{/td}
+{td}Simulate 60 s critical event; verify server log confirms notification enqueued to push/SMS gateway within 30 s; move GMS-69 to Project Accepted{/td}
+{td}Mutruc Victoria{/td}
+{td}2026-04-30{/td}
+{/tr}
+{tr}
+{td}**4.3**{/td}
+{td}{jira:GMS-70|showSummary=false}{/td}
+{td}**INVALID — MERGED INTO SR-2.6 (GMS-95).** The threshold configuration capability originally described here has been consolidated into SR-2.6, which now covers all monitored parameters. Review R1 (Cojocaru Daniel) identified SR-4.3 and SR-2.6 as duplicates with overlapping scope.{/td}
+{td}Close GMS-70 as Invalid; add comment referencing GMS-95 as the authoritative ticket; no implementation action required{/td}
+{td}Mutruc Victoria{/td}
+{td}2026-04-22{/td}
+{/tr}
+{tr}
+{td}**4.4**{/td}
+{td}{jira:GMS-97|showSummary=false}{/td}
+{td}The system SHALL categorize temperature alerts into distinct types — "Heat Warning" for high temperature threshold breaches and "Frost Warning" for low temperature threshold breaches — displaying the alert type label alongside the severity indicator in both in-dashboard banners and push/SMS notifications.{/td}
+{td}Simulate low-temperature breach; verify "Frost Warning" label displayed; simulate high-temperature breach; verify "Heat Warning" label in banner and push/SMS text; move GMS-97 to Project Accepted{/td}
+{td}Alexei Maxim{/td}
+{td}2026-05-05{/td}
+{/tr}
+{tr}
+{td}**5.**{/td}
+{td}**{jira:GMS-5}**{/td}
+{td}**Historical Data, Reports & Analytics**{/td}
+{td}Review 90-day retention, trend visualisation, and export requirements; confirm duplicate Jira tickets GMS-75 and GMS-77 are closed as Invalid per review R9{/td}
+{td}Rațeeva Daria{/td}
+{td}2026-04-22{/td}
+{/tr}
+{tr}
+{td}**5.1**{/td}
+{td}{jira:GMS-82|showSummary=false}{/td}
+{td}The system SHALL store all sensor readings with associated timestamps (ISO 8601) and sensor IDs, retaining data for a minimum of 90 days.{/td}
+{td}Verify 90-day data retention in DB with timestamps and sensor IDs; confirm GMS-75 and GMS-77 closed as Invalid (duplicates) per review R9; move GMS-82 to Project Accepted{/td}
+{td}Rațeeva Daria{/td}
+{td}2026-04-28{/td}
+{/tr}
+{tr}
+{td}**5.2**{/td}
+{td}{jira:GMS-78|showSummary=false}{/td}
+{td}The system SHALL provide an interactive trend visualisation allowing the operator to select any monitored parameter and any date range up to 90 days, with hourly and daily granularity options.{/td}
+{td}Test chart render for 90-day daily granularity (target: < 3 s) and hourly granularity (target: < 5 s); verify parameter and date-range selectors function; move GMS-78 to Project Accepted{/td}
+{td}Rațeeva Daria{/td}
+{td}2026-04-30{/td}
+{/tr}
+{tr}
+{td}**5.3**{/td}
+{td}{jira:GMS-79|showSummary=false}{/td}
+{td}The system SHALL allow export of historical sensor data in both .xlsx and .csv formats, including the mandatory fields: timestamp (ISO 8601), sensor ID, parameter name, value, and unit.{/td}
+{td}Export 90-day dataset in both formats; verify all five mandatory fields present and correctly typed; move GMS-79 to Project Accepted{/td}
+{td}Rațeeva Daria{/td}
+{td}2026-05-02{/td}
+{/tr}
+{tr}
+{td}**6.**{/td}
+{td}**{jira:GMS-6}**{/td}
+{td}**Connectivity & Network Reliability**{/td}
+{td}Review 4G/5G primary network requirement and offline autonomy; confirm 72-hour minimum offline duration is embedded in SR-6.2 per review R3{/td}
+{td}Rațeeva Daria{/td}
+{td}2026-04-22{/td}
+{/tr}
+{tr}
+{td}**6.1**{/td}
+{td}{jira:GMS-80|showSummary=false}{/td}
+{td}The GMS system SHALL operate all dashboard and notification features over a 4G/5G mobile data connection as the primary network, using HTTPS for web traffic and MQTT for sensor telemetry.{/td}
+{td}Verify full feature set accessible at 4G signal strength >= −100 dBm; confirm HTTPS for web traffic and MQTT for telemetry in network capture; move GMS-80 to Project Accepted{/td}
+{td}Rațeeva Daria{/td}
+{td}2026-04-28{/td}
+{/tr}
+{tr}
+{td}**6.2**{/td}
+{td}{jira:GMS-81|showSummary=false}{/td}
+{td}WHILE the network connection is unavailable, the system SHALL continue autonomous greenhouse control locally for min 72 hours, WHEN connectivity is restored, the system SHALL synchronise all buffered data to the server with zero data loss.{/td}
+{td}Simulate 72-hour cloud outage; verify all automated controls (irrigation, temperature, humidity) continue operating locally; verify all buffered readings synchronise with zero data loss on reconnect; update GMS-81 text; move to Project Accepted{/td}
+{td}Rațeeva Daria{/td}
+{td}2026-05-05{/td}
+{/tr}
+{tr}
+{td}**7.**{/td}
+{td}**{jira:GMS-7}**{/td}
+{td}**Affordability & Cost Optimization**{/td}
+{td}Review hardware budget ceiling, cost estimate document, resource logging, and ROI comparison panel requirements{/td}
+{td}Rațeeva Daria{/td}
+{td}2026-04-25{/td}
+{/tr}
+{tr}
+{td}**7.1**{/td}
+{td}{jira:GMS-76|showSummary=false}{/td}
+{td}The GMS system SHALL be deployable using a hardware bill of materials with a total component cost not exceeding 2,000 EUR, covering the edge controller, sensors, actuators, enclosures, and 4G connectivity module.{/td}
+{td}Produce draft bill of materials using commercially available components; verify total <= 2,000 EUR; move GMS-76 to Project Accepted{/td}
+{td}Cojocaru Daniel{/td}
+{td}2026-04-30{/td}
+{/tr}
+{tr}
+{td}**7.2**{/td}
+{td}{jira:GMS-60|showSummary=false}{/td}
+{td}The GMS system SHALL provide a publicly accessible cost estimate document detailing hardware, cloud infrastructure, and installation cost ranges, linked from the dashboard onboarding screen or documentation landing page.{/td}
+{td}Confirm cost estimate document exists with at least three line items (hardware, cloud/hosting, installation); verify it is reachable within two clicks from dashboard login; move GMS-60 to Project Accepted{/td}
+{td}Rațeeva Daria{/td}
+{td}2026-05-02{/td}
+{/tr}
+{tr}
+{td}**7.3**{/td}
+{td}{jira:GMS-61|showSummary=false}{/td}
+{td}The GMS system SHALL log total water volume dispensed per irrigation activation event and cumulative energy consumption of all actuators, storing these values with timestamps, activation trigger type (sensor-threshold / schedule / manual-remote), and irrigation duration in the same time-series database as sensor readings, retaining data for a minimum of 90 days. (Trigger type field added per review R8; covers all three activation modes: SR-2.1, SR-2.3, SR-2.4.){/td}
+{td}Trigger irrigation via sensor, schedule, and manual; verify log entry exists for each with correct trigger-type field, water volume, duration, and timestamp; verify 90-day retention; update GMS-61 text; move to Project Accepted{/td}
+{td}Rațeeva Daria{/td}
+{td}2026-05-05{/td}
+{/tr}
+{tr}
+{td}**7.4**{/td}
+{td}{jira:GMS-62|showSummary=false}{/td}
+{td}The GMS dashboard SHALL display a cumulative resource summary panel showing total water dispensed and total actuator energy consumed for a user-selected period, alongside a manually entered baseline value for direct comparison.{/td}
+{td}Enter baseline figure; select a date range; verify panel displays actual vs. baseline with percentage difference; confirm data sourced from SR-7.3 log; move GMS-62 to Project Accepted{/td}
+{td}Rațeeva Daria{/td}
+{td}2026-05-07{/td}
+{/tr}
+{tr}
+{td}**8.**{/td}
+{td}**{jira:GMS-8}**{/td}
+{td}**Multi-Site / Multi-Zone Management**{/td}
+{td}SR-8.1 and SR-8.2 invalidated per review R6 — close GMS-85 and GMS-86 as Invalid; capture architectural intent as a design note outside the requirements baseline{/td}
+{td}Vremere Adrian{/td}
+{td}2026-04-22{/td}
+{/tr}
+{tr}
+{td}**8.1**{/td}
+{td}{jira:GMS-85|showSummary=false}{/td}
+{td}**INVALID — Out of scope.** SR-8.1 is classified as Won't Have in MoSCoW priority. Invalidated as system has to have multi zone management. Does not correspond to its SHR. Invalidated per review R6 (Rațeeva Daria).{/td}
+{td}Close GMS-85 as Invalid in Jira{/td}
+{td}Vremere Adrian{/td}
+{td}2026-04-22{/td}
+{/tr}
+{tr}
+{td}**8.2**{/td}
+{td}{jira:GMS-86|showSummary=false}{/td}
+{td}**INVALID — Out of scope.** SR-8.2 is classified as Won't Have in MoSCoW priority. Does not correspond to its SHR. Invalidated per review R6 (Rațeeva Daria).{/td}
+{td}Close GMS-86 as Invalid in Jira{/td}
+{td}Vremere Adrian{/td}
+{td}2026-04-22{/td}
+{/tr}
+{tr}
+{td}**8.3**{/td}
+{td}{jira:GMS-99|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}The system SHALL provide a unified dashboard that aggregates and displays the real-time operational status of all greenhouse sites registered under the same account, including current sensor values, actuator status, and active alert count per site, accessible from a single authenticated session.{/td}
+{td}Verify all registered sites appear in one dashboard view after single login; confirm current sensor values, actuator status, and alert count are visible per site; move GMS-99 to Project Accepted{/td}
+{td}Mutruc Victoria{/td}
+{td}2026-05-05{/td}
+{/tr}
+{tr}
+{td}**8.4**{/td}
+{td}{jira:GMS-100|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}The system SHALL provide a side-by-side comparison view that simultaneously displays the current value of any selected environmental parameter (temperature, humidity, soil moisture, or CO2) across all selected sites, and SHALL visually highlight any site whose value deviates from its configured normal range using a colour-coded indicator.{/td}
+{td}Select each monitored parameter; verify values for all sites displayed simultaneously; simulate out-of-range value on one site; confirm colour-coded highlight appears; move GMS-100 to Project Accepted{/td}
+{td}Mutruc Victoria{/td}
+{td}2026-05-07{/td}
+{/tr}
+{tr}
+{td}**8.5**{/td}
+{td}{jira:GMS-101|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}The multi-site dashboard SHALL render the aggregated status of up to 10 registered greenhouse sites within 5 seconds of initial page load and within 3 seconds of each automatic refresh cycle, measured over a 4G/5G mobile connection.{/td}
+{td}Load dashboard with 10 simulated sites; verify initial load <= 5 s and auto-refresh <= 3 s at >= -100 dBm 4G signal; move GMS-101  to Project Accepted{/td}
+{td}Mutruc Victoria{/td}
+{td}2026-05-09{/td}
+{/tr}
+{tr}
+{td}**9.**{/td}
+{td}**{jira:GMS-9}**{/td}
+{td}**Cybersecurity**{/td}
+{td}Review TLS/certificate authentication, RBAC, audit logging, and offline authentication requirements; verify account management is included in Operator role per review R7{/td}
+{td}Vremere Adrian{/td}
+{td}2026-04-25{/td}
+{/tr}
+{tr}
+{td}**9.1**{/td}
+{td}{jira:GMS-87|showSummary=false}{/td}
+{td}All communication between the GMS edge controller and the cloud server SHALL be encrypted using TLS 1.2 or higher, and the edge controller SHALL authenticate to the cloud broker using X.509 client certificates before any sensor data or actuator command is transmitted or received.{/td}
+{td}Run network traffic inspection; confirm all cloud-bound traffic is TLS-encrypted; verify broker rejects connection without valid client certificate; move GMS-87 to Project Accepted{/td}
+{td}Vremere Adrian{/td}
+{td}2026-04-30{/td}
+{/tr}
+{tr}
+{td}**9.2**{/td}
+{td}{jira:GMS-88|showSummary=false}{/td}
+{td}The GMS web dashboard SHALL implement role-based access control with a minimum of two roles — Operator (full read/write access to controls, configuration, and user account management) and Viewer (read-only access to sensor data and alerts) — with role assignments persisted per user account. An account holding the Operator role SHALL be able to create, modify, and deactivate other user accounts and assign the Viewer role to them. The initial Operator account shall be provisioned at installation. (Account management added to Operator role per review R7.){/td}
+{td}Verify Viewer cannot activate actuators or modify thresholds (expect permission error); verify Operator can create and assign a Viewer account; update GMS-88 text; move to Project Accepted{/td}
+{td}Vremere Adrian{/td}
+{td}2026-04-30{/td}
+{/tr}
+{tr}
+{td}**9.3**{/td}
+{td}{jira:GMS-89|showSummary=false}{/td}
+{td}WHEN an unauthenticated or unauthorised request is made to any GMS API endpoint or dashboard route, the system SHALL reject the request with an HTTP 401 or 403 response and log the attempt with a timestamp and source IP address.{/td}
+{td}Submit requests with invalid token and with valid Viewer token to Operator-only endpoints; verify HTTP 401 and 403 responses respectively; confirm audit log entry with timestamp and source IP; move GMS-89 to Project Accepted{/td}
+{td}Vremere Adrian{/td}
+{td}2026-05-02{/td}
+{/tr}
+{tr}
+{td}**9.4**{/td}
+{td}{jira:GMS-90|showSummary=false}{/td}
+{td}WHILE the edge controller is operating in offline autonomous mode, the system SHALL continue to enforce local authentication for any direct API access to the controller, rejecting requests that do not present a valid pre-provisioned credential.{/td}
+{td}Simulate cloud outage; send direct HTTP request to edge controller API without credentials; verify HTTP 401 response; move GMS-90 to Project Accepted{/td}
+{td}Vremere Adrian{/td}
+{td}2026-05-05{/td}
+{/tr}
+{/table}
+
+{br}
+
+== Review Session
+
+{table class="wrapped"}
+{tr}
+{th}ID{/th}
+{th}Reviewer{/th}
+{th}Requirement(s){/th}
+{th}Issue{/th}
+{th}Verdict{/th}
+{/tr}
+{tr}
+{td}R1{/td}
+{td}Cojocaru Daniel{/td}
+{td}SR-2.6, SR-4.3{/td}
+{td}Duplicate threshold configuration{/td}
+{td}Merge SR-4.3 into SR-2.6; close GMS-70 as Invalid{/td}
+{/tr}
+{tr}
+{td}R2{/td}
+{td}Rațeeva Daria{/td}
+{td}SR-1.3{/td}
+{td}Hardcoded thresholds conflict with configurable SR-2.6{/td}
+{td}Update SR-1.3 to reference operator-configured thresholds with defaults{/td}
+{/tr}
+{tr}
+{td}R3{/td}
+{td}Mutruc Victoria{/td}
+{td}SR-6.2{/td}
+{td}Unresolved "72h to be confirmed" placeholder{/td}
+{td}Fix to 72-hour minimum in requirement text{/td}
+{/tr}
+{tr}
+{td}R4{/td}
+{td}Alexei Maxim{/td}
+{td}SR-1.1{/td}
+{td}Light intensity has no stakeholder basis and no action requirement{/td}
+{td}Remove from SR-1.1 OR add informational alert with justification{/td}
+{/tr}
+{tr}
+{td}R5{/td}
+{td}Cojocaru Daniel{/td}
+{td}SR-4.2{/td}
+{td}Push/SMS 30s SLA ambiguous — dispatch vs. delivery{/td}
+{td}Clarify SLA is measured at GMS server dispatch point{/td}
+{/tr}
+{tr}
+{td}R6{/td}
+{td}Rațeeva Daria{/td}
+{td}SR-8.1, SR-8.2{/td}
+{td}Won't Have items cannot be system requirements. System should have multi zone management as pilot.{/td}
+{td}**Invalidated** — close GMS-85 and GMS-86 as Invalid{/td}
+{/tr}
+{tr}
+{td}R7{/td}
+{td}Alexei Maxim{/td}
+{td}SR-9.2{/td}
+{td}No user account management mechanism defined{/td}
+{td}Add account management to Operator role description{/td}
+{/tr}
+{tr}
+{td}R8{/td}
+{td}Mutruc Victoria{/td}
+{td}SR-7.3{/td}
+{td}"Per irrigation cycle" excludes schedule and manual triggers{/td}
+{td}Change to "per activation event"; log trigger type{/td}
+{/tr}
+{tr}
+{td}R9{/td}
+{td}Vremere Adrian{/td}
+{td}GMS-75, GMS-77{/td}
+{td}Duplicate Jira tickets for 90-day retention (GMS-82 is authoritative){/td}
+{td}Close GMS-75 and GMS-77 as Invalid{/td}
+{/tr}
+{tr}
+{td}R10{/td}
+{td}Rațeeva Daria{/td}
+{td}SR-2.4, SR-2.5 (WP5.3){/td}
+{td}Missing GMS-94 and GMS-96 links in traceability table{/td}
+{td}Add GMS-94 and GMS-96 to WP5.3{/td}
+{/tr}
+{tr}
+{td}R11{/td}
+{td}Mutruc Victoria{/td}
+{td}SR-8.3 to SR-8.5{/td}
+{td}Missing valid system requirements for multi-zone management{/td}
+{td}Add SR-8.3 (unified dashboard, Functional/Should Have), SR-8.4 (cross-site comparison, Functional/Should Have), SR-8.5 (load performance constraint, Non-Functional/Should Have); link GMS-45 and GMS-46 Jira tickets;{/td}
+{/tr}
+{/table}
+
+Link to video of review session:{br}[https://drive.google.com/file/d/1Nx3KgpG1nrfAwLXgEpMGQuy0MMNt99fq/view?usp=sharing](https://drive.google.com/file/d/1Nx3KgpG1nrfAwLXgEpMGQuy0MMNt99fq/view?usp=sharing)

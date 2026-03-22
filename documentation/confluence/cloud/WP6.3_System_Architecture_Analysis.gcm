@@ -1,0 +1,308 @@
+--- gcm ---
+title: 04 - GMS -WP6.3 System architecture analysis
+page_id: 42634173
+version: 5
+source: http://confluence.microlab.club/rest/api/content/42634173
+---
+
+== Component Special Characteristics
+
+This section identifies the special characteristics for each of the five GMS architectural components. Each component responsible has analyzed their subsystem’s architecture to identify the characteristics that warrant particular design attention due to their impact on system reliability, crop safety, and operational performance. The analysis follows SYS.3.BP3 guidance, considering product lifecycle phases (deployment, maintenance, decommissioning) and technical design aspects (manufacturability, reuse suitability, element availability).
+
+=== Sensor Acquisition & Environmental Monitoring System
+
+The Sensor Acquisition System is the perception layer of the GMS, responsible for polling all environmental sensors at 60-second intervals on the Cortex-M7 core and delivering validated data to the automation engine and cloud pipeline. It operates the SN-3002-TR-ECTHNPKPH-N01 soil probe via RS-485 Modbus RTU, the SHT10 air sensor via 2-wire serial, and an NDIR CO₂ sensor via UART.
+
+{table class="wrapped"}
+{thead}
+{tr}
+{th}Special Characteristic{/th}
+{th}Description{/th}
+{/tr}
+{/thead}
+{tr}
+{td}**Sensor Data Validation Pipeline**{/td}
+{td}The 3-stage validation (range check, plausibility, rate-of-change) must execute deterministically within the 60 s polling cycle on the Cortex-M7 core. This pipeline is the first line of defence against sensor drift, cable faults on RS-485 runs up to 1200 m, and electromagnetic interference from motor loads in the greenhouse environment. Invalid readings must be rejected before they reach the automation engine, preventing false actuator activation.{/td}
+{/tr}
+{tr}
+{td}**Fault Counter Accuracy**{/td}
+{td}Per-sensor configurable fault counters must distinguish transient anomalies (single bad reading from EMI spike) from persistent hardware failures (corroded connector, cable break). The threshold must be tuned per sensor type: the SN-3002 RS-485 bus is more susceptible to transient errors on long cable runs than the SHT10 local I²C connection. Incorrect fault counting leads either to missed failures (counter too permissive) or nuisance alarms (counter too sensitive).{/td}
+{/tr}
+{tr}
+{td}**Non-Blocking MQTT Publication**{/td}
+{td}MQTT payload serialisation and handoff to the Cortex-M4 communication core must never block the Cortex-M7 polling and threshold evaluation path. A cloud outage or 4G/5G latency spike must not delay local alert generation beyond the 5 s SLA (SR-1.2). This characteristic is critical for the 55.6% of sites relying on mobile data with variable latency.{/td}
+{/tr}
+{/table}
+
+=== Local Automation Engine
+
+The Local Automation Engine is the control subsystem running on the Cortex-M7 core. It executes PID temperature control (±0.5°C stability), hysteresis-based humidity control, sensor/schedule/manual irrigation logic, and offline buffer management. It must maintain full autonomous greenhouse operation for 72+ hours without cloud connectivity.
+
+{table class="wrapped"}
+{thead}
+{tr}
+{th}Special Characteristic{/th}
+{th}Description{/th}
+{/tr}
+{/thead}
+{tr}
+{td}**PID Control Loop Stability**{/td}
+{td}The PID temperature controller running at 10 Hz on the Cortex-M7 must maintain ±0.5°C setpoint stability across Moldova’s -15°C to +35°C external range (up to 80°C inside without ventilation). Tuning parameters (Kp, Ki, Kd) must be robust against the non-linear thermal dynamics of greenhouse structures and seasonal variations. Integral windup during sustained temperature deviations (e.g., winter cold snaps) must be managed to prevent actuator saturation and overshooting on recovery.{/td}
+{/tr}
+{tr}
+{td}**Actuator Conflict Arbitration**{/td}
+{td}Temperature ventilation and humidity ventilation share the same physical exhaust fan actuator. The arbitration logic must coordinate simultaneous trigger demands without oscillation, log each event independently with its trigger type (temperature vs. humidity), and prevent rapid cycling that increases electrical wear and energy consumption. Incorrect arbitration can lead to fungal disease (insufficient humidity ventilation) or crop thermal stress (insufficient temperature ventilation).{/td}
+{/tr}
+{tr}
+{td}**Offline Autonomous Continuity**{/td}
+{td}The engine must maintain full PID/hysteresis control, execute irrigation schedules, enforce safety interlocks, and buffer all sensor data for a minimum of 72 hours during cloud outages (one survey respondent requires up to 3 months of autonomous operation). Schedule persistence in non-volatile storage must survive controller restarts. Buffer capacity must be managed with circular overwrite policies that preserve the most recent data when storage is exhausted.{/td}
+{/tr}
+{/table}
+
+=== Cloud Backend System
+
+The Cloud Backend receives telemetry via MQTT/TLS, persists sensor readings in InfluxDB/TimescaleDB for 90 days, evaluates alerts, dispatches push/SMS notifications, serves the REST API, and enforces RBAC. It handles both real-time telemetry streams and batch-flush recovery after edge reconnection.
+
+{table class="wrapped"}
+{thead}
+{tr}
+{th}Special Characteristic{/th}
+{th}Description{/th}
+{/tr}
+{/thead}
+{tr}
+{td}**Batch Reconnection Ingestion**{/td}
+{td}After a 72-hour cloud outage, the edge controller flushes up to 4,320 buffered records (60 s intervals × 72 hours) in a single batch. The ingestion pipeline must handle this burst without data loss, maintain chronological ordering in the time-series database, and not degrade real-time telemetry processing for other connected greenhouses. Individual record re-publish would exceed 4G rate limits, making batch insert the only viable strategy.{/td}
+{/tr}
+{tr}
+{td}**Alert Dispatch Latency**{/td}
+{td}Critical alerts (temperature >35°C, soil moisture <10%, actuator failure) must be dispatched as push/SMS within 30 seconds of the 60-second persistence threshold being crossed (SR-4.2). The notification pipeline through Twilio/FCM introduces external service dependencies with variable latency. Queue management must ensure that notification dispatch does not block telemetry ingestion or dashboard API responses.{/td}
+{/tr}
+{tr}
+{td}**Time-Series Retention Enforcement**{/td}
+{td}The 90-day retention policy must automatically expire old data while preserving data integrity for active trend queries and export operations. Storage growth must be predictable: at 60 s intervals across 5 parameters per greenhouse, approximately 39 million data points accumulate over 90 days for a 10-site deployment. Retention policy enforcement must not cause query latency spikes during data purging windows.{/td}
+{/tr}
+{/table}
+
+=== Web Dashboard & User Interface System
+
+The Web Dashboard is the operator-facing SPA providing real-time monitoring, manual actuator control, alert management, historical analysis, threshold/schedule configuration, resource tracking, and multi-site overview. It must be fully functional on smartphones over 4G/5G mobile data (55.6% of target users).
+
+{table class="wrapped"}
+{thead}
+{tr}
+{th}Special Characteristic{/th}
+{th}Description{/th}
+{/tr}
+{/thead}
+{tr}
+{td}**Alert Prioritisation Algorithm**{/td}
+{td}The two-tier severity model (informational: in-dashboard only; critical: push/SMS escalation after 60 s persistence) must ensure operators never miss safety-critical alerts while preventing alert fatigue from transient threshold breaches. Colour-coded banners (yellow = warning, red = critical) with Heat Warning / Frost Warning type labels must render within 5 seconds of breach detection via WebSocket/SSE. Incorrect prioritisation could either mask critical crop threats or desensitise operators to genuine emergencies.{/td}
+{/tr}
+{tr}
+{td}**Mobile-First Responsive Rendering**{/td}
+{td}Complete feature parity between desktop (2560 px) and smartphone (360 px) viewports is a Must Have requirement (SR-3.5). The soil moisture primary widget must be visible without scrolling at 360 px (SR-2.5). Touch targets must be ≥44 px. The 10-second auto-refresh cycle must consume minimal bandwidth on metered 4G/5G data plans. Degraded mobile rendering would exclude the majority of the target user base (small-scale Moldovan farmers whose smartphone is their primary device).{/td}
+{/tr}
+{tr}
+{td}**Real-Time Data Freshness Indication**{/td}
+{td}The dashboard must permanently display a data freshness timestamp and activate a visible staleness warning when no data arrives for 60 seconds (SR-3.6). On 4G/5G connections with variable latency, operators must always be able to verify whether displayed values are current. Silent data staleness could lead operators to make decisions based on outdated readings, potentially causing crop damage or resource waste.{/td}
+{/tr}
+{/table}
+
+=== Cybersecurity System
+
+The Cybersecurity System is the cross-cutting security subsystem enforcing TLS 1.2+ encryption, X.509 mutual authentication, JWT-based RBAC, audit logging, and offline edge authentication across all GMS layers. It protects against command injection, eavesdropping, and unauthorised actuator control over public 4G/5G networks.
+
+{table class="wrapped"}
+{thead}
+{tr}
+{th}Special Characteristic{/th}
+{th}Description{/th}
+{/tr}
+{/thead}
+{tr}
+{td}**Offline Edge Authentication**{/td}
+{td}When cloud connectivity is lost, the EdgeAuthModule on the Cortex-M4 must continue enforcing pre-provisioned credential authentication for any direct API access to the edge controller (SR-9.4). Security must not degrade during the offline autonomy period, as an unauthenticated attacker with local network access could manipulate actuators (open valves, disable heating) causing direct crop damage. The pre-provisioned credentials must be securely stored and support rotation without requiring cloud connectivity.{/td}
+{/tr}
+{tr}
+{td}**X.509 Certificate Lifecycle**{/td}
+{td}Client certificates used for MQTT mutual TLS authentication have expiration dates. Certificate rotation must be planned and executable without greenhouse downtime. Expired certificates would prevent the edge controller from connecting to the cloud broker, forcing indefinite offline operation. In rural Moldovan deployments with limited IT support, certificate management must be as automated as possible with clear advance warnings before expiration.{/td}
+{/tr}
+{tr}
+{td}**Audit Trail Integrity**{/td}
+{td}The append-only audit log recording all authentication attempts, rejected requests (HTTP 401/403), and configuration changes with timestamps and source IPs must resist tampering. An attacker who compromises the system and then erases the audit trail eliminates forensic evidence. The audit log is also required by technical experts for compliance verification and by the role-based access control model to trace who made what configuration change.{/td}
+{/tr}
+{/table}
+
+== Rationale and Failure Mode Analysis
+
+This section documents the rationale for one selected special characteristic per team member, including a detailed failure mode analysis with associated risks, severity assessment, and recommended mitigation strategies. The analysis follows an FMEA-inspired approach as recommended by the SYS.3.BP3 process reference.
+
+=== Sensor Data Validation Pipeline
+
+**Design Rationale: **The 3-stage sensor validation pipeline was selected as a proven-in-use pattern from industrial automation (IEC 61131-3 compliant systems) adapted for the GMS edge controller. The layered approach (range → plausibility → rate-of-change) was chosen over simple threshold checking because the SN-3002 7-in-1 soil sensor communicates over RS-485 Modbus RTU with cable runs up to 1200 m in greenhouse environments where motor loads (fans, pumps) generate significant electromagnetic interference. Single-stage validation would either reject too many valid readings (reducing data availability) or pass corrupted readings to the automation engine (causing false actuator activations).
+
+{table class="wrapped"}
+{thead}
+{tr}
+{th}Failure Mode{/th}
+{th}Risk{/th}
+{th}Severity{/th}
+{th}Mitigation Strategy{/th}
+{/tr}
+{/thead}
+{tr}
+{td}**Validation bypass due to Cortex-M7 timing overrun**{/td}
+{td}If the 3-stage validation exceeds the 60 s polling budget, the system may skip validation on subsequent cycles to catch up, allowing unvalidated data into the automation engine. This could trigger false irrigation or heating activations based on corrupted sensor values.{/td}
+{td}**Critical**{/td}
+{td}Implement a hardware watchdog timer on the Cortex-M7 that resets the validation pipeline if a single cycle exceeds 50 s (83% of budget). Add execution time profiling that logs cycle duration and generates an informational alert when any cycle exceeds 40 s (67% threshold). If validation cannot complete, the system shall use the last known valid reading with a staleness flag rather than skipping validation entirely.{/td}
+{/tr}
+{/table}
+
+=== PID Control Loop Stability
+
+**Design Rationale: **PID control for temperature was selected over simpler on/off or hysteresis-based approaches because the ±0.5°C setpoint stability requirement (SR-1.3) cannot be achieved with bang-bang control in Moldova’s climate where external temperatures swing 50°C across seasons. The three-term PID algorithm (proportional response to deviation, integral correction for sustained offsets, derivative anticipation of trends) is a proven-in-use industrial control strategy documented in the WP2.1 technology research. Hysteresis was retained for humidity control because humidity actuator dynamics do not require the precision of PID and hysteresis avoids oscillation with simpler implementation.
+
+{table class="wrapped"}
+{thead}
+{tr}
+{th}Failure Mode{/th}
+{th}Risk{/th}
+{th}Severity{/th}
+{th}Mitigation Strategy{/th}
+{/tr}
+{/thead}
+{tr}
+{td}**Integral windup during sustained cold events**{/td}
+{td}During Moldova’s November–March winter season, sustained sub-zero external temperatures cause the integral term to accumulate indefinitely while the heating actuator is at maximum output. When external conditions improve, the large accumulated integral causes prolonged overheating overshoot that can damage heat-sensitive crops like tomatoes.{/td}
+{td}**High**{/td}
+{td}Implement anti-windup clamping that limits the integral accumulator to a configurable maximum corresponding to the actuator output range. Add conditional integration that freezes integral accumulation when actuator output is saturated (at maximum heating or cooling capacity). Log integral accumulator values alongside PID output for post-season tuning analysis. Provide operator-accessible PID parameter adjustment via the Configuration mode interface.{/td}
+{/tr}
+{/table}
+
+=== Batch Reconnection Ingestion
+
+**Design Rationale: **Batch-flush reconnection was chosen over individual record re-publish because analysis of 4G mobile data plan rate limits in Moldova showed that re-publishing 4,320 individual MQTT messages after a 72-hour outage would exceed typical carrier throttling thresholds and take over 30 minutes at sustained QoS 1 acknowledgement rates. Batch insert into InfluxDB/TimescaleDB is both more efficient (single write transaction) and preserves chronological ordering without requiring client-side sorting. This is an evolutionary design decision validated through prototyping during the WP6.2 architecture phase.
+
+{table class="wrapped"}
+{thead}
+{tr}
+{th}Failure Mode{/th}
+{th}Risk{/th}
+{th}Severity{/th}
+{th}Mitigation Strategy{/th}
+{/tr}
+{/thead}
+{tr}
+{td}**Batch insert timeout on large payloads over 4G**{/td}
+{td}A 72-hour batch containing 4,320+ records serialised as a single MQTT payload may exceed the mobile carrier’s maximum packet size or the MQTT broker’s message size limit, causing the entire batch to be rejected. Partial failure during batch ingestion could result in duplicate records or gaps in the time-series data, corrupting historical trend analysis and export integrity.{/td}
+{td}**High**{/td}
+{td}Implement chunked batch upload: split the offline buffer into segments of 500 records maximum, each transmitted as an independent MQTT message with a batch sequence number. The cloud ingestion service shall deduplicate records by (sensorId + timestamp) composite key and request retransmission of any missing chunk. Add a batch sync status indicator on the dashboard showing upload progress percentage during reconnection recovery. Set MQTT broker max message size to accommodate the largest expected chunk plus 20% overhead margin.{/td}
+{/tr}
+{/table}
+
+=== Alert Prioritisation Algorithm
+
+**Design Rationale: **The two-tier alert severity model (informational vs. critical) was a direct outcome of the WP4.2 peer review process (recommendation R3 by Cojocaru Daniel). The design rationale is rooted in human factors research showing that undifferentiated alert systems cause operator desensitisation — if every threshold breach triggers a push/SMS notification, operators disable notifications entirely, defeating the purpose of the alerting system. The 60-second persistence filter for critical escalation was chosen to balance false-positive suppression (transient spikes from sensor noise) against response time (operators must be notified within 90 seconds of a genuine critical event).
+
+{table class="wrapped"}
+{thead}
+{tr}
+{th}Failure Mode{/th}
+{th}Risk{/th}
+{th}Severity{/th}
+{th}Mitigation Strategy{/th}
+{/tr}
+{/thead}
+{tr}
+{td}**Alert fatigue from miscategorised severity**{/td}
+{td}If the severity classification thresholds are incorrectly configured (e.g., temperature warning threshold set too close to normal operating range), informational alerts fire frequently, and operators stop monitoring the dashboard. When a genuine critical event occurs (frost during an autumn night), the operator misses it among the noise. Tatiana Gropa’s frost loss incident (WP3.2 interview) demonstrates the real-world consequence: cucumbers destroyed at -3°C because the alert came too late.{/td}
+{td}**High**{/td}
+{td}Implement an alert frequency analytics panel that tracks informational alert counts per parameter per day. If any parameter exceeds 10 informational alerts in a 24-hour window, generate a meta-alert recommending threshold adjustment. Provide a “quiet hours” configuration that suppresses informational push notifications during defined periods while maintaining critical notifications at all times. Add configurable severity escalation rules that allow operators to promote specific parameters from informational to critical tier based on crop growth stage.{/td}
+{/tr}
+{/table}
+
+=== Offline Edge Authentication
+
+**Design Rationale: **The EdgeAuthModule was designed as an independent authentication subsystem on the Cortex-M4 core, fully decoupled from cloud-based AuthN/AuthZ services. This make-or-buy decision was driven by the requirement that security must not degrade during offline operation (SR-9.4). Cloud-dependent authentication would create a critical vulnerability window: during a 72-hour outage, the edge controller’s local API would be completely unprotected. Pre-provisioned credentials stored in the controller’s secure flash memory provide a proven-in-use fallback mechanism commonly used in industrial PLCs operating in air-gapped environments.
+
+{table class="wrapped"}
+{thead}
+{tr}
+{th}Failure Mode{/th}
+{th}Risk{/th}
+{th}Severity{/th}
+{th}Mitigation Strategy{/th}
+{/tr}
+{/thead}
+{tr}
+{td}**Pre-provisioned credential compromise without cloud revocation capability**{/td}
+{td}If the locally stored API key or credential is extracted from the edge controller (physical theft, firmware dump), an attacker gains persistent access to the local API for actuator control. During offline operation, the compromised credential cannot be revoked because the cloud’s revocation list is unreachable. The attacker could manipulate irrigation valves, disable heating, or trigger emergency stop — all causing direct crop damage.{/td}
+{td}**Critical**{/td}
+{td}Store credentials in the STM32H747’s hardware-protected flash region (read-protection level 2) to prevent firmware extraction. Implement a local credential rotation mechanism triggered by physical button press on the controller enclosure (requires physical access, not network access). Add a credential expiration timer that forces re-authentication every 24 hours even in offline mode. When cloud connectivity is restored, the edge controller shall immediately check the cloud revocation list and invalidate any compromised credentials. Log all local API authentication attempts with timestamps for post-incident forensic analysis.{/td}
+{/tr}
+{/table}
+
+== System Requirements Refinement
+
+Based on the failure mode analysis, the following new system requirements and modifications to existing requirements are recommended to cover the identified risks according to their mitigation strategies.
+
+=== New Requirements:
+
+{table class="wrapped"}
+{thead}
+{tr}
+{th}Requirement{/th}
+{th}Description{/th}
+{/tr}
+{/thead}
+{tr}
+{td}**SR-10.1**{/td}
+{td}**Sensor Validation Timing Safeguard: **The system SHALL implement a watchdog timer resetting the validation pipeline if a cycle exceeds 50 s. Cycles over 40 s SHALL trigger an informational alert. If validation cannot complete, the system SHALL use the last valid reading with a STALE flag.{/td}
+{/tr}
+{tr}
+{td}**SR-10.2**{/td}
+{td}**PID Anti-Windup Protection: **The system SHALL implement PID anti-windup clamping to the actuator range, freezing accumulation when saturated. PID integral values SHALL be logged for tuning. Parameters (Kp, Ki, Kd, clamp) SHALL be adjustable via Configuration mode without reflashing.{/td}
+{/tr}
+{tr}
+{td}**SR-10.3**{/td}
+{td}**Chunked Batch Synchronisation: **The Cloud Backend SHALL accept offline buffer uploads in max 500-record chunks with sequence number and chunk count. The ingestion service SHALL deduplicate by (sensorId, timestamp) and retransmit missing chunks. Dashboard SHALL display sync progress.{/td}
+{/tr}
+{tr}
+{td}**SR-10.4**{/td}
+{td}**Alert Frequency Analytics: **The Dashboard SHALL track informational alerts per parameter per 24 h. WHEN any parameter exceeds 10 alerts in 24 h, the system SHALL raise a meta-alert recommending threshold reconfiguration and provide a quiet hours setting to suppress such alerts.{/td}
+{/tr}
+{tr}
+{td}**SR-10.5**{/td}
+{td}**Offline Credential Security: **The system SHALL store edge credentials in hardware-protected flash, rotatable via physical button, expiring after 7 days. WHEN connectivity is restored, the system SHALL check the revocation list, invalidate compromised credentials, and log attempts.{/td}
+{/tr}
+{/table}
+
+{br}
+
+=== Modified Requirements:
+
+{table class="wrapped"}
+{thead}
+{tr}
+{th}Requirement{/th}
+{th}Original{/th}
+{th}Modified{/th}
+{/tr}
+{/thead}
+{tr}
+{td}**SR-1.2**{/td}
+{td}WHEN any monitored parameter value falls outside its configured threshold, the system SHALL generate an alert event within 5 seconds of the breach being detected by the edge controller.{/td}
+{td}WHEN a parameter breaches its threshold, the system SHALL generate an alert within 5 s with a quality indicator (VALID, STALE, or INTERPOLATED). STALE alerts SHALL carry an elevated uncertainty flag visible in the dashboard and push/SMS notifications.{/td}
+{/tr}
+{tr}
+{td}**SR-6.2**{/td}
+{td}WHILE the network connection is unavailable, the system SHALL continue autonomous greenhouse control locally and buffer all sensor readings; WHEN connectivity is restored, the system SHALL synchronise all buffered data to the server with zero data loss.{/td}
+{td}WHILE offline, the system SHALL maintain autonomous control and buffer readings. WHEN connectivity is restored, the system SHALL upload buffered data in max 500-record chunks, deduplicated by (sensorId, timestamp), zero data loss, sync progress shown.{/td}
+{/tr}
+{tr}
+{td}**SR-9.4**{/td}
+{td}WHILE the edge controller is operating in offline autonomous mode, the system SHALL continue to enforce local authentication for any direct API access to the controller, rejecting requests that do not present a valid pre-provisioned credential.{/td}
+{td}WHILE offline, the system SHALL enforce local auth via hardware-flash credentials expiring after 7 days. WHEN connectivity is restored, the system SHALL check the revocation list, invalidate compromised credentials, and log all authentication attempts.{/td}
+{/tr}
+{/table}

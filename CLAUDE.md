@@ -91,13 +91,23 @@ The **GMS board** contains the actual project issues (user stories, tasks, job s
 ```sh
 python3 scripts/jira/jira_board_server.py <subcommand>
 # subcommands: serve, list, assign, move, bulk-move, update, bulk-update,
-#              comment, bulk-comment, create, link, unlink, users
+#              comment, bulk-comment, create, link, unlink, users,
+#              list-priorities, list-link-types, list-issue-types, list-transitions
 ```
 
 Key flags available on `create`, `update`, and `bulk-update`:
 - `--epic GMS-X` — link issue to an epic (sets Epic Link field)
 - `--labels "Functional,EARS-Event"` — comma-separated labels
 - `--priority Highest` — priority name (Highest/High/Medium/Low/Lowest)
+- `--column "In Work"` — move to column immediately after create/update (use `--force` for multi-hop)
+
+Discovery commands (run before creating to avoid errors):
+- `list-priorities` — print valid priority names
+- `list-link-types` — print available link type names with inward/outward labels
+- `list-issue-types` — print available issue type names for this project
+- `list-transitions KEY` — print available transitions from the current status of an issue
+
+**Note:** Newly created issues start in Backlog with no available transitions until assigned. Always assign to `adrian.vremere` before running `move` (or use `--assignee adrian.vremere` on `create`).
 
 Key flags available on `move` and `bulk-move`:
 - `--force` — walk through intermediate transitions when no direct path exists (e.g. Backlog → In Work → Proposed)
@@ -171,7 +181,9 @@ python3 scripts/confluence/confluence_push.py --file WP4.2_Analyze_Stakeholder_R
 
 All logging commands below post time entries to the **PBL26 course board** via `scripts/logging/log_work.py`. They have no effect on the GMS board.
 
-**When to log:** After completing any task that is **GMS project development work** — writing or editing GMS documentation (Confluence pages, WP files), or writing code that belongs to the Greenhouse Management System itself (sensors, firmware, backend, cloud logic, etc.). Log immediately after the task is done, without waiting to be asked.
+**When to log:** After completing any task that is **GMS project development work** — writing or editing GMS documentation (Confluence pages, WP files), writing code that belongs to the Greenhouse Management System itself (sensors, firmware, backend, cloud logic, etc.), or creating/updating GMS Jira issues. Log immediately after the task is done, without waiting to be asked.
+
+> **MANDATORY:** Logging is not optional and must not be skipped or deferred. If the task qualifies, the very next action after completing it MUST be running `log_work.py log`. Do not respond to the user, do not ask for confirmation — just log it.
 
 **When NOT to log:** Tooling/codespace work — changes to sync scripts (`confluence_sync.py`, `confluence_push.py`, `gcm_*.py`), Jira board scripts, the logging system itself, CLAUDE.md updates, or any infrastructure/automation that supports the workspace but is not part of the GMS product.
 

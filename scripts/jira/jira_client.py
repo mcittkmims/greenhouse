@@ -116,6 +116,18 @@ class JiraClient:
         data = self.request("GET", f"/rest/api/2/issue/{key}/transitions")
         return data.get("transitions", [])
 
+    def fetch_priorities(self):
+        return self.request("GET", "/rest/api/2/priority")
+
+    def fetch_link_types(self):
+        data = self.request("GET", "/rest/api/2/issueLinkType")
+        return data.get("issueLinkTypes", [])
+
+    def fetch_issue_types(self):
+        project_key = self.project_key()
+        data = self.request("GET", f"/rest/api/2/project/{project_key}")
+        return data.get("issueTypes", [])
+
     def search_users(self, query):
         return self.request("GET", f"/rest/api/2/user/search?username={quote(query)}")
 
@@ -246,4 +258,6 @@ class JiraClient:
             fields["parent"] = {"key": payload["parentKey"]}
         if payload.get("epicKey"):
             fields["customfield_10100"] = payload["epicKey"]
+        if payload.get("issueType") == "Epic":
+            fields["customfield_10102"] = payload.get("epicName") or payload["summary"]
         return self.request("POST", "/rest/api/2/issue", json={"fields": fields})

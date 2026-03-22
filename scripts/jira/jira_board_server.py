@@ -20,6 +20,11 @@ Usage:
     python3 scripts/jira/jira_board_server.py link --from GMS-83 --to GMS-16 GMS-30
     python3 scripts/jira/jira_board_server.py link --from GMS-83 --to GMS-16 --type Duplicate
     python3 scripts/jira/jira_board_server.py unlink --from GMS-83 --to GMS-16
+    python3 scripts/jira/jira_board_server.py list-priorities
+    python3 scripts/jira/jira_board_server.py list-link-types
+    python3 scripts/jira/jira_board_server.py list-issue-types
+    python3 scripts/jira/jira_board_server.py list-transitions GMS-104
+    python3 scripts/jira/jira_board_server.py create --issue-type Story --summary "..." --epic GMS-102 --column "In Work" --force
 
 Open http://127.0.0.1:8765/ while the server runs.
 """
@@ -239,7 +244,37 @@ def cmd_create(client, args):
         "parentKey": args.parent,
         "epicKey": args.epic,
     })
-    print(created.get("key", json.dumps(created, ensure_ascii=True)))
+    key = created.get("key", json.dumps(created, ensure_ascii=True))
+    print(key)
+    if args.column and created.get("key"):
+        column = resolve_column(client, args.column)
+        client.move_issue_to_column(created["key"], column, force=args.force)
+        print(f"Moved {created['key']} -> {column['name']}")
+
+
+def cmd_list_priorities(client, args):
+    for p in client.fetch_priorities():
+        print(p["name"])
+
+
+def cmd_list_link_types(client, args):
+    for lt in client.fetch_link_types():
+        print(lt["name"], f"(in: {lt.get('inward','?')} / out: {lt.get('outward','?')})")
+
+
+def cmd_list_issue_types(client, args):
+    for it in client.fetch_issue_types():
+        print(it["name"])
+
+
+def cmd_list_transitions(client, args):
+    transitions = client.fetch_transitions(args.key)
+    if not transitions:
+        print(f"No transitions available from current status of {args.key}")
+        return
+    for t in transitions:
+        to = t.get("to", {})
+        print(f"{t['id']:>5}  {t['name']} -> {to.get('name', '?')}")
 
 
 def run_server(args):
@@ -333,6 +368,15 @@ def build_parser():
     create.add_argument("--due-date", help="Due date as YYYY-MM-DD")
     create.add_argument("--parent", help="Parent issue key")
     create.add_argument("--project", help="Project key, defaults to board project")
+    create.add_argument("--column", help="Move to column immediately after creation")
+    create.add_argument("--force", action="store_true", help="Allow multi-hop column transitions")
+
+    subparsers.add_parser("list-priorities", help="List valid priority names")
+    subparsers.add_parser("list-link-types", help="List available issue link types")
+    subparsers.add_parser("list-issue-types", help="List available issue types for this project")
+
+    list_transitions = subparsers.add_parser("list-transitions", help="List available transitions for an issue")
+    list_transitions.add_argument("key", help="Issue key (e.g. GMS-104)")
 
     link = subparsers.add_parser("link", help="Add an issue link between two issues")
     link.add_argument("--from", dest="from_key", required=True, help="Source issue key")
@@ -392,6 +436,14 @@ def main():
         cmd_create(client, args)
     elif args.command == "list":
         cmd_list(client, args)
+    elif args.command == "list-priorities":
+        cmd_list_priorities(client, args)
+    elif args.command == "list-link-types":
+        cmd_list_link_types(client, args)
+    elif args.command == "list-issue-types":
+        cmd_list_issue_types(client, args)
+    elif args.command == "list-transitions":
+        cmd_list_transitions(client, args)
     else:
         parser.error(f"Unknown command: {args.command}")
 

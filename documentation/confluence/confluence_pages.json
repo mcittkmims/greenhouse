@@ -17,6 +17,11 @@
     { "wp": "5.1", "id": "42634147", "local_file": "WP5.1_Analyze_Stakeholder_Requirements.gcm" },
     { "wp": "5.2", "id": "42634148", "local_file": "WP5.2_Develop_System_Requirements.gcm" },
     { "wp": "5.3", "id": "42634149", "local_file": "WP5.3_Ensure_Requirements_Traceability.gcm" },
-    { "wp": "5.4", "id": "42634150", "local_file": "WP5.4_Review_and_Release_System_Requirements.gcm" }
+    { "wp": "5.4", "id": "42634150", "local_file": "WP5.4_Review_and_Release_System_Requirements.gcm" },
+    { "wp": "6.1", "id": "42634152", "local_file": "WP6.1_Static_Aspects_System_Architecture.gcm" },
+    { "wp": "6.2", "id": "42634164", "local_file": "WP6.2_Dynamic_Aspects_System_Architecture.gcm" },
+    { "wp": "6.3", "id": "42634173", "local_file": "WP6.3_System_Architecture_Analysis.gcm" },
+    { "wp": "6.4", "id": "42634174", "local_file": "WP6.4_Ensure_Consistency_Traceability.gcm" },
+    { "wp": "6.5", "id": "42634175", "local_file": "WP6.5_Review_and_Communicate_Architecture.gcm" }
   ]
 }

@@ -1,0 +1,724 @@
+--- gcm ---
+title: 04 - GMS -WP6.1 Static aspects of the system architecture specification
+page_id: 42634152
+version: 6
+source: http://confluence.microlab.club/rest/api/content/42634152
+---
+
+== System Requirements Analysis
+
+The system requirements (WP5.4) define nine functional and non-functional groups, validated through a review session. The table maps each group to its architectural driver, hardware/software element, and key SLA.
+
+{table class="wrapped"}
+{colgroup}
+{col }
+{col }
+{col }
+{/colgroup}
+{tr}
+{th}**SR Group**{/th}
+{th}**Architectural Driver**{/th}
+{th}**Key SLA / Constraint**{/th}
+{/tr}
+{tr}
+{td}SR-1 - Environmental Monitoring{/td}
+{td}Polling engine 60 s; SN-3002 (soil 7-in-1) + SHT10 (air) + NDIR (CO2); threshold breach alert 5 s{/td}
+{td}Poll: 60 s; Alert: 5 s{/td}
+{/tr}
+{tr}
+{td}SR-2 - Irrigation & Climate{/td}
+{td}Irrigation valve, heating/ventilation; PID (temp +/-0.5C) + hysteresis (humidity){/td}
+{td}Auto: 30 s; Manual: 10 s{/td}
+{/tr}
+{tr}
+{td}SR-3 - Web Dashboard{/td}
+{td}Responsive SPA 360-2560 px; auto-refresh 10 s; staleness warning 60 s{/td}
+{td}Refresh: 10 s{/td}
+{/tr}
+{tr}
+{td}SR-4 - Alerts & Notifications{/td}
+{td}Two-tier: in-dash 5 s; push/SMS 30 s dispatch after 60 s critical; Heat/Frost label{/td}
+{td}In-dash: 5 s; Dispatch: 30 s{/td}
+{/tr}
+{tr}
+{td}SR-5 - Historical Data{/td}
+{td}InfluxDB/TimescaleDB 90-day; ISO 8601 timestamps; CSV/XLSX export; trend charts{/td}
+{td}Retention: 90 days{/td}
+{/tr}
+{tr}
+{td}SR-6 - Connectivity{/td}
+{td}MQTT/TLS 1.2+ QoS 1 over 4G/5G; offline 72 h min; zero-loss sync on reconnect{/td}
+{td}Offline: 72 h min{/td}
+{/tr}
+{tr}
+{td}SR-7 - Affordability{/td}
+{td}Hardware BOM 2000 EUR max; resource logging per event with trigger type{/td}
+{td}BOM: 2000 EUR{/td}
+{/tr}
+{tr}
+{td}SR-8 - Multi-Site{/td}
+{td}Unified dashboard 10 sites; initial load 5 s; auto-refresh 3 s over 4G/5G{/td}
+{td}Load: 5 s; Refresh: 3 s{/td}
+{/tr}
+{tr}
+{td}SR-9 - Cybersecurity{/td}
+{td}TLS 1.2+/X.509 mTLS; RBAC Operator/Viewer; HTTP 401/403; audit log; offline auth{/td}
+{td}All MQTT: TLS 1.2+{/td}
+{/tr}
+{/table}
+
+== High-Level Architectural Design
+
+The GMS architecture follows a four-layer modular design. Hardware is confirmed in WP6.2: Arduino Portenta Machine Control (STM32H747 dual-core). Cortex-M7 (10 Hz) runs PID/hysteresis control loops; Cortex-M4 handles MQTT communications and security. Cloud uses InfluxDB or TimescaleDB for time-series storage.
+
+{table class="wrapped"}
+{colgroup}
+{col }
+{col }
+{col }
+{/colgroup}
+{tr}
+{th}**Layer**{/th}
+{th}**Key Technology**{/th}
+{th}**Responsibility**{/th}
+{/tr}
+{tr}
+{td}Hardware{/td}
+{td}SN-3002-TR-ECTHNPKPH-N01 (RS-485 Modbus RTU, 7-in-1 soil), SHT10 (air temp/humidity, 2-wire serial), NDIR (CO2, UART); Valve, Heater, Fans, Humidifier; 4G Modem{/td}
+{td}Physical sensing and actuation; irrigation, heating, ventilation, humidity{/td}
+{/tr}
+{tr}
+{td}Edge Controller{/td}
+{td}Arduino Portenta MC; STM32H747 Cortex-M7 (PID 10Hz) + Cortex-M4 (MQTT/Security); NV config storage{/td}
+{td}Local PID/hysteresis automation; schedule execution; offline buffering 72 h; MQTT publish; local auth{/td}
+{/tr}
+{tr}
+{td}Cloud Backend{/td}
+{td}MQTT Broker; InfluxDB/TimescaleDB 90-day; REST API; AuthN/AuthZ; Alert+Notification service{/td}
+{td}Telemetry ingestion; alert generation; RBAC; analytics; push/SMS dispatch{/td}
+{/tr}
+{tr}
+{td}Client Layer{/td}
+{td}Browser SPA (HTTPS/REST); WebSocket/SSE; Mobile browser 360 px+{/td}
+{td}Operator dashboard; real-time monitoring; manual control; historical analysis; multi-site{/td}
+{/tr}
+{/table}
+
+{br}
+
+=== System Operational Modes
+
+The GMS operates in five modes managed by the Edge Controller System State Controller. Each mode activates/deactivates specific component responsibilities:
+
+{table class="wrapped"}
+{colgroup}
+{col }
+{col }
+{col }
+{/colgroup}
+{tr}
+{th}**Mode**{/th}
+{th}**Active Components**{/th}
+{th}**Key Static Constraint**{/th}
+{/tr}
+{tr}
+{td}Normal Operation{/td}
+{td}All components; Sensor Acq -> Automation -> Cloud -> Dashboard{/td}
+{td}MQTT QoS 1; TLS 1.2+; polling 60 s{/td}
+{/tr}
+{tr}
+{td}Offline Autonomous{/td}
+{td}Sensor Acq + Local Automation Engine + Offline Buffer only (edge){/td}
+{td}Min 72 h; no cloud for actuation{/td}
+{/tr}
+{tr}
+{td}Manual Override{/td}
+{td}Local Automation (automation paused per-actuator); REST API -> IrrigationController{/td}
+{td}Safety interlocks always active; audit log required{/td}
+{/tr}
+{tr}
+{td}Configuration{/td}
+{td}ThresholdConfigStore + ScheduleExecutor; propagate to Cortex-M7 within 60 s{/td}
+{td}Persists across restart; applies immediately{/td}
+{/tr}
+{tr}
+{td}Emergency Stop{/td}
+{td}ActuatorSafetyInterlock (all -> safe state); AlertService -> push/SMS{/td}
+{td}Completes within 60 s; manual ACK to resume{/td}
+{/tr}
+{/table}
+
+=== Component Responsibility Overview
+
+{table class="wrapped"}
+{colgroup}
+{col }
+{col }
+{col }
+{/colgroup}
+{tr}
+{th}**Component**{/th}
+{th}**Responsible**{/th}
+{th}**Type / Layer**{/th}
+{/tr}
+{tr}
+{td}Sensor Acquisition & Environmental Monitoring System{/td}
+{td}Cojocaru Daniel{/td}
+{td}Perception Subsystem - Edge Controller (Cortex-M7){/td}
+{/tr}
+{tr}
+{td}Local Automation Engine{/td}
+{td}Alexei Maxim{/td}
+{td}Control Subsystem - Edge Controller (Cortex-M7 PID/Hysteresis){/td}
+{/tr}
+{tr}
+{td}Cloud Backend System{/td}
+{td}Rațeeva Daria{/td}
+{td}Cloud Backend (InfluxDB/TimescaleDB, MQTT Broker, REST API){/td}
+{/tr}
+{tr}
+{td}Web Dashboard & User Interface System{/td}
+{td}Mutruc Victoria{/td}
+{td}Presentation Subsystem - Client Layer (Browser SPA){/td}
+{/tr}
+{tr}
+{td}Cybersecurity System{/td}
+{td}Vremere Adrian{/td}
+{td}Cross-Cutting - All Layers (TLS/RBAC/Audit){/td}
+{/tr}
+{/table}
+
+== {image file="gms_high_level_architecture.png" height=400}
+
+== Component Details and Interfaces
+
+=== Sensor Acquisition & Environmental Monitoring System
+
+{table class="wrapped"}
+{colgroup}
+{col }
+{col }
+{/colgroup}
+{tr}
+{td}**Architectural Element**{/td}
+{td}Sensor Acquisition & Environmental Monitoring System{/td}
+{/tr}
+{tr}
+{td}**Component Type**{/td}
+{td}Perception Subsystem{/td}
+{/tr}
+{tr}
+{td}**Responsible**{/td}
+{td}Cojocaru Daniel{/td}
+{/tr}
+{tr}
+{td}**Platform**{/td}
+{td}STM32H747 Cortex-M7 Core; RS-485 Modbus RTU (SN-3002-TR-ECTHNPKPH-N01), 2-wire Serial (SHT10), UART/Modbus RTU (NDIR CO2){/td}
+{/tr}
+{tr}
+{td}**Purpose**{/td}
+{td}Continuously reads soil moisture, soil temperature, EC, pH, N, P, K (SN-3002-TR-ECTHNPKPH-N01), air temperature and relative humidity (SHT10), and CO2 concentration (NDIR) at 60 s intervals and transmits to cloud (SR-1.1). Evaluates against operator-configured thresholds and generates alert events within 5 s (SR-1.2). Light intensity (PAR/BH1750) excluded from pilot scope (review R4).{/td}
+{/tr}
+{tr}
+{td}**Scope**{/td}
+{td}Sensor polling, 3-stage validation (range/plausibility/rate-of-change), threshold evaluation, alert classification, data serialisation, MQTT payload preparation, fault counter monitoring, local buffer feed{/td}
+{/tr}
+{tr}
+{td}**Key Features**{/td}
+{td}{ul}
+
+- Polls 4 parameters at 60 s intervals - deterministic on Cortex-M7 (SR-1.1)
+- 3-stage validation: range check, plausibility, rate-of-change guard (e.g. rejects implausible EC or temperature jumps between cycles)
+- Threshold breach alert event generation 5 s SLA (SR-1.2)
+- Temperature auto-actuation within 30 s: heating at <10C, ventilation at >35C; operator-configurable defaults (SR-1.3)
+- Humidity ventilation within 30 s of exceeding maximum configured threshold (SR-1.4)
+- CO2 informational advisory when concentration drops below 800 ppm (SR-1.5)
+- SensorFaultMonitor: configurable fault counter per sensor; flags alarm on persistent failures
+- MQTT publish is non-blocking - cloud outage does not delay local threshold evaluation
+- Light intensity excluded from pilot scope (no corresponding SHR, review R4)
+{/ul}{/td}
+{/tr}
+{/table}
+
+==== {image file="sensor_acquisition_component.png" height=250}
+
+==== {br}Component Interfaces
+
+{table class="wrapped"}
+{colgroup}
+{col }
+{col }
+{col }
+{/colgroup}
+{tr}
+{th}**Interface**{/th}
+{th}**Description / Scope**{/th}
+{th}**Connected Component**{/th}
+{/tr}
+{tr}
+{td}**SENS-HW-IF**{/td}
+{td}Hardware interface to physical sensors: RS-485 Modbus RTU (SN-3002-TR-ECTHNPKPH-N01 soil probe), 2-wire Serial (SHT10 air sensor), UART/Modbus RTU (NDIR CO2 sensor). Driven by STM32H747 peripheral controllers. Not exposed beyond edge controller.{/td}
+{td}Physical Sensors (Hardware Layer){/td}
+{/tr}
+{tr}
+{td}**SENS-ENGINE-IF**{/td}
+{td}Delivers SensorData events (parameter, value, unit, ISO 8601 timestamp, sensorId) and AlertEvent objects to Local Automation Engine. Triggered each polling cycle and immediately on threshold breach.{/td}
+{td}Local Automation Engine{/td}
+{/tr}
+{tr}
+{td}**SENS-MQTT-IF**{/td}
+{td}Serialises SensorData to JSON MQTT payloads (sensorId, parameter, value, unit, ISO 8601 timestamp). Passed to MQTT Client (Cortex-M4) for cloud publication at 60 s intervals.{/td}
+{td}MQTT Client (Cortex-M4 Core){/td}
+{/tr}
+{tr}
+{td}**SENS-BUFF-IF**{/td}
+{td}Feeds sensor records to Offline Buffer Manager when cloud connectivity is lost. Records time-stamped locally and flushed chronologically on reconnect. Ensures zero data loss (SR-6.2).{/td}
+{td}Offline Buffer Manager{/td}
+{/tr}
+{/table}
+
+{br}
+
+=== Local Automation Engine
+
+{table class="wrapped"}
+{colgroup}
+{col }
+{col }
+{/colgroup}
+{tr}
+{td}**Architectural Element**{/td}
+{td}Local Automation Engine{/td}
+{/tr}
+{tr}
+{td}**Component Type**{/td}
+{td}Control Subsystem{/td}
+{/tr}
+{tr}
+{td}**Responsible**{/td}
+{td}Alexei Maxim{/td}
+{/tr}
+{tr}
+{td}**Platform**{/td}
+{td}STM32H747 Cortex-M7 Core; PID control (+/-0.5C setpoint stability); hysteresis for humidity; 10 Hz control cycle; EEPROM/Flash for NV config{/td}
+{/tr}
+{tr}
+{td}**Purpose**{/td}
+{td}Orchestrates all on-device automated greenhouse control. Receives sensor events, applies PID/hysteresis logic, issues actuator commands, executes scheduled irrigation, handles remote manual commands, buffers data during cloud outages, and maintains 72 h+ autonomous operation (SR-6.2).{/td}
+{/tr}
+{tr}
+{td}**Scope**{/td}
+{td}Irrigation control (sensor/schedule/manual-triggered), climate PID/hysteresis, actuator conflict arbitration, threshold config persistence, offline buffer management, resource usage logging, emergency stop enforcement{/td}
+{/tr}
+{tr}
+{td}**Key Features**{/td}
+{td}{ul}
+
+- PID temperature control (+/-0.5C stability); hysteresis-based humidity control
+- Irrigation valve activation within 30 s of soil moisture breach (SR-2.1); auto-stop within 30 s of reaching target regardless of trigger source (SR-2.2)
+- Skip-if-wet gate: skips scheduled irrigation if soil already at/above target, preventing over-watering
+- Maximum duration timer safeguard on pump prevents indefinite operation on sensor failure
+- Autonomous schedule execution (daily/weekly) persisted in NV; survives restarts and 72 h+ cloud outages (SR-2.3)
+- Remote manual irrigation commands from dashboard execute within 10 s (SR-2.4)
+- Ventilation arbitration: temp and humidity breaches share physical actuator; each event logged independently with trigger type
+- ResourceLogger: records water volume, energy, trigger type (SENSOR|SCHEDULE|MANUAL), timestamp per activation event (SR-7.3)
+- Offline buffer with zero data loss on reconnect; batch flush avoids mobile rate-limit issues (SR-6.2)
+- ActuatorSafetyInterlock: emergency stop reachable from any state; all actuators to safe state within 60 s
+{/ul}{/td}
+{/tr}
+{/table}
+
+==== {image file="local_automation_engine_component.png" width=749}
+
+==== Component Interfaces
+
+{table class="wrapped"}
+{colgroup}
+{col }
+{col }
+{col }
+{/colgroup}
+{tr}
+{th}**Interface**{/th}
+{th}**Description / Scope**{/th}
+{th}**Connected Component**{/th}
+{/tr}
+{tr}
+{td}**AUTO-SENS-IF**{/td}
+{td}Receives SensorData and AlertEvent from Sensor Acquisition System. Entry point to AutomationDecisionEngine. Driven by 60 s polling cycle.{/td}
+{td}Sensor Acquisition System{/td}
+{/tr}
+{tr}
+{td}**AUTO-ACT-IF**{/td}
+{td}Issues GPIO/relay actuation commands to physical actuators (valve, heater, exhaust/circ fan, humidifier). SLA: 30 s automated, 10 s manual remote.{/td}
+{td}Physical Actuators (Hardware Layer){/td}
+{/tr}
+{tr}
+{td}**AUTO-API-IF**{/td}
+{td}Receives manual remote control commands from Cloud REST API Gateway via MQTT downlink. Executes within 10 s of dashboard submission. Guarded by EdgeAuthModule in offline mode.{/td}
+{td}Cloud REST API Gateway / EdgeAuthModule{/td}
+{/tr}
+{tr}
+{td}**AUTO-CONFIG-IF**{/td}
+{td}Reads and writes threshold configuration (4 parameters) from ThresholdConfigStore (NV). Persists across restarts; applies immediately; syncs from cloud within 60 s cycle (SR-2.6).{/td}
+{td}ThresholdConfigStore (NV Storage){/td}
+{/tr}
+{tr}
+{td}**AUTO-SCHED-IF**{/td}
+{td}Retrieves and persists irrigation schedules from ScheduleExecutor. Schedules survive cloud outages and controller restarts (SR-2.3).{/td}
+{td}ScheduleExecutor{/td}
+{/tr}
+{tr}
+{td}**AUTO-BUF-IF**{/td}
+{td}Passes buffered SensorRecords and activation logs to MQTT Client for batch upload on cloud reconnect. Guarantees zero data loss and chronological ordering (SR-6.2).{/td}
+{td}MQTT Client (Cortex-M4 Core){/td}
+{/tr}
+{tr}
+{td}**AUTO-LOG-IF**{/td}
+{td}Passes resource usage records (water volume, energy, trigger type, timestamp) to Cloud Time-Series DB for 90-day retention (SR-7.3).{/td}
+{td}Cloud Time-Series DB (via MQTT pipeline){/td}
+{/tr}
+{/table}
+
+{br}
+
+=== Cloud Backend System
+
+{table class="wrapped"}
+{colgroup}
+{col }
+{col }
+{/colgroup}
+{tr}
+{td}**Architectural Element**{/td}
+{td}Cloud Backend System{/td}
+{/tr}
+{tr}
+{td}**Component Type**{/td}
+{td}Cloud Backend Subsystem{/td}
+{/tr}
+{tr}
+{td}**Responsible**{/td}
+{td}Raeeva Daria{/td}
+{/tr}
+{tr}
+{td}**Platform**{/td}
+{td}MQTT Broker (Mosquitto/EMQX); InfluxDB or TimescaleDB; REST API (HTTPS); AuthN/AuthZ (JWT+RBAC); Notification gateway (Twilio/FCM){/td}
+{/tr}
+{tr}
+{td}**Purpose**{/td}
+{td}Receives telemetry via MQTT/TLS, persists sensor readings 90 days, evaluates alerts, dispatches push/SMS notifications, serves HTTPS REST API to dashboard, enforces RBAC, provides analytics and export.{/td}
+{/tr}
+{tr}
+{td}**Scope**{/td}
+{td}MQTT broker with X.509 mTLS, data ingestion, InfluxDB/TimescaleDB 90-day store, alert evaluation, two-tier notification dispatch, REST API with RBAC, analytics, resource usage storage, notification gateway{/td}
+{/tr}
+{tr}
+{td}**Key Features**{/td}
+{td}{ul}
+
+- MQTT broker accepts connections only with valid X.509 certs; TLS 1.2+ and QoS 1 to prevent data loss on 4G/5G (SR-9.1)
+- Data ingestion handles normal 30-60 s telemetry and batch historical sync on edge reconnect
+- InfluxDB/TimescaleDB 90-day retention; ISO 8601 timestamps and sensor IDs on all records (SR-5.1)
+- In-dashboard alert generation 5 s from breach; yellow=warning, red=critical (SR-4.1)
+- Critical alert escalation: push/SMS within 30 s of 60 s persistence; SLA at server dispatch point (SR-4.2, review R5)
+- Heat Warning / Frost Warning temperature alert categorisation (SR-4.4)
+- Interactive trend queries up to 90 days; daily render 3 s, hourly 5 s (SR-5.2)
+- CSV and XLSX export with 5 mandatory fields: timestamp, sensor ID, parameter, value, unit (SR-5.3)
+- Setpoint/config updates acknowledged by edge within one 60 s control cycle (SR-2.6)
+- Multi-site aggregation: 10 sites, initial load 5 s, refresh 3 s (SR-8.3, SR-8.5)
+- REST API returns HTTP 401/403 for unauthenticated/unauthorised requests; logs with timestamp and source IP (SR-9.3)
+{/ul}{/td}
+{/tr}
+{/table}
+
+{image file="cloud_backend_component.png" height=400}
+
+==== Component Interfaces
+
+{table class="wrapped"}
+{colgroup}
+{col }
+{col }
+{col }
+{/colgroup}
+{tr}
+{th}**Interface**{/th}
+{th}**Description / Scope**{/th}
+{th}**Connected Component**{/th}
+{/tr}
+{tr}
+{td}**CLOUD-EDGE-IF**{/td}
+{td}MQTT over TLS 1.2+ with X.509 mutual auth. QoS 1 (at-least-once). Receives telemetry every 30-60 s and batch historical records on reconnect. Delivers actuator commands and config updates via MQTT downlink. Transport: 4G/5G (SR-6.1).{/td}
+{td}Edge MQTT Client (Cortex-M4){/td}
+{/tr}
+{tr}
+{td}**CLOUD-WEB-IF**{/td}
+{td}HTTPS/REST JSON API for web dashboard. Covers sensor data, actuator commands, threshold config, schedule CRUD, historical export, analytics, resource summary, user management, and multi-site aggregation.{/td}
+{td}Web Dashboard & UI System{/td}
+{/tr}
+{tr}
+{td}**CLOUD-NOTIF-IF**{/td}
+{td}Interface to Twilio/FCM push/SMS gateway. Triggered when critical alert persists beyond 60 s; notification enqueued within 30 s (SR-4.2). Includes Heat/Frost Warning label in payload.{/td}
+{td}External Push/SMS Provider{/td}
+{/tr}
+{tr}
+{td}**CLOUD-DB-IF**{/td}
+{td}Internal: DataIngestionService to InfluxDB/TimescaleDB. Writes all sensor readings and resource logs; enforces 90-day retention; serves queries for dashboard and export.{/td}
+{td}InfluxDB / TimescaleDB{/td}
+{/tr}
+{tr}
+{td}**CLOUD-AUTH-IF**{/td}
+{td}Internal: REST API Gateway to AuthNAuthZService. Validates JWT tokens, enforces Operator/Viewer roles, logs all unauthorised attempts with timestamp and source IP.{/td}
+{td}AuthNAuthZService{/td}
+{/tr}
+{tr}
+{td}**CLOUD-SYNC-IF**{/td}
+{td}Receives batch-flushed buffered records from reconnecting edge controllers. Inserts chronologically into DB with zero data loss (SR-6.2).{/td}
+{td}Edge Offline Buffer (on reconnect){/td}
+{/tr}
+{/table}
+
+{br}
+
+=== Web Dashboard & User Interface System
+
+{table class="wrapped"}
+{colgroup}
+{col }
+{col }
+{/colgroup}
+{tr}
+{td}**Architectural Element**{/td}
+{td}Web Dashboard & User Interface System{/td}
+{/tr}
+{tr}
+{td}**Component Type**{/td}
+{td}Presentation Subsystem{/td}
+{/tr}
+{tr}
+{td}**Responsible**{/td}
+{td}Mutruc Victoria{/td}
+{/tr}
+{tr}
+{td}**Platform**{/td}
+{td}Browser SPA (no install); HTTPS/REST; WebSocket or SSE; Chrome >=110, Firefox >=110, Safari >=16, Edge >=110{/td}
+{/tr}
+{tr}
+{td}**Purpose**{/td}
+{td}Operator-facing SPA for real-time greenhouse monitoring, manual control, alert management, historical data access, threshold and schedule configuration, resource analysis, and multi-site overview. Accessible from any modern browser, 360 px viewport upward.{/td}
+{/tr}
+{tr}
+{td}**Scope**{/td}
+{td}Responsive SPA 360-2560 px; live sensor dashboard (soil moisture primary); colour-coded alert panel; irrigation control (manual ON/OFF, Operator role gated); schedule manager; threshold config UI; historical trend view + export; resource summary + baseline; multi-site aggregated dashboard; side-by-side cross-site comparison{/td}
+{/tr}
+{tr}
+{td}**Key Features**{/td}
+{td}{ul}
+
+- Single-page overview: all sensor values, alerts, and actuator statuses without navigation (SR-3.2)
+- Soil moisture primary top-viewport widget visible without scrolling at 360 px (SR-2.5)
+- Auto-refresh 10 s without manual reload (SR-3.4); freshness timestamp always visible; staleness warning when data >60 s (SR-3.6)
+- Fully responsive 360-2560 px; touch targets >=44 px; no horizontal overflow at 360 px (SR-3.3)
+- Complete feature parity desktop/mobile: every control reachable on smartphone (SR-3.5)
+- Colour-coded alert banners within 5 s of breach; Heat/Frost Warning type labels (SR-4.1, SR-4.4)
+- Manual irrigation ON/OFF with 10 s SLA; requires Operator role (SR-2.4)
+- Historical trend: 90 days, hourly/daily granularity; CSV and XLSX export with 5 mandatory fields (SR-5.2, SR-5.3)
+- Resource summary panel: water + energy for selected period vs. manually-entered baseline with % difference (SR-7.4)
+- Multi-site dashboard: 10 sites, initial load 5 s, auto-refresh 3 s over 4G/5G (SR-8.3, SR-8.5)
+- Side-by-side parameter comparison; colour-coded out-of-range highlight (SR-8.4)
+{/ul}{/td}
+{/tr}
+{/table}
+
+==== {image file="web_dashboard_component.png" width=749}
+
+==== Component Interfaces
+
+{table class="wrapped"}
+{colgroup}
+{col }
+{col }
+{col }
+{/colgroup}
+{tr}
+{th}**Interface**{/th}
+{th}**Description / Scope**{/th}
+{th}**Connected Component**{/th}
+{/tr}
+{tr}
+{td}**UI-API-IF**{/td}
+{td}HTTPS/REST interface to Cloud REST API Gateway. All data retrieval, config writes, actuator commands, schedule CRUD, historical queries, multi-site aggregation. Actuator commands execute within 10 s (SR-2.4).{/td}
+{td}Cloud REST API Gateway{/td}
+{/tr}
+{tr}
+{td}**UI-AUTH-IF**{/td}
+{td}JWT-based authentication. Login credentials -> signed JWT with role (Operator/Viewer). Token in every API request. Operator role required for actuator controls and threshold edits.{/td}
+{td}AuthN/AuthZ Service{/td}
+{/tr}
+{tr}
+{td}**UI-WS-IF**{/td}
+{td}WebSocket/SSE for push real-time updates. Alert banners appear 5 s after breach (SR-4.1); live sensor values refresh 10 s without reload (SR-3.4).{/td}
+{td}Cloud Alert Service (WebSocket/SSE endpoint){/td}
+{/tr}
+{tr}
+{td}**UI-EXPORT-IF**{/td}
+{td}Data export to Analytics & Reporting Service. CSV or XLSX packages for up to 90 days with 5 mandatory fields (SR-5.3).{/td}
+{td}Analytics & Reporting Service{/td}
+{/tr}
+{/table}
+
+{br}
+
+=== Cybersecurity System
+
+{table class="wrapped"}
+{colgroup}
+{col }
+{col }
+{/colgroup}
+{tr}
+{td}**Architectural Element**{/td}
+{td}Cybersecurity System{/td}
+{/tr}
+{tr}
+{td}**Component Type**{/td}
+{td}Cross-Cutting Security Subsystem{/td}
+{/tr}
+{tr}
+{td}**Responsible**{/td}
+{td}Vremere Adrian{/td}
+{/tr}
+{tr}
+{td}**Platform**{/td}
+{td}TLS termination at MQTT broker and REST API Gateway; JWT for web auth; X.509 CertificateStore on edge controller (Cortex-M4); EdgeAuthModule independent of cloud{/td}
+{/tr}
+{tr}
+{td}**Purpose**{/td}
+{td}End-to-end security across all GMS layers: encrypted edge-to-cloud communication, RBAC on the web dashboard, audit logging of all access attempts, and offline authentication enforcement on the edge controller.{/td}
+{/tr}
+{tr}
+{td}**Scope**{/td}
+{td}TLS 1.2+ termination with X.509 client cert validation (MQTT); JWT RBAC (REST API); user account management; request guard HTTP 401/403; append-only audit log with IP and timestamp; offline local auth (edge){/td}
+{/tr}
+{tr}
+{td}**Key Features**{/td}
+{td}{ul}
+
+- All MQTT communication: TLS 1.2+; edge authenticates with X.509 client certificate (SR-9.1)
+- RBAC: Operator (full read/write, account management) and Viewer (read-only) (SR-9.2)
+- Operator creates, modifies, deactivates user accounts; initial Operator provisioned at installation (SR-9.2, review R7)
+- All unauthenticated/unauthorised API requests: HTTP 401/403, logged with timestamp and source IP (SR-9.3)
+- EdgeAuthModule: offline mode enforces pre-provisioned credential auth; operates without cloud (SR-9.4)
+- CertificateStore: manages X.509 edge certs; supports certificate rotation
+- MQTT QoS 1 prevents command injection on unstable 4G/5G; TLS prevents eavesdropping and replay
+{/ul}{/td}
+{/tr}
+{/table}
+
+{image file="cybersecurity_component.png" width=749}
+
+==== Component Interfaces
+
+{table class="wrapped"}
+{colgroup}
+{col }
+{col }
+{col }
+{/colgroup}
+{tr}
+{th}**Interface**{/th}
+{th}**Description / Scope**{/th}
+{th}**Connected Component**{/th}
+{/tr}
+{tr}
+{td}**SEC-MQTT-IF**{/td}
+{td}X.509 mutual TLS interface between TLSTerminationModule and MQTT Broker. Broker rejects connections without valid pre-provisioned cert. All traffic TLS 1.2+ minimum. Applies to all sensor data and actuator command messages (SR-9.1).{/td}
+{td}MQTT Broker (Cloud Backend){/td}
+{/tr}
+{tr}
+{td}**SEC-API-IF**{/td}
+{td}JWT validation and RBAC by RequestGuard before every REST API endpoint. Returns HTTP 401 (no token) or HTTP 403 (wrong role) on failure.{/td}
+{td}REST API Gateway (Cloud Backend){/td}
+{/tr}
+{tr}
+{td}**SEC-AUDIT-IF**{/td}
+{td}AuditLogger: called by RequestGuard on every rejected request. Persists timestamp, source IP, route, rejection reason to append-only audit trail.{/td}
+{td}Audit Log Store (Cloud Backend){/td}
+{/tr}
+{tr}
+{td}**SEC-EDGE-IF**{/td}
+{td}EdgeAuthModule on edge local API: validates pre-provisioned credential when cloud unavailable. Returns HTTP 401 if unauthenticated. Fully independent of cloud (SR-9.4).{/td}
+{td}Edge Controller Local API (Cortex-M4){/td}
+{/tr}
+{tr}
+{td}**SEC-USERMGMT-IF**{/td}
+{td}UserAccountManager: Operator-only interface to create/modify/deactivate accounts and assign Viewer role. Persisted server-side per user account (SR-9.2).{/td}
+{td}AuthN/AuthZ Service / Web Dashboard{/td}
+{/tr}
+{/table}
+
+{br}
+
+== GMS sequence diagram
+
+The GMS sequence diagram illustrates three key operational scenarios: normal sensor-to-cloud data flow with operator control, autonomous offline operation with local data buffering, and emergency stop with safe shutdown and operator notification. It shows how the five system components: Sensor Acquisition, Local Automation, Cloud Backend, Web Dashboard, and Cybersecurity interact and maintain greenhouse control under both connected and disconnected conditions.
+
+{br}
+
+{image file="gms_sequence_diagram (1).png" width=749}
+
+== Architectural Decisions and Rationale
+
+{table class="wrapped"}
+{colgroup}
+{col }
+{col }
+{col }
+{/colgroup}
+{tr}
+{th}**Decision**{/th}
+{th}**Rationale**{/th}
+{th}**Requirements / Source**{/th}
+{/tr}
+{tr}
+{td}STM32H747 dual-core edge controller{/td}
+{td}M7 runs deterministic PID at 10 Hz without OS jitter; M4 handles MQTT/security separately, so comms delays never affect the control loop.{/td}
+{td}SR-1.1, SR-2.1,{/td}
+{/tr}
+{tr}
+{td}InfluxDB / TimescaleDB{/td}
+{td}Purpose-built time-series stores outperform relational DBs for time-range queries and retention enforcement. Required for 90-day trend visualisation and seasonal ROI analysis.{/td}
+{td}SR-5.1, SR-5.2{/td}
+{/tr}
+{tr}
+{td}MQTT QoS 1 over TLS 1.2+{/td}
+{td}QoS 1 (at-least-once) prevents data loss on unstable 4G/5G (55.6% of sites mobile-only per WP3.3). TLS 1.2+ prevents command injection and eavesdropping.{/td}
+{td}SR-6.1, SR-9.1, WP3.3 survey{/td}
+{/tr}
+{tr}
+{td}PID for temperature, hysteresis for humidity{/td}
+{td}PID achieves +/-0.5C setpoint stability in Moldova's -15C to +35C range. Hysteresis is adequate for humidity and avoids oscillation.{/td}
+{td}SR-1.3, SR-1.4, WP6.2 Climate section{/td}
+{/tr}
+{tr}
+{td}Edge-first offline architecture 72 h+{/td}
+{td}3-month offline operation is a real Moldovan farmer use case (WP3.3). Edge-local automation prevents crop damage during extended cloud outages.{/td}
+{td}SR-6.2, SR-2.3, Project Charter O5{/td}
+{/tr}
+{tr}
+{td}RBAC Operator/Viewer roles{/td}
+{td}Viewer prevents accidental actuation; Operator includes account management (review R7), avoiding a separate admin tier.{/td}
+{td}SR-9.2, review R7{/td}
+{/tr}
+{tr}
+{td}Batch flush on reconnect{/td}
+{td}Individual re-publish after long outage exceeds 4G rate limits. Batch insert into InfluxDB is efficient and preserves chronological order.{/td}
+{td}SR-6.2, WP6.2 Cloud section{/td}
+{/tr}
+{tr}
+{td}Hardware BOM ceiling 2000 EUR{/td}
+{td}Constrains component selection to commodity sensors and a single MCU controller, keeping TCO affordable for small Moldovan farms.{/td}
+{td}SR-7.1{/td}
+{/tr}
+{/table}

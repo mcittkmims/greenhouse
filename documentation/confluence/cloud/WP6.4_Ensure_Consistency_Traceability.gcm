@@ -1,0 +1,386 @@
+--- gcm ---
+title: 04 - GMS -WP6.4 Ensure consistency and establish bidirectional traceability
+page_id: 42634174
+version: 57
+source: http://confluence.microlab.club/rest/api/content/42634174
+---
+
+{table class="wrapped"}
+{thead}
+{tr}
+{th}**Ticket ID**{/th}
+{th}**Jira Ticket**{/th}
+{th}**Ticket Name / Element**{/th}
+{th}**Type**{/th}
+{th}**Satisfies / Relates to (SR Tickets)**{/th}
+{th}**Related Arch. Tickets**{/th}
+{/tr}
+{/thead}
+{tr}
+{td}**GMS-AE1**{/td}
+{td}{jira:GMS-137|showSummary=false}{/td}
+{td}Sensor Acquisition & Environmental Monitoring System — Architecture{/td}
+{td}Epic{/td}
+{td}{jira:GMS-1|showSummary=false}
+{jira:GMS-71|showSummary=false}
+{jira:GMS-72|showSummary=false}{/td}
+{td}-{/td}
+{/tr}
+{tr}
+{td}**GMS-AE1-COMP**{/td}
+{td}{jira:GMS-138|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}SensorAcquisitionSystem Component — Static Spec (SensorPoller, DataValidator, ThresholdEvaluator, AlertClassifier, SensorFaultMonitor){/td}
+{td}Story{/td}
+{td}{jira:GMS-71|showSummary=false}{jira:GMS-72|showSummary=false}{jira:GMS-73|showSummary=false} {jira:GMS-74|showSummary=false}{jira:GMS-91|showSummary=false}{/td}
+{td}{jira:GMS-139|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-140|showSummary=false}{jira:GMS-141|showSummary=false}{jira:GMS-142|showSummary=false}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE1-IF1**{/td}
+{td}{jira:GMS-139|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}SENS-HWIF — RS-485/SHT10/UART hardware interface to physical sensors{/td}
+{td}Story{/td}
+{td}{jira:GMS-71|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}{jira:GMS-138|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE1-IF2**{/td}
+{td}{jira:GMS-140|showSummary=false}{/td}
+{td}SENSENGINE-IF — SensorData + AlertEvent delivery to Local Automation Engine{/td}
+{td}Story{/td}
+{td}{jira:GMS-72|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-73|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}{jira:GMS-138|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-121|showSummary=false}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE1-IF3**{/td}
+{td}{jira:GMS-141|showSummary=false}{/td}
+{td}SENSMQTT-IF — JSON MQTT payload serialisation to Cortex-M4 MQTT client{/td}
+{td}Story{/td}
+{td}{jira:GMS-71|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-80|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}{jira:GMS-138|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-130|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE1-IF4**{/td}
+{td}{jira:GMS-142|showSummary=false}{/td}
+{td}SENSBUFF-IF — Offline buffer feed to OfflineBufferManager{/td}
+{td}Story{/td}
+{td}{jira:GMS-81|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}{jira:GMS-138|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-121|showSummary=false}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE1-SC**{/td}
+{td}{jira:GMS-143|showSummary=false}{/td}
+{td}Sensor Acquisition Special Characteristics (validation pipeline, fault counter, non-blocking MQTT){/td}
+{td}Story{/td}
+{td}{jira:GMS-145|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-72|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}{jira:GMS-138|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE2**{/td}
+{td}{jira:GMS-120|showSummary=false}{/td}
+{td}Local Automation Engine — Architecture{/td}
+{td}Epic{/td}
+{td}{jira:GMS-2|showSummary=false}{jira:GMS-83|showSummary=false} {jira:GMS-92|showSummary=false} {jira:GMS-93|showSummary=false}{jira:GMS-94|showSummary=false}{/td}
+{td}–{/td}
+{/tr}
+{tr}
+{td}**GMS-AE2-COMP**{/td}
+{td}{jira:GMS-121|showSummary=false}{/td}
+{td}LocalAutomationEngine Component — Static Spec (AutomationDecisionEngine, IrrigationController, ClimateController, ScheduleExecutor, OfflineBufferManager, ResourceLogger, ActuatorSafetyInterlock){/td}
+{td}Story{/td}
+{td}{jira:GMS-83|showSummary=false}{jira:GMS-92|showSummary=false}{jira:GMS-93|showSummary=false} {jira:GMS-94|showSummary=false}{jira:GMS-95|showSummary=false}{jira:GMS-81|showSummary=false} {jira:GMS-61|showSummary=false}{/td}
+{td}{jira:GMS-122|showSummary=false}, {jira:GMS-123|showSummary=false}, {jira:GMS-124|showSummary=false}, {jira:GMS-125|showSummary=false}, {jira:GMS-126|showSummary=false}, {jira:GMS-127|showSummary=false}, {jira:GMS-128|showSummary=false}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE2-IF1**{/td}
+{td}{jira:GMS-122|showSummary=false}{/td}
+{td}AUTOSENS-IF — SensorData + AlertEvent from SensorAcquisitionSystem{/td}
+{td}Story{/td}
+{td}{jira:GMS-83|showSummary=false} {jira:GMS-73|showSummary=false}{/td}
+{td}{jira:GMS-138|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}, {jira:GMS-121|showSummary=false}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE2-IF2**{/td}
+{td}{jira:GMS-123|showSummary=false}{/td}
+{td}AUTOACT-IF — GPIO/relay actuation to physical actuators (30s auto / 10s manual){/td}
+{td}Story{/td}
+{td}{jira:GMS-83|showSummary=false} {jira:GMS-92|showSummary=false} {jira:GMS-73|showSummary=false} {jira:GMS-74|showSummary=false}{/td}
+{td}{jira:GMS-121|showSummary=false}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE2-IF3**{/td}
+{td}{jira:GMS-124|showSummary=false}{/td}
+{td}AUTO-APIIF — Manual remote commands via MQTT downlink from Cloud REST API{/td}
+{td}Story{/td}
+{td}{jira:GMS-94|showSummary=false}{/td}
+{td}{jira:GMS-121|showSummary=false}, {jira:GMS-130|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}, {jira:GMS-104|showSummary=false}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE2-IF4**{/td}
+{td}{jira:GMS-125|showSummary=false}{/td}
+{td}AUTOCONFIG-IF — Threshold config read/write from ThresholdConfigStore (NV){/td}
+{td}Story{/td}
+{td}{jira:GMS-95|showSummary=false}{/td}
+{td}{jira:GMS-121|showSummary=false}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE2-IF5**{/td}
+{td}{jira:GMS-126|showSummary=false}{/td}
+{td}AUTOSCHED-IF — Irrigation schedule persist/retrieve from ScheduleExecutor (NV){/td}
+{td}Story{/td}
+{td}{jira:GMS-93|showSummary=false}{/td}
+{td}{jira:GMS-121|showSummary=false}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE2-IF6**{/td}
+{td}{jira:GMS-127|showSummary=false}{/td}
+{td}AUTOBUF-IF — Buffered records batch upload to MQTT client on reconnect{/td}
+{td}Story{/td}
+{td}{jira:GMS-81|showSummary=false}{/td}
+{td}{jira:GMS-121|showSummary=false}, {jira:GMS-130|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE2-IF7**{/td}
+{td}{jira:GMS-128|showSummary=false}{/td}
+{td}AUTOLOG-IF — Resource usage records to Cloud Time-Series DB via MQTT{/td}
+{td}Story{/td}
+{td}{jira:GMS-61|showSummary=false}{/td}
+{td}{jira:GMS-121|showSummary=false}, {jira:GMS-130|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE2-SC**{/td}
+{td}{jira:GMS-129|showSummary=false}{/td}
+{td}Local Automation Engine Special Characteristics (PID anti-windup, actuator conflict, 72h autonomy){/td}
+{td}Story{/td}
+{td}{jira:GMS-146|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}, {jira:GMS-81|showSummary=false}{/td}
+{td}{jira:GMS-121|showSummary=false}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE3**{/td}
+{td}{jira:GMS-119|showSummary=false}{/td}
+{td}Cloud Backend System — Architecture{/td}
+{td}Epic{/td}
+{td}{jira:GMS-5|showSummary=false}{jira:GMS-4|showSummary=false}{jira:GMS-6|showSummary=false}{jira:GMS-8|showSummary=false}{/td}
+{td}-{/td}
+{/tr}
+{tr}
+{td}**GMS-AE3-COMP**
+** **{/td}
+{td}{jira:GMS-130|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}CloudBackendSystem Component — Static Spec (MQTTBroker, DataIngestionService, AlertEvaluationService, NotificationDispatcher, RESTAPIGateway, AnalyticsService, AuthNAuthZService){/td}
+{td}Story{/td}
+{td}{jira:GMS-80|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-81|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-82|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-78|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-79|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-68|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-69|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-87|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-88|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-89|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-99|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-101|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}{jira:GMS-131|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-132|showSummary=false}{jira:GMS-133|showSummary=false}{jira:GMS-134|showSummary=false}{jira:GMS-135|showSummary=false}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE3-IF1**{/td}
+{td}{jira:GMS-131|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}CLOUDEDGE-IF — MQTT/TLS 1.2+ X.509 mTLS; QoS 1; telemetry + downlink commands{/td}
+{td}Story{/td}
+{td}{jira:GMS-80|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-87|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}{jira:GMS-130|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-104|showSummary=false}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE3-IF2**{/td}
+{td}{jira:GMS-132|showSummary=false}{/td}
+{td}CLOUDNOTIF-IF — Twilio/FCM push/SMS gateway; 30s dispatch after 60s persist{/td}
+{td}Story{/td}
+{td}{jira:GMS-69|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-97|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}{jira:GMS-130|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE3-IF3**{/td}
+{td}{jira:GMS-133|showSummary=false}{/td}
+{td}CLOUDDB-IF — DataIngestionService to InfluxDB/TimescaleDB; 90-day retention{/td}
+{td}Story{/td}
+{td}{jira:GMS-78|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-79|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-82|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}{jira:GMS-130|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE3-IF4**{/td}
+{td}{jira:GMS-134|showSummary=false}{/td}
+{td}CLOUDAUTH-IF — REST API Gateway to AuthNAuthZService; JWT + RBAC{/td}
+{td}Story{/td}
+{td}{jira:GMS-88|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-89|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}{jira:GMS-130|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-104|showSummary=false}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE3-IF5**{/td}
+{td}{jira:GMS-135|showSummary=false}{/td}
+{td}CLOUDSYNC-IF — Batch-flush buffered records from edge on reconnect; zero data loss{/td}
+{td}Story{/td}
+{td}{jira:GMS-81|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}{jira:GMS-130|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{jira:GMS-127|showSummary=false}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE3-SC**{/td}
+{td}{jira:GMS-136|showSummary=false}{/td}
+{td}Cloud Backend Special Characteristics (batch reconnect ingestion, alert dispatch latency, 90-day retention){/td}
+{td}Story{/td}
+{td}{jira:GMS-82|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}{jira:GMS-130|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE4**{/td}
+{td}{jira:GMS-112|showSummary=false}{/td}
+{td}Web Dashboard & User Interface System — Architecture{/td}
+{td}Epic{/td}
+{td}{jira:GMS-3|showSummary=false}
+{jira:GMS-4|showSummary=false}
+{jira:GMS-5|showSummary=false}
+{jira:GMS-7|showSummary=false}
+{jira:GMS-8|showSummary=false}{/td}
+{td}–{/td}
+{/tr}
+{tr}
+{td}**GMS-AE4-COMP**{/td}
+{td}{jira:GMS-113|showSummary=false}{/td}
+{td}WebDashboardUISystem Component — Static Spec (SensorDashboard, AlertPanel, IrrigationControlPanel, ScheduleManager, ThresholdConfigUI, HistoricalTrendView, ResourceSummaryPanel, MultiSiteDashboard){/td}
+{td}Story{/td}
+{td}{jira:GMS-63|showSummary=false}
+{jira:GMS-64|showSummary=false}
+{jira:GMS-65|showSummary=false}
+{jira:GMS-66|showSummary=false}
+{jira:GMS-67|showSummary=false}
+{jira:GMS-68|showSummary=false}
+{jira:GMS-84|showSummary=false}
+{jira:GMS-97|showSummary=false}
+{jira:GMS-78|showSummary=false}
+{jira:GMS-79|showSummary=false}
+{jira:GMS-62|showSummary=false}
+{jira:GMS-96|showSummary=false}
+{jira:GMS-94|showSummary=false}
+{jira:GMS-99|showSummary=false}
+{jira:GMS-100|showSummary=false}
+{jira:GMS-101|showSummary=false}{/td}
+{td}{jira:GMS-114|showSummary=false}
+{jira:GMS-115|showSummary=false}
+{jira:GMS-116|showSummary=false}
+{jira:GMS-117|showSummary=false}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE4-IF1**{/td}
+{td}{jira:GMS-114|showSummary=false}{/td}
+{td}UI-API-IF — HTTPS/REST to Cloud REST API Gateway; all data + commands{/td}
+{td}Story{/td}
+{td}{jira:GMS-94|showSummary=false}
+{jira:GMS-63|showSummary=false}{/td}
+{td}{jira:GMS-113|showSummary=false}
+{jira:GMS-113|showSummary=false}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE4-IF2**{/td}
+{td}{jira:GMS-115|showSummary=false}{/td}
+{td}UI-AUTHIF — JWT login → signed token with role; Operator gates{/td}
+{td}Story{/td}
+{td}{jira:GMS-88|showSummary=false}{/td}
+{td}{jira:GMS-113|showSummary=false}
+{jira:GMS-104|showSummary=false}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE4-IF3**{/td}
+{td}{jira:GMS-116|showSummary=false}{/td}
+{td}UI-WS-IF — WebSocket/SSE push: alert banners 5s; sensor refresh 10s{/td}
+{td}Story{/td}
+{td}{jira:GMS-68|showSummary=false}
+{jira:GMS-66|showSummary=false}{/td}
+{td}{jira:GMS-113|showSummary=false}
+{jira:GMS-130|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE4-IF4**{/td}
+{td}{jira:GMS-117|showSummary=false}{/td}
+{td}UI-EXPORTIF — CSV/XLSX export (90 days, 5 mandatory fields){/td}
+{td}Story{/td}
+{td}{jira:GMS-79|showSummary=false}{/td}
+{td}{jira:GMS-113|showSummary=false}
+{jira:GMS-130|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE4-SC**{/td}
+{td}{jira:GMS-118|showSummary=false}{/td}
+{td}Web Dashboard Special Characteristics (alert prioritisation, mobile-first rendering, data freshness indication){/td}
+{td}Story{/td}
+{td}{jira:GMS-113|showSummary=false}{/td}
+{td}{jira:GMS-113|showSummary=false}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE5**{/td}
+{td}{jira:GMS-102|showSummary=false}{/td}
+{td}Cybersecurity System — Architecture{/td}
+{td}Epic{/td}
+{td}{jira:GMS-9|showSummary=false} {jira:GMS-87|showSummary=false} {jira:GMS-88|showSummary=false} {jira:GMS-89|showSummary=false} {jira:GMS-90|showSummary=false}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE5-COMP**{/td}
+{td}{jira:GMS-104|showSummary=false}{/td}
+{td}CybersecuritySystem Component — Static Spec (TLSTerminationModule, RequestGuard, AuditLogger, EdgeAuthModule, CertificateStore, UserAccountManager){/td}
+{td}Story{/td}
+{td}{jira:GMS-87|showSummary=false} {jira:GMS-88|showSummary=false} {jira:GMS-89|showSummary=false} {jira:GMS-90|showSummary=false}{/td}
+{td}{jira:GMS-105|showSummary=false} {jira:GMS-106|showSummary=false} {jira:GMS-107|showSummary=false} {jira:GMS-108|showSummary=false} {jira:GMS-109|showSummary=false}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE5-IF1**{/td}
+{td}{jira:GMS-105|showSummary=false}{/td}
+{td}SECMQTT-IF — X.509 mTLS between TLSTerminationModule and MQTT Broker{/td}
+{td}Story{/td}
+{td}{jira:GMS-87|showSummary=false}{/td}
+{td}{jira:GMS-104|showSummary=false}, {jira:GMS-130|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE5-IF2**{/td}
+{td}{jira:GMS-106|showSummary=false}{/td}
+{td}SEC-APIIF — JWT validation + RBAC by RequestGuard before every REST endpoint{/td}
+{td}Story{/td}
+{td}{jira:GMS-88|showSummary=false} {jira:GMS-89|showSummary=false}{/td}
+{td}{jira:GMS-104|showSummary=false}, {jira:GMS-130|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE5-IF3**{/td}
+{td}{jira:GMS-107|showSummary=false}{/td}
+{td}SECAUDIT-IF — AuditLogger: append-only log on every rejected request (timestamp, IP, route){/td}
+{td}Story{/td}
+{td}{jira:GMS-89|showSummary=false}{/td}
+{td}{jira:GMS-104|showSummary=false}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE5-IF4**{/td}
+{td}{jira:GMS-108|showSummary=false}{/td}
+{td}SECEDGE-IF — EdgeAuthModule: offline local API auth; HTTP 401 if unauthenticated{/td}
+{td}Story{/td}
+{td}{jira:GMS-90|showSummary=false}{/td}
+{td}{jira:GMS-104|showSummary=false}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE5-IF5**{/td}
+{td}{jira:GMS-109|showSummary=false}{/td}
+{td}SECUSERMGMT-IF — UserAccountManager: Operator-only create/modify/deactivate accounts{/td}
+{td}Story{/td}
+{td}{jira:GMS-88|showSummary=false}{/td}
+{td}{jira:GMS-104|showSummary=false}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE5-SC**{/td}
+{td}{jira:GMS-110|showSummary=false}{/td}
+{td}Cybersecurity Special Characteristics (offline edge auth, X.509 cert lifecycle, audit trail integrity){/td}
+{td}Story{/td}
+{td}{jira:GMS-90|showSummary=false}{/td}
+{td}{jira:GMS-104|showSummary=false}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE6**{/td}
+{td}{jira:GMS-103|showSummary=false}{/td}
+{td}System-Level Architecture (WP6.1 high-level + WP6.2 modes + WP6.3 decisions){/td}
+{td}Epic{/td}
+{td}{jira:GMS-1|showSummary=false} {jira:GMS-2|showSummary=false} {jira:GMS-3|showSummary=false} {jira:GMS-4|showSummary=false} {jira:GMS-5|showSummary=false} {jira:GMS-6|showSummary=false} {jira:GMS-7|showSummary=false} {jira:GMS-8|showSummary=false} {jira:GMS-9|showSummary=false}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE6-ARCH**{/td}
+{td}{jira:GMS-111|showSummary=false}{/td}
+{td}High-Level Static Architecture — 4-layer design (Hardware/Edge/Cloud/Client); SR group mapping; architectural decisions rationale{/td}
+{td}Story{/td}
+{td}{jira:GMS-71|showSummary=false} {jira:GMS-80|showSummary=false} {jira:GMS-81|showSummary=false} {jira:GMS-76|showSummary=false}{/td}
+{td}{jira:GMS-138|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}, {jira:GMS-121|showSummary=false}, {jira:GMS-130|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}, {jira:GMS-113|showSummary=false}, {jira:GMS-104|showSummary=false}{/td}
+{/tr}
+{/table}

@@ -35,11 +35,13 @@ except ImportError:
 
 sys.path.insert(0, str(Path(__file__).parent))
 from gcm_from_html import html_to_gcm  # noqa: E402
+from confluence_attachments import download_attachments  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 CONFIG_PATH = ROOT / "documentation" / "confluence" / "confluence_pages.json"
 CLOUD_DIR = ROOT / "documentation" / "confluence" / "cloud"
 CACHE_DIR = CLOUD_DIR / ".cache"
+ATTACHMENTS_DIR = CLOUD_DIR / "attachments"
 
 
 # ── Config / auth helpers ────────────────────────────────────────────────────
@@ -117,6 +119,7 @@ def main():
 
     CLOUD_DIR.mkdir(parents=True, exist_ok=True)
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    ATTACHMENTS_DIR.mkdir(parents=True, exist_ok=True)
 
     pages = pages_up_to(config, args.up_to)
     if not pages:
@@ -193,6 +196,15 @@ def main():
         updated += 1
         ver_note = f"v{cached_version} → v{current_version}" if cached_version else f"v{current_version}"
         print(f"  UPDATED   WP{wp} — {local_file} ({ver_note})")
+
+        # Download attachments (images, diagrams, etc.)
+        att_dir = ATTACHMENTS_DIR / Path(local_file).stem
+        try:
+            n = download_attachments(page["id"], base_url, auth, att_dir, dry_run=args.dry_run)
+            if n:
+                print(f"            {n} attachment(s) → attachments/{Path(local_file).stem}/")
+        except Exception as e:
+            print(f"            WARNING: could not download attachments — {e}")
 
     print(f"\nSync complete: {updated} updated, {skipped} skipped, {errors} errors.")
 

@@ -1,19 +1,19 @@
 --- gcm ---
 title: 04 - GMS -WP5.2 Develop System Requirements
 page_id: 42634148
-version: 43
+version: 53
 source: http://confluence.microlab.club/rest/api/content/42634148
 ---
 
 {table width=118.021% class="wrapped relative-table"}
 {colgroup}
- {col style="width: 3.31872%;"}
- {col style="width: 35.5041%;"}
- {col style="width: 9.76832%;"}
- {col style="width: 5.94865%;"}
- {col style="width: 5.13463%;"}
- {col style="width: 40.263%;"}
- {/colgroup}
+{col style="width: 3.29792%;"}
+{col style="width: 35.5339%;"}
+{col style="width: 9.7544%;"}
+{col style="width: 5.94554%;"}
+{col style="width: 5.1559%;"}
+{col style="width: 40.2717%;"}
+{/colgroup}
 {thead}
 {tr}
 {th}**Req ID**{/th}
@@ -96,10 +96,7 @@ source: http://confluence.microlab.club/rest/api/content/42634148
 {/tr}
 {tr}
 {td}SR-2.4{/td}
-{td}The GMS web dashboard SHALL provide a remote irrigation control panel allowing the operator to manually activate or deactivate the irrigation valve from any browser, with the command executing on the edge controller within 10 seconds of submission.
-{raw}
-<ac:macro ac:name="jira"><ac:parameter ac:name="showSummary">false</ac:parameter><ac:parameter ac:name="server">Microlab Jira</ac:parameter><ac:parameter ac:name="serverId">5b8ef41d-7a73-399f-9666-c949acb53653</ac:parameter><ac:parameter ac:name="key">GMS-94</ac:parameter>&quot;</ac:macro>
-{/raw}{/td}
+{td}The GMS web dashboard SHALL provide a remote irrigation control panel allowing the operator to manually activate or deactivate the irrigation valve from any browser, with the command executing on the edge controller within 10 seconds of submission.{jira:GMS-94|showSummary=false}{/td}
 {td}*MASTER-Action — The system SHALL [provide] [remote control] executing within [time]*{/td}
 {td}Functional{/td}
 {td}Must Have{/td}
@@ -107,10 +104,7 @@ source: http://confluence.microlab.club/rest/api/content/42634148
 {/tr}
 {tr}
 {td}SR-2.5{/td}
-{td}The GMS dashboard home screen SHALL display the current soil moisture reading as the primary prominent widget, positioned in the top section of the viewport and visible without scrolling on all screen sizes from 360 px width upward.
-{raw}
-<ac:macro ac:name="jira"><ac:parameter ac:name="showSummary">false</ac:parameter><ac:parameter ac:name="server">Microlab Jira</ac:parameter><ac:parameter ac:name="serverId">5b8ef41d-7a73-399f-9666-c949acb53653</ac:parameter><ac:parameter ac:name="key">GMS-96</ac:parameter>&quot;</ac:macro>
-{/raw}{/td}
+{td}The GMS dashboard home screen SHALL display the current soil moisture reading as the primary prominent widget, positioned in the top section of the viewport and visible without scrolling on all screen sizes from 360 px width upward.{jira:GMS-96|showSummary=false}{/td}
 {td}*MASTER-Constraint — The system SHALL [position] [widget] in [viewport location] across [screen size range]*{/td}
 {td}Functional{/td}
 {td}Must Have{/td}
@@ -118,10 +112,7 @@ source: http://confluence.microlab.club/rest/api/content/42634148
 {/tr}
 {tr}
 {td}SR-2.6{/td}
-{td}The system SHALL allow the operator to configure minimum and maximum threshold values independently for soil moisture, air temperature, and relative humidity, with all values persisted across sessions and applied immediately to both sensor-triggered and schedule-based control logic.
-{raw}
-<ac:macro ac:name="jira"><ac:parameter ac:name="showSummary">false</ac:parameter><ac:parameter ac:name="server">Microlab Jira</ac:parameter><ac:parameter ac:name="serverId">5b8ef41d-7a73-399f-9666-c949acb53653</ac:parameter><ac:parameter ac:name="key">GMS-95</ac:parameter>&quot;</ac:macro>
-{/raw}{/td}
+{td}The system SHALL allow the operator to configure minimum and maximum threshold values independently for soil moisture, air temperature, and relative humidity, with all values persisted across sessions and applied immediately to both sensor-triggered and schedule-based control logic.{jira:GMS-95|showSummary=false}{/td}
 {td}MASTER-Action — *The system SHALL [allow actor] to [configure thresholds] applied to [control logic]*{/td}
 {td}Functional{/td}
 {td}Must Have{/td}
@@ -224,10 +215,7 @@ Acceptance criterion: threshold values saved by an operator survive a full brows
 {/tr}
 {tr}
 {td}SR-4.4{/td}
-{td}The system SHALL categorize temperature alerts into distinct types - "Heat Warning" for high temperature threshold breaches and "Frost Warning" for low temperature threshold breaches - displaying the alert type label alongside the severity indicator in both in-dashboard banners and push/SMS notifications.
-{raw}
-<ac:macro ac:name="jira"><ac:parameter ac:name="showSummary">false</ac:parameter><ac:parameter ac:name="server">Microlab Jira</ac:parameter><ac:parameter ac:name="serverId">5b8ef41d-7a73-399f-9666-c949acb53653</ac:parameter><ac:parameter ac:name="key">GMS-97</ac:parameter>&quot;</ac:macro>
-{/raw}{/td}
+{td}The system SHALL categorize temperature alerts into distinct types - "Heat Warning" for high temperature threshold breaches and "Frost Warning" for low temperature threshold breaches - displaying the alert type label alongside the severity indicator in both in-dashboard banners and push/SMS notifications.{jira:GMS-97|showSummary=false}{/td}
 {td}*The system SHALL [categorize] [alerts] into [distinct types] with [type label]*
 ***MASTER-Action***{/td}
 {td}Functional{/td}
@@ -345,6 +333,31 @@ Addresses the 11.1% of surveyed sites with no stable connection. The dual-clause
 {td}Derived from GMS-45 and GMS-46. Although multi-zone management is out of scope for the pilot, the expert interview (Andrei Bragarenco) explicitly described the vision of a unified cloud layer supervising multiple zones. Documenting the extension path now prevents costly architectural rework in future phases. Acceptance criterion: architecture document contains a dedicated section outlining the steps needed to add a second greenhouse zone, including API changes, database schema adjustments, and dashboard modifications.{/td}
 {/tr}
 {tr}
+{td}SR-8.3{/td}
+{td}The system SHALL provide a unified dashboard that aggregates and displays the real-time operational status of all greenhouse sites registered under the same account, including current sensor values, actuator status, and active alert count per site, accessible from a single authenticated session.{jira:GMS-99|showSummary=false}{/td}
+{td}* MASTER-Action — The system SHALL [provide] [unified dashboard] displaying [aggregated status] for [all registered sites]*{/td}
+{td}Functional{/td}
+{td}Should Have{/td}
+{td}Derived from GMS-45 (US). Directly satisfies the SH need: one dashboard for all sites without switching sessions. Lists the minimum data set per site to make the requirement testable. Acceptance: dashboard renders all registered sites in one view after single login.{/td}
+{/tr}
+{tr}
+{td}SR-8.4{/td}
+{td}The system SHALL provide a side-by-side comparison view that simultaneously displays the current value of any selected environmental parameter (temperature, humidity, soil moisture, or CO2) across all selected sites, and SHALL visually highlight any site whose value deviates from its configured normal range using a colour-coded indicator.{jira:GMS-100|showSummary=false}{/td}
+{td}* MASTER-Action — The system SHALL [provide] [comparison view] displaying [parameter] across [all sites] with [deviation highlight]*{/td}
+{td}Functional{/td}
+{td}Should Have{/td}
+{td}Derived from GMS-46 (JS). Implements cross-site data comparison and under-performance identification in one requirement. Colour-coded highlight is the verifiable acceptance criterion for "identify under-performance". Acceptance criterion: selecting any parameter renders values for all sites simultaneously; a site with an out-of-range value is highlighted with a distinct colour-coded indicator.{/td}
+{/tr}
+{tr}
+{td}SR-8.5{/td}
+{td}The multi-site dashboard SHALL render the aggregated status of up to 10 registered greenhouse sites within 5 seconds of initial page load and within 3 seconds of each automatic refresh cycle, measured over a 4G/5G mobile connection.{jira:GMS-101|showSummary=false}{/td}
+{td}*MASTER-Constraint — The system SHALL [render] [multi-site view] within [time threshold] under [network condition]*{/td}
+{td}Non-functional{/td}
+{td}Should Have{/td}
+{td}Derived from GMS-45 (US). Non-functional performance constraint for SR-8.3. Aggregating live sensor data from 10 sites over a mobile connection introduces latency not present in single-site views. The 10-site ceiling aligns with the GMS project scope. 
+Acceptance criterion: dashboard initial load with 10 simulated sites completes within 5 seconds at >= -100 dBm 4G signal; subsequent auto-refresh cycles complete within 3 seconds.{/td}
+{/tr}
+{tr}
 {td colspan=6}**Chapter 9 – Cybersecurity**{/td}
 {/tr}
 {tr}
@@ -378,5 +391,48 @@ Addresses the 11.1% of surveyed sites with no stable connection. The dual-clause
 {td}Non-Functional{/td}
 {td}Should Have{/td}
 {td}Derived from GMS-48. Security must not degrade during cloud connectivity loss — the offline autonomy period (cross-reference SR-6.2) must not create a window where the edge controller is reachable without authentication. Pre-provisioned credentials (e.g., a local API key or certificate stored on the device) must be configured during deployment. Acceptance criterion: during a simulated cloud outage, a direct HTTP request to the edge controller API without valid credentials is rejected with a 401 response.{/td}
+{/tr}
+{tr}
+{td colspan=6}**Chapter 10 – System Architecture Refinements (WP6.3 FMEA)**{/td}
+{/tr}
+{tr}
+{td}SR-10.1{/td}
+{td}The Sensor Acquisition System SHALL implement a hardware watchdog timer that resets the validation pipeline if any single polling cycle exceeds 50 s. Cycles exceeding 40 s SHALL generate an informational alert. If validation cannot complete, the system SHALL use the last known valid reading with a STALE quality flag.{jira:GMS-145|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}EARS-State — WHILE [condition], the system SHALL [action]{/td}
+{td}Functional{/td}
+{td}Must Have{/td}
+{td}Derived from WP6.3 FMEA — Sensor Data Validation Pipeline. Mitigates validation bypass due to Cortex-M7 timing overrun. Cross-reference: SR-1.1 (60 s polling cycle), SR-1.2 (alert generation). Acceptance criterion: watchdog resets pipeline and logs a STALE flag within one polling cycle of a 50 s overrun.{/td}
+{/tr}
+{tr}
+{td}SR-10.2{/td}
+{td}The Local Automation Engine SHALL implement PID integral anti-windup clamping that limits the integral accumulator to the actuator output range, freezing accumulation when saturated. PID integral values SHALL be logged alongside actuator output. Parameters (Kp, Ki, Kd, clamp) SHALL be adjustable via Configuration mode without firmware update.{jira:GMS-146|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}MASTER-Constraint — The system SHALL [constrain] [control parameter] within [range]{/td}
+{td}Functional{/td}
+{td}Must Have{/td}
+{td}Derived from WP6.3 FMEA — PID Control Loop Stability. Mitigates integral windup during Moldova's sustained winter cold events. Cross-reference: SR-1.3 (temperature actuation), SR-1.4 (humidity actuation). Acceptance criterion: during a simulated sustained cold event, actuator output does not overshoot the setpoint by more than 0.5°C on recovery.{/td}
+{/tr}
+{tr}
+{td}SR-10.3{/td}
+{td}The Cloud Backend SHALL accept offline buffer uploads in chunks of maximum 500 records per MQTT message, each with a batch sequence number and total chunk count. The ingestion service SHALL deduplicate records by (sensorId, timestamp) and request retransmission of any missing chunk. The dashboard SHALL display a sync progress indicator during reconnection.{jira:GMS-147|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}EARS-Event — WHEN [event], the system SHALL [action]{/td}
+{td}Functional{/td}
+{td}Must Have{/td}
+{td}Derived from WP6.3 FMEA — Batch Reconnection Ingestion. Mitigates batch insert timeout over 4G on large payloads after 72 h outage. Cross-reference: SR-6.2 (offline buffering and sync). Acceptance criterion: a 4,320-record offline buffer synchronises completely after reconnection with zero data loss and no duplicate records.{/td}
+{/tr}
+{tr}
+{td}SR-10.4{/td}
+{td}The Web Dashboard SHALL track informational alert counts per monitored parameter per 24-hour rolling window. WHEN any parameter exceeds 10 informational alerts in 24 hours, the system SHALL generate a meta-alert recommending threshold reconfiguration. The dashboard SHALL provide a quiet hours setting to suppress informational push notifications during operator-defined periods.{jira:GMS-148|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}EARS-Event — WHEN [trigger event], the system SHALL [action]{/td}
+{td}Functional{/td}
+{td}Should Have{/td}
+{td}Derived from WP6.3 FMEA — Alert Prioritisation Algorithm. Mitigates alert fatigue from miscategorised severity thresholds. Cross-reference: SR-4.1 (informational alerts), SR-4.2 (critical alerts), SR-4.3 (threshold configuration). Acceptance criterion: when a parameter fires 11 informational alerts in 24 h, a meta-alert is visible on the dashboard within the next refresh cycle.{/td}
+{/tr}
+{tr}
+{td}SR-10.5{/td}
+{td}The Cybersecurity System SHALL store pre-provisioned edge authentication credentials in the STM32H747 hardware-protected flash region. Credential rotation SHALL be executable via physical button press without network access. Credentials SHALL expire after a configurable period (default: 7 days). WHEN connectivity is restored, the system SHALL validate local credentials against the cloud revocation list.{jira:GMS-149|showSummary=false|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}EARS-State + EARS-Event — WHILE [condition], the system SHALL [enforce]; WHEN [event], the system SHALL [validate]{/td}
+{td}Functional{/td}
+{td}Should Have{/td}
+{td}Derived from WP6.3 FMEA — Offline Edge Authentication. Mitigates pre-provisioned credential compromise without cloud revocation capability. Cross-reference: SR-9.4 (offline authentication), SR-6.2 (offline autonomy). Acceptance criterion: credentials stored in protected flash cannot be extracted via firmware dump; rotation via physical button succeeds without network access.{/td}
 {/tr}
 {/table}

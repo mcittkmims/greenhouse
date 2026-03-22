@@ -1,7 +1,7 @@
 --- gcm ---
 title: 04 - GMS -WP3.2 Stakeholder Workshop
 page_id: 42634063
-version: 5
+version: 6
 source: http://confluence.microlab.club/rest/api/content/42634063
 ---
 
@@ -28,11 +28,11 @@ The following structured question sets were prepared prior to the interviews. Qu
 
 - Could you please introduce yourself, including your name, age, and how long you have been involved in greenhouse operations?
 - What are the most significant challenges you face in maintaining stable temperature, humidity, and soil moisture conditions throughout the day?
-- How do you currently monitor and adjust conditions in your greenhouse — is it done manually? How much time does it take daily?
+- How do you currently monitor and adjust conditions in your greenhouse, is it done manually? How much time does it take daily?
 - Have you ever experienced crop losses or quality issues due to delayed or missed adjustments? Can you describe what happened?
-- How do you manage monitoring if you have multiple spaces — for example, a garden and a greenhouse at the same time? What problems does this create?
-- What would an ideal monitoring and automatic control system look like for you — what features would matter most?
-- What concerns would you have about adopting a new IoT-based system — for example, cost, complexity, or reliability?
+- How do you manage monitoring if you have multiple spaces , for example, a garden and a greenhouse at the same time? What problems does this create?
+- What would an ideal monitoring and automatic control system look like for you , what features would matter most?
+- What concerns would you have about adopting a new IoT-based system , for example, cost, complexity, or reliability?
 
 **2.2 Government and Institutions**
 
@@ -46,10 +46,10 @@ The following structured question sets were prepared prior to the interviews. Qu
 
 **2.3 IoT / Industrial Automation Expert**
 
-- Please introduce yourself — your name, area of technical expertise, and your role as a distributor/developer in the IoT and industrial automation space.
+- Please introduce yourself , your name, area of technical expertise, and your role as a distributor/developer in the IoT and industrial automation space.
 - How many years of experience do you have working with industrial control systems, IoT hardware, or agricultural automation solutions?
 - What types of equipment and sensors are available on the market for a project like ours?
-- From your experience, what are the most common failure points in IoT sensor deployments in agricultural or greenhouse environments — especially in high-humidity conditions?
+- From your experience, what are the most common failure points in IoT sensor deployments in agricultural or greenhouse environments , especially in high-humidity conditions?
 - What are the frequent integration challenges when connecting PLC-based control systems with cloud platforms or IoT gateways?
 - What is a realistic budget for our project for a single greenhouse zone such as the one at the UTM campus?
 - How would you approach scaling this architecture from a small single-zone greenhouse to a multi-zone, multi-location facility?
@@ -68,7 +68,7 @@ The Teams recording of the expert interview was transcribed using Teams' built-i
 
 == **4. Staekholder Interviews**
 
-**4.1 Expert Interview — Andrei Bragarenco**
+**4.1 Expert Interview , Andrei Bragarenco**
 
 {table class="wrapped"}
 {colgroup}
@@ -80,7 +80,7 @@ The Teams recording of the expert interview was transcribed using Teams' built-i
 {th scope=col}Role{/th}
 {/tr}
 {tr}
-{td}Andrei Bragarenco{/td}
+{td}{user:ff8081819164c840019164ccaee80001}{/td}
 {td}IoT/Embeded systems expert{/td}
 {/tr}
 {tr}
@@ -105,46 +105,83 @@ The Teams recording of the expert interview was transcribed using Teams' built-i
 {/tr}
 {/table}
 
-**Interviewer (Daniel):** Alright, let's begin. The first question — please introduce yourself: your name, your area of technical expertise, and your role as a distributor in the IoT and industrial automation space.
+**Interviewer (Daniel):** Alright, let's begin. The first question , please introduce yourself: your name, your area of technical expertise, and your role as a distributor in the IoT and industrial automation space.
 
-**Andrei Bragarenco:** Should I start now? Okay. My name is Andrei Bragarenco. My area of interest is developing solutions for the agricultural sector. The trend I'm focused on is innovation in agriculture — specifically embedded systems and IoT. I want to cover everything with end-to-end solutions: identify the problem from the farmer's side and deliver a complete answer. We're in the Republic of Moldova, and the problems here are persistent. Most of our engineers are focused on solving problems for others abroad, while our own farmers buy solutions from outside. My goal is to cut that chain — our engineers work for abroad, and then we buy back from abroad. Moldova is practically an entire experimentation ground, full of unsolved problems that others have already moved past. That's my role and my interest.
+**Andrei Bragarenco:** Should I start now? Okay. My name is Andrei Bragarenco. My area of interest is developing solutions for the agricultural sector. The trend I'm focused on is innovation in agriculture , specifically embedded systems and IoT. I want to cover everything with end-to-end solutions: identify the problem from the farmer's side and deliver a complete answer. We're in the Republic of Moldova, and the problems here are persistent. Most of our engineers are focused on solving problems for others abroad, while our own farmers buy solutions from outside. My goal is to cut that chain , our engineers work for abroad, and then we buy back from abroad. Moldova is practically an entire experimentation ground, full of unsolved problems that others have already moved past. That's my role and my interest.
 
 **Interviewer (Daria):** I'll take the next question. What types of equipment and sensors are available for the possible realization of our project, in your opinion?
 
-**Andrei Bragarenco:** The question needs to come from a slightly different angle, because we are technology producers, but for a greenhouse specifically, we first need to identify which processes are happening inside it. Do we want to control humidity? Then we need a humidity sensor. Air humidity? Soil humidity? Both matter. We currently have a sensor — one of ours — that covers air temperature, air humidity, soil temperature, and soil moisture. Those are the sensor-side technologies. On the processing side, we experimented with Arduino, but the problem is those devices are not certified, not verified. They're not suited for industrial deployment. Put an Arduino in a greenhouse and the humidity alone will degrade it in no time. So we moved to industrial-grade equipment — including with your project in mind. Everything runs at 24V industrial standard, not 5V hobby-level. Sensors are also at industrial quality level.
+**Andrei Bragarenco:** The question needs to come from a slightly different angle, because we are technology producers, but for a greenhouse specifically, we first need to identify which processes are happening inside it. Do we want to control humidity? Then we need a humidity sensor. Air humidity? Soil humidity? Both matter. We currently have a sensor , one of ours , that covers air temperature, air humidity, soil temperature, and soil moisture. Those are the sensor-side technologies. On the processing side, we experimented with Arduino, but the problem is those devices are not certified, not verified. They're not suited for industrial deployment. Put an Arduino in a greenhouse and the humidity alone will degrade it in no time. So we moved to industrial-grade equipment , including with your project in mind. Everything runs at 24V industrial standard, not 5V hobby-level. Sensors are also at industrial quality level.
 
-**Victoria:** I have a follow-up — we also have CO2 sensors. When we did our research, almost everyone uses CO2 concentration because it's important for plant development.
+**Victoria:** I have a follow-up , we also have CO2 sensors. When we did our research, almost everyone uses CO2 concentration because it's important for plant development.
 
-**Andrei Bragarenco:** If we find an industrial one online, we buy it. If not — most people use MQ-4 type sensors for gas sensing, which is basically just a board. It's adapted for certain environments and is actually decent quality. Worth considering.
+**Andrei Bragarenco:** If we find an industrial one online, we buy it. If not , most people use MQ-4 type sensors for gas sensing, which is basically just a board. It's adapted for certain environments and is actually decent quality. Worth considering.
 
-**Interviewer (Daria):** I have another question. Given that we're talking about humidity and high temperatures inside a greenhouse — what are the most frequent failure points? What should we pay attention to?
+**Interviewer (Daria):** I have another question. Given that we're talking about humidity and high temperatures inside a greenhouse , what are the most frequent failure points? What should we pay attention to?
 
-**Andrei Bragarenco:** Write this down, it'll be useful. There are two types of failures: systematic and random. Systematic ones are reproducible — you can investigate them, find the cause. Random ones — something happens out of nowhere: a power drop, a small fault that becomes a bigger problem over time if left unaddressed. For example, a tiny gap in a unit — in a short time it propagates through the whole system. These need protection mechanisms. For example, if I have a fault isolated in one module, it should not spread to the rest. Now, a very real problem in summer — especially in a greenhouse — is what we call the greenhouse effect: temperatures can rise to 60, even 80 degrees Celsius inside. You have to evacuate that heat. We have motors there that control the windows — they run at industrial level, autonomously, but we can redirect them. Our system takes control of the motors and we can open or close the windows exactly when we need. If our system goes down, there's a backup — the system that works without microcontrollers. So there's always a safety layer.
+**Andrei Bragarenco:** Write this down, it'll be useful. There are two types of failures: systematic and random. Systematic ones are reproducible , you can investigate them, find the cause. Random ones , something happens out of nowhere: a power drop, a small fault that becomes a bigger problem over time if left unaddressed. For example, a tiny gap in a unit , in a short time it propagates through the whole system. These need protection mechanisms. For example, if I have a fault isolated in one module, it should not spread to the rest. Now, a very real problem in summer , especially in a greenhouse , is what we call the greenhouse effect: temperatures can rise to 60, even 80 degrees Celsius inside. You have to evacuate that heat. We have motors there that control the windows , they run at industrial level, autonomously, but we can redirect them. Our system takes control of the motors and we can open or close the windows exactly when we need. If our system goes down, there's a backup , the system that works without microcontrollers. So there's always a safety layer.
 
-**Interviewer (Daniel):** You mentioned the greenhouse at UTM — do you grow things there currently?
+**Interviewer (Daniel):** You mentioned the greenhouse at UTM , do you grow things there currently?
 
-**Andrei Bragarenco:** Yes, it's growing in manual mode — someone waters when needed, opens the window when the temperature rises, it's all manual. I'd actually recommend you get the phone number of the person responsible there — she's always on site, she manages the greenhouse. She's the lady responsible for green spaces. I gave her the greenhouse to manage for her own use — it's her space, and for us it's a testing ground. Get her number, go interview her, she'll tell you everything from the operational side.
+**Andrei Bragarenco:** Yes, it's growing in manual mode , someone waters when needed, opens the window when the temperature rises, it's all manual. I'd actually recommend you get the phone number of the person responsible there , she's always on site, she manages the greenhouse. She's the lady responsible for green spaces. I gave her the greenhouse to manage for her own use , it's her space, and for us it's a testing ground. Get her number, go interview her, she'll tell you everything from the operational side.
 
-**Interviewer (Victoria):** Next question — what are the most frequent problems when integrating a cloud-based platform with control systems?
+**Interviewer (Victoria):** Next question , what are the most frequent problems when integrating a cloud-based platform with control systems?
 
-**Andrei Bragarenco:** Rather than talking about problems, I want to highlight what's important: the equipment you install must be easy to set up — installable by someone without specialized knowledge. That is the biggest challenge. That's exactly why we stopped using Arduino after a year — too many problems starting from the 5V power side, which is not compatible with industrial equipment, and you end up doing a lot of conversions and workarounds. When you go industrial — a distribution unit, a relay, irrigation solenoid valves — it's much easier to find parts and find people who understand them. The core answer: the system must be easy to integrate with minimal technical knowledge.
+**Andrei Bragarenco:** Rather than talking about problems, I want to highlight what's important: the equipment you install must be easy to set up , installable by someone without specialized knowledge. That is the biggest challenge. That's exactly why we stopped using Arduino after a year , too many problems starting from the 5V power side, which is not compatible with industrial equipment, and you end up doing a lot of conversions and workarounds. When you go industrial , a distribution unit, a relay, irrigation solenoid valves , it's much easier to find parts and find people who understand them. The core answer: the system must be easy to integrate with minimal technical knowledge.
 
-**Interviewer (Adrian):** What is a realistic budget for our project — for a single greenhouse zone like the one at UTM? We estimated around 4,000 euros.
+**Interviewer (Adrian):** What is a realistic budget for our project , for a single greenhouse zone like the one at UTM? We estimated around 4,000 euros.
 
-**Andrei Bragarenco:** In reality, PLCs are expensive because they're industrial — one PLC is around 200–300 EUR. But at that level it can cover a large area. On the other hand, a cheap sensor might cost 2 EUR versus 50 EUR for an industrial one. The 2 EUR one lasts two or three months. The 50 EUR one lasts ten years. This is actually a perfect scenario for your research — run two parallel systems. One industrial, one with Arduino. Compare the costs, document the downsides of each. Because what very often happens in university thesis projects is: someone builds something with a 5 USD sensor, it works for the demo, but reliability? Longevity? Unknown. Reliability costs money — but the question is how much, and that's exactly what your research can answer.
+**Andrei Bragarenco:** In reality, PLCs are expensive because they're industrial , one PLC is around 200–300 EUR. But at that level it can cover a large area. On the other hand, a cheap sensor might cost 2 EUR versus 50 EUR for an industrial one. The 2 EUR one lasts two or three months. The 50 EUR one lasts ten years. This is actually a perfect scenario for your research , run two parallel systems. One industrial, one with Arduino. Compare the costs, document the downsides of each. Because what very often happens in university thesis projects is: someone builds something with a 5 USD sensor, it works for the demo, but reliability? Longevity? Unknown. Reliability costs money , but the question is how much, and that's exactly what your research can answer.
 
 **Interviewer (Maxim):** Besides the UTM greenhouse, do you know of any other local implementations in Moldova or the region that have used a similar IoT-based architecture?
 
-**Andrei Bragarenco:** From what I know, implementations here are all separate. Someone needs humidity control — they buy a humidity controller. Irrigation — separate system. Ventilation — another separate system. Nobody has integrated it all into one. That's actually the proposal here: all the data is lifted into the cloud, and there's a site that supervises everything — like an agentic layer that checks everything continuously. The key idea is that hardware should stay lean — just sensors — and the logic lives on the cloud side. When the cloud system is active, it controls everything. When it goes down, the backup takes over. That division is the concept.
+**Andrei Bragarenco:** From what I know, implementations here are all separate. Someone needs humidity control , they buy a humidity controller. Irrigation , separate system. Ventilation , another separate system. Nobody has integrated it all into one. That's actually the proposal here: all the data is lifted into the cloud, and there's a site that supervises everything , like an agentic layer that checks everything continuously. The key idea is that hardware should stay lean , just sensors , and the logic lives on the cloud side. When the cloud system is active, it controls everything. When it goes down, the backup takes over. That division is the concept.
 
 **Victoria:** And what would be the most important things on the dashboard for a greenhouse operator?
 
-**Andrei Bragarenco:** Validate limits. I'll show you on Saturday — there are threshold systems where you set the acceptable range and the system operates within it. You collect data, you give recommendations. The system can suggest: "I could give a little more water — for example, 3 liters." And you can tell it: "0.5 liters in the morning, 1 liter at noon, 2 liters in the evening." Those are general rules, operational rules. Then you observe — what happens if you give 3 liters all in the morning versus spread through the day? You're collecting behavioral data. What the dashboard should ultimately show: observations and recommendations. Then the system learns and brings optimized control suggestions on its own.
+**Andrei Bragarenco:** Validate limits. I'll show you on Saturday , there are threshold systems where you set the acceptable range and the system operates within it. You collect data, you give recommendations. The system can suggest: "I could give a little more water , for example, 3 liters." And you can tell it: "0.5 liters in the morning, 1 liter at noon, 2 liters in the evening." Those are general rules, operational rules. Then you observe , what happens if you give 3 liters all in the morning versus spread through the day? You're collecting behavioral data. What the dashboard should ultimately show: observations and recommendations. Then the system learns and brings optimized control suggestions on its own.
 
-**Victoria:** And alerts — for example if a level drops suddenly?
+**Victoria:** And alerts , for example if a level drops suddenly?
 
-**Andrei Bragarenco:** That's a minimum — that's a given, it's obligatory. But what I'd really like to see is an analysis agent that runs two or three times a day, checks the statistics, and proposes a remediation. Then you can activate or deactivate that proposal. The system learns, brings its own optimized controls, and you choose. Start with basic data collection, analysis, alerts — and then move into diagnostics. Collect data, extract patterns, generate alerts. Document it, describe it clearly. Then build the agent layer on top. That's a beautiful product.
+**Andrei Bragarenco:** That's a minimum , that's a given, it's obligatory. But what I'd really like to see is an analysis agent that runs two or three times a day, checks the statistics, and proposes a remediation. Then you can activate or deactivate that proposal. The system learns, brings its own optimized controls, and you choose. Start with basic data collection, analysis, alerts , and then move into diagnostics. Collect data, extract patterns, generate alerts. Document it, describe it clearly. Then build the agent layer on top. That's a beautiful product.
 
 **Interviewer (Daniel):** Alright, I think we've covered the main questions. Any final suggestions?
 
-**Andrei Bragarenco:** I'll be honest — I want to look at everything you've done but haven't found the time yet. But what I want from you this week: get your hands on the equipment. Go to the greenhouse, look at what's installed, study the hardware, start researching what sensors are being used. And start a basic setup — something that collects data and sends a control signal back. Even if it's not installed in the actual greenhouse yet, get that loop working. You have two weeks. You're not starting from zero — everything is already there. There's also Radu at the club, he's been our hardware mentor, he can walk you through everything. Go find him. Good luck.{br}{br}{br}
+**Andrei Bragarenco:** I'll be honest , I want to look at everything you've done but haven't found the time yet. But what I want from you this week: get your hands on the equipment. Go to the greenhouse, look at what's installed, study the hardware, start researching what sensors are being used. And start a basic setup , something that collects data and sends a control signal back. Even if it's not installed in the actual greenhouse yet, get that loop working. You have two weeks. You're not starting from zero , everything is already there. There's also Radu at the club, he's been our hardware mentor, he can walk you through everything. Go find him. Good luck.{br}{br}{br}
+
+**4.2 Greenhouse Operator , Tatiana Gropa{br}**
+
+{table}
+{colgroup}
+{col }
+{col }
+{/colgroup}
+{tr}
+{th}Name{/th}
+{th}Role{/th}
+{/tr}
+{tr}
+{td}Tatiana Gropa{/td}
+{td}Greenhouse Operator{/td}
+{/tr}
+{tr}
+{td}{user:ff8081819b134c58019c0ab8328c000c}{/td}
+{td}Developer{/td}
+{/tr}
+{/table}
+
+**Interviewer (Daniel): **Good morning! Thank you for agreeing to speak with us today. Could you please introduce yourself and tell us a little about the greenhouse you manage?{br}**Tatiana Gropa:** Good morning! My name is Tatiana. I work as an agricultural consultant and agronomist, a specialist in plant growth and development, not just decorative plants, but edible ones as well. I'm connected to the Technical University of Moldova, where I oversee the greenhouse on campus. I make sure it functions properly and I also use it as an educational space to teach younger generations about agriculture. In terms of what we grow, we cultivate vegetables, tomatoes, cucumbers, and different varieties depending on conditions. We focus on varieties that allow us to control temperature and air circulation effectively. The greenhouse is positioned in a semi-shaded, north-facing area on one side, which means those windows stay closed most of the time and provide good protection. The south-facing side is more open to heat and light, which we also manage carefully.
+
+**Interviewer (Daniel):** What are the biggest challenges you face in maintaining stable conditions inside the greenhouse?{br}**Tatiana Gropa:** The main challenge is monitoring and reacting in time. We check the greenhouse twice a day, morning and evening. In the morning I turn on the irrigation manually, and in the evening I check again and close up if needed. Outside those hours I also prune, clean, and observe the plants more carefully. The issue is that when I'm not there, I have no visibility into what's happening. I would really like to be able to monitor things remotely, to know if the soil is too dry or if the temperature has climbed too high. We previously had a humidity and temperature sensor installed in the soil, but it was dismantled at some point and we've been doing everything manually since then. We also experimented with FarmBot for automated planting and irrigation, but unfortunately it didn't hold up in our conditions, even though the concept was promising.
+
+**Interviewer (Daniel): **Have you experienced any crop losses due to delayed reactions or missed adjustments?{br}**Tatiana Gropa: **Yes, last year we had an early frost. The greenhouse wasn't properly insulated at the time and some windows were left open overnight. By the time we noticed, the damage was already done. The cucumbers were the most affected, they're more sensitive to cold. That particular night the temperature dropped to -3°C, which was enough to cause significant losses. This is exactly the kind of situation that automation could prevent, automatic window closing when the temperature drops below a threshold, or at least an alert that forces someone to go and check immediately.
+
+**Interviewer (Daniel):** How do you currently handle ventilation?{br}**Tatiana Gropa:** Ventilation is mostly natural, we rely on opening and closing the windows manually. We did install an additional fan at some point, but it wasn't the right capacity for the greenhouse volume. Proper air circulation is critical, especially when the tomatoes grow tall, you need airflow all the way to the tops of the plants. Without it, you get stagnant humidity pockets which lead to disease. We tried circulating outside air through the space, but without a properly sized system it's not always effective.
+
+**Interviewer (Daniel):** What would an ideal automated system look like for you?{br}**Tatiana Gropa: **Ideally, I'd want a system that requires minimal human intervention, though I understand that's not fully possible yet. What matters most to me is a smart alert system: something that detects a developing problem and notifies me that I need to go check, even on days I wasn't planning to visit. I go daily, but sometimes I don't notice a problem that's quietly developing, a disease starting, a stress condition building up. If the system could flag these early based on temperature and soil humidity data, that would already be enormously valuable. Beyond alerts, I'd love a database that accumulates historical data so I can start identifying patterns, what conditions led to good harvests, what preceded plant stress or disease. The human eye sees a lot, but sensors see more, and they see things we can't, like precise soil moisture percentages.
+
+**Interviewer (Daniel): **What about lighting in the greenhouse?{br}**Tatiana Gropa:** For the plants we currently grow, tomatoes, cucumbers, vegetables, they are well adapted to our natural day and night cycle, so additional grow lighting isn't strictly necessary under normal conditions. However, when growing seedlings in early spring, they need longer light exposure to develop properly. In those early stages, supplementary red and blue spectrum lighting would be very helpful. We did have some colored lights installed at one point, but they were decorative rather than functional grow lights. When I'm in the greenhouse late in the evening, I also simply need basic working light to see and care for the plants, that's a basic need that was never properly addressed. Automatically controlled grow lighting, particularly for seedling stages, would be a meaningful addition to any future system.
+
+**Interviewer (Daniel):** Thank you very much for your time , this has been incredibly useful for our project!{br}**Tatiana Gropa:** Thank you for contacting me. I hope this information helps you build something truly useful. Good luck with the project!
+
+**{br}{br}**

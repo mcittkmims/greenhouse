@@ -1,0 +1,130 @@
+--- gcm ---
+title: 04 - GMS -WP6.4 Ensure consistency and establish bidirectional traceability
+page_id: 42634174
+version: 6
+source: http://confluence.microlab.club/rest/api/content/42634174
+---
+
+{table}
+{thead}
+{tr}
+{th}**Ticket ID**{/th}
+{th}**Ticket Name / Element**{/th}
+{th}**Jira Link**{/th}
+{th}**Type**{/th}
+{th}**Priority**{/th}
+{th}**Satisfies / Relates to (SR Tickets)**{/th}
+{th}**Related Arch. Tickets**{/th}
+{/tr}
+{/thead}
+{tr}
+{td}**GMS-AE1**{/td}
+{td}Sensor Acquisition & Environmental Monitoring System — Architecture{/td}
+{td}{/td}
+{td}Epic{/td}
+{td}**High**{/td}
+{td}{jira:GMS-1|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}
+{jira:GMS-71|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}
+{jira:GMS-72|columnIds=issuekey,summary,issuetype,created,updated,duedate,assignee,reporter,priority,status,resolution|columns=key,summary,type,created,updated,due,assignee,reporter,priority,status,resolution}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE1-COMP**{/td}
+{td}SensorAcquisitionSystem Component — Static Spec (SensorPoller, DataValidator, ThresholdEvaluator, AlertClassifier, SensorFaultMonitor){/td}
+{td}{/td}
+{td}Story{/td}
+{td}**High**{/td}
+{td}{jira:GMS-71} {jira:GMS-72} {jira:GMS-73} {jira:GMS-74} {jira:GMS-91}{/td}
+{td}GMS-AE1-IF1, GMS-AE1-IF2, GMS-AE1-IF3, GMS-AE1-IF4{/td}
+{/tr}
+{tr}
+{td}**GMS-AE5**{/td}
+{td}Cybersecurity System — Architecture{/td}
+{td}{jira:GMS-102|columns=key}{/td}
+{td}Epic{/td}
+{td}**Critical**{/td}
+{td}{jira:GMS-9} {jira:GMS-87} {jira:GMS-88} {jira:GMS-89} {jira:GMS-90}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE5-COMP**{/td}
+{td}CybersecuritySystem Component — Static Spec (TLSTerminationModule, RequestGuard, AuditLogger, EdgeAuthModule, CertificateStore, UserAccountManager){/td}
+{td}{jira:GMS-104|columns=key}{/td}
+{td}Story{/td}
+{td}**Critical**{/td}
+{td}{jira:GMS-87} {jira:GMS-88} {jira:GMS-89} {jira:GMS-90}{/td}
+{td}{jira:GMS-105} {jira:GMS-106} {jira:GMS-107} {jira:GMS-108} {jira:GMS-109}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE5-IF1**{/td}
+{td}SECMQTT-IF — X.509 mTLS between TLSTerminationModule and MQTT Broker{/td}
+{td}{jira:GMS-105|columns=key}{/td}
+{td}Story{/td}
+{td}**Critical**{/td}
+{td}{jira:GMS-87}{/td}
+{td}{jira:GMS-104}, GMS-AE3-COMP{/td}
+{/tr}
+{tr}
+{td}**GMS-AE5-IF2**{/td}
+{td}SEC-APIIF — JWT validation + RBAC by RequestGuard before every REST endpoint{/td}
+{td}{jira:GMS-106|columns=key}{/td}
+{td}Story{/td}
+{td}**Critical**{/td}
+{td}{jira:GMS-88} {jira:GMS-89}{/td}
+{td}{jira:GMS-104}, GMS-AE3-COMP{/td}
+{/tr}
+{tr}
+{td}**GMS-AE5-IF3**{/td}
+{td}SECAUDIT-IF — AuditLogger: append-only log on every rejected request (timestamp, IP, route){/td}
+{td}{jira:GMS-107|columns=key}{/td}
+{td}Story{/td}
+{td}**High**{/td}
+{td}{jira:GMS-89}{/td}
+{td}{jira:GMS-104}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE5-IF4**{/td}
+{td}SECEDGE-IF — EdgeAuthModule: offline local API auth; HTTP 401 if unauthenticated{/td}
+{td}{jira:GMS-108|columns=key}{/td}
+{td}Story{/td}
+{td}**Critical**{/td}
+{td}{jira:GMS-90}{/td}
+{td}{jira:GMS-104}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE5-IF5**{/td}
+{td}SECUSERMGMT-IF — UserAccountManager: Operator-only create/modify/deactivate accounts{/td}
+{td}{jira:GMS-109|columns=key}{/td}
+{td}Story{/td}
+{td}**High**{/td}
+{td}{jira:GMS-88}{/td}
+{td}{jira:GMS-104}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE5-SC**{/td}
+{td}Cybersecurity Special Characteristics (offline edge auth, X.509 cert lifecycle, audit trail integrity){/td}
+{td}{jira:GMS-110|columns=key}{/td}
+{td}Story{/td}
+{td}**Critical**{/td}
+{td}{jira:GMS-90}{/td}
+{td}{jira:GMS-104}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE6**{/td}
+{td}System-Level Architecture (WP6.1 high-level + WP6.2 modes + WP6.3 decisions){/td}
+{td}{jira:GMS-103|columns=key}{/td}
+{td}Epic{/td}
+{td}**High**{/td}
+{td}{jira:GMS-1} {jira:GMS-2} {jira:GMS-3} {jira:GMS-4} {jira:GMS-5} {jira:GMS-6} {jira:GMS-7} {jira:GMS-8} {jira:GMS-9}{/td}
+{td}{/td}
+{/tr}
+{tr}
+{td}**GMS-AE6-ARCH**{/td}
+{td}High-Level Static Architecture — 4-layer design (Hardware/Edge/Cloud/Client); SR group mapping; architectural decisions rationale{/td}
+{td}{jira:GMS-111|columns=key}{/td}
+{td}Story{/td}
+{td}**High**{/td}
+{td}{jira:GMS-71} {jira:GMS-80} {jira:GMS-81} {jira:GMS-76}{/td}
+{td}GMS-AE1-COMP, GMS-AE2-COMP, GMS-AE3-COMP, GMS-AE4-COMP, {jira:GMS-104}{/td}
+{/tr}
+{/table}
