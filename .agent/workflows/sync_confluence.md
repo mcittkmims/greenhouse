@@ -7,12 +7,16 @@ Fetches Confluence pages via REST API, converts storage HTML → GCM, and writes
 
 **Options:**
 - `--up-to X.Y` — fetch pages with WP ≤ limit (e.g., `--up-to 4.2` fetches WP1.1 → 4.2)
+- `--all` — fetch all pages listed in `confluence_pages.json`
+- `--page WP [WP ...]` — fetch one or more specific pages by WP number (e.g., `--page 6.1 6.2`)
 - `--dry-run` — list pages without writing files
 - `--force` — re-fetch even if the cached version matches
 
-**Command:** 
+**Commands:**
 ```sh
 python3 scripts/confluence/confluence_sync.py --up-to <WP_LIMIT>
+python3 scripts/confluence/confluence_sync.py --all
+python3 scripts/confluence/confluence_sync.py --page 6.1 6.2
 ```
 
 **Adding New Pages:**

@@ -66,6 +66,19 @@ log-direct --ticket WP_OR_KEY --task DESC --hours N [--date YYYY-MM-DD] — Post
         --hours 1.5 \\
         [--date 2026-03-11]
 
+list-worklogs --ticket WP_OR_KEY — List all worklogs on a ticket with their IDs and timestamps.
+    Useful for finding worklog IDs before deleting them.
+
+    python3 scripts/logging/log_work.py list-worklogs --ticket 5.4
+
+delete-worklog --ticket WP_OR_KEY --id WORKLOG_ID [--adjust-estimate new|leave|auto] [--new-estimate 0] —
+    Delete a specific worklog entry from Jira.
+    --adjust-estimate controls how the remaining estimate is updated (default: new).
+    --new-estimate sets the new remaining estimate when --adjust-estimate=new (default: 0).
+
+    python3 scripts/logging/log_work.py delete-worklog --ticket 5.4 --id 17643
+    python3 scripts/logging/log_work.py delete-worklog --ticket PBL26-715 --id 17643 --adjust-estimate leave
+
 report-log [--date YYYY-MM-DD] [--task DESC1 DESC2] — Post two fixed worklogs to the PBL26
     tracking/report ticket (PBL26-1362) for a class workshop day. Always posts:
       • 15:15 — 1h 30m — first description (default: "Attended PBL26 workshop session")
@@ -175,6 +188,13 @@ def jira_post(env, path, payload):
     with urlopen(req, timeout=10) as resp:
         raw = resp.read()
         return json.loads(raw) if raw else {}
+
+
+def jira_delete(env, path):
+    url = _base_url(env) + path
+    req = Request(url, headers=_auth_headers(env), method="DELETE")
+    with urlopen(req, timeout=10) as resp:
+        return resp.status
 
 
 def fetch_tickets(env):
@@ -630,6 +650,42 @@ def cmd_report_log(env, args):
         sys.exit(1)
 
 
+def cmd_list_worklogs(env, args):
+    ticket = resolve_ticket_arg(args.ticket)
+    try:
+        data = jira_get(env, f"/rest/api/2/issue/{ticket}/worklog")
+    except Exception as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
+    worklogs = data.get("worklogs", [])
+    if not worklogs:
+        print(f"No worklogs found on {ticket}.")
+        return
+    for wl in worklogs:
+        started = wl.get("started", "")[:19]
+        time_spent = wl.get("timeSpent", "?")
+        wl_id = wl["id"]
+        comment = wl.get("comment", "").replace("\n", " ")[:70]
+        print(f"{wl_id}  {started}  {time_spent}  {comment}")
+
+
+def cmd_delete_worklog(env, args):
+    ticket = resolve_ticket_arg(args.ticket)
+    qs = f"?adjustEstimate={args.adjust_estimate}"
+    if args.adjust_estimate == "new":
+        qs += f"&newEstimate={args.new_estimate}"
+    path = f"/rest/api/2/issue/{ticket}/worklog/{args.id}{qs}"
+    try:
+        status = jira_delete(env, path)
+        if status == 204:
+            print(f"OK  deleted worklog {args.id} from {ticket}  (adjustEstimate={args.adjust_estimate})")
+        else:
+            print(f"WARN: unexpected status {status}", file=sys.stderr)
+    except Exception as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
 def main():
     parser = argparse.ArgumentParser(description="Log GMS work and link to a PBL26 ticket.")
     sub = parser.add_subparsers(dest="command")
@@ -681,6 +737,20 @@ def main():
     ld_p.add_argument("--date", metavar="YYYY-MM-DD",
                       help="Date the work was done (default: today)")
 
+    lw_p = sub.add_parser("list-worklogs", help="List worklogs on a ticket with IDs and timestamps")
+    lw_p.add_argument("--ticket", required=True,
+                      help="WP number (e.g. 5.4) or full ticket key (e.g. PBL26-563)")
+
+    dw_p = sub.add_parser("delete-worklog", help="Delete a worklog entry from Jira")
+    dw_p.add_argument("--ticket", required=True,
+                      help="WP number (e.g. 5.4) or full ticket key (e.g. PBL26-563)")
+    dw_p.add_argument("--id", required=True, help="Worklog ID to delete")
+    dw_p.add_argument("--adjust-estimate", default="new",
+                      choices=["new", "leave", "auto"],
+                      help="How to update the remaining estimate (default: new)")
+    dw_p.add_argument("--new-estimate", default="0", metavar="TIME",
+                      help="New remaining estimate when --adjust-estimate=new (default: 0)")
+
     args = parser.parse_args()
     if not args.command:
         parser.print_help()
@@ -704,6 +774,10 @@ def main():
         cmd_log_direct(env, args)
     elif args.command == "report-log":
         cmd_report_log(env, args)
+    elif args.command == "list-worklogs":
+        cmd_list_worklogs(env, args)
+    elif args.command == "delete-worklog":
+        cmd_delete_worklog(env, args)
 
 
 if __name__ == "__main__":

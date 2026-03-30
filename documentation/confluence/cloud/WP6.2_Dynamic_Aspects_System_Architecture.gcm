@@ -1,69 +1,69 @@
 --- gcm ---
 title: 04 - GMS -WP6.2 Dynamic aspects of the system architecture Specification
 page_id: 42634164
-version: 9
+version: 10
 source: http://confluence.microlab.club/rest/api/content/42634164
 ---
 
 == System Modes Overview
-
+ 
 The GMS operates in five distinct modes. Each mode maintains greenhouse environmental control integrity and crop safety while serving specific operational purposes.
-
+ 
 {table class="wrapped"}
-{thead}
-{tr}
-{th}Mode{/th}
-{th}Purpose{/th}
-{th}Key Characteristics{/th}
-{/tr}
-{/thead}
-{tr}
-{td}Normal Operation{/td}
-{td}Automated environmental monitoring and control with full cloud connectivity{/td}
-{td}Real-time sensor polling (60 s), PID/hysteresis actuator control, MQTT cloud sync via TLS, full dashboard access, push/SMS notifications active{/td}
-{/tr}
-{tr}
-{td}Offline Autonomous{/td}
-{td}Continued greenhouse control during internet / cloud outage{/td}
-{td}Edge-local PID loops, scheduled irrigation execution, local alarm activation, sensor data buffered for reconnect (≥72 h per Project Charter O5){/td}
-{/tr}
-{tr}
-{td}Manual Override{/td}
-{td}Direct operator control of individual actuators via dashboard{/td}
-{td}Dashboard-triggered actuator commands, automation paused per-actuator, safety interlocks remain active, all events logged with operator identity and timestamp{/td}
-{/tr}
-{tr}
-{td}Configuration{/td}
-{td}Crop-specific setpoint and irrigation schedule adjustment{/td}
-{td}Threshold reconfiguration, irrigation schedule CRUD, crop-profile selection; changes propagate to edge controller within one 60 s cycle even without cloud{/td}
-{/tr}
-{tr}
-{td}Emergency Stop{/td}
-{td}Immediate safe-state response to critical environmental events or system faults{/td}
-{td}All actuators transition to safe state, audible/visual alarms, event logged with fault type and timestamp, push/SMS alert sent, manual acknowledgement required to resume{/td}
-{/tr}
-{/table}
-
+ {thead}
+ {tr}
+ {th}Mode{/th}
+ {th}Purpose{/th}
+ {th}Key Characteristics{/th}
+ {/tr}
+ {/thead}
+ {tr}
+ {td}Normal Operation{/td}
+ {td}Automated environmental monitoring and control with full cloud connectivity{/td}
+ {td}Real-time sensor polling (60 s), PID/hysteresis actuator control, MQTT cloud sync via TLS, full dashboard access, push/SMS notifications active{/td}
+ {/tr}
+ {tr}
+ {td}Offline Autonomous{/td}
+ {td}Continued greenhouse control during internet / cloud outage{/td}
+ {td}Edge-local PID loops on Portenta zone controllers, scheduled irrigation execution, local alarm activation. The Mini PC Edge Gateway buffers sensor data for reconnect (≥72 h per Project Charter O5) and executes cached AI parameters.{/td}
+ {/tr}
+ {tr}
+ {td}Manual Override{/td}
+ {td}Direct operator control of individual actuators via dashboard{/td}
+ {td}Dashboard-triggered actuator commands, automation paused per-actuator, safety interlocks remain active, all events logged with operator identity and timestamp{/td}
+ {/tr}
+ {tr}
+ {td}Configuration{/td}
+ {td}Crop-specific setpoint and irrigation schedule adjustment{/td}
+ {td}Threshold reconfiguration, irrigation schedule CRUD, crop-profile selection; changes propagate to edge controller within one 60 s cycle even without cloud{/td}
+ {/tr}
+ {tr}
+ {td}Emergency Stop{/td}
+ {td}Immediate safe-state response to critical environmental events or system faults{/td}
+ {td}All actuators transition to safe state, audible/visual alarms, event logged with fault type and timestamp, push/SMS alert sent, manual acknowledgement required to resume{/td}
+ {/tr}
+ {/table}
+ 
 {br}
-
+ 
 == 1. Edge Controller — Core Processing System
-
-The Edge Controller (Arduino Portenta H7 (STM32H747 dual-core)) is the central coordination hub. It manages all state transitions, executes local PID and hysteresis control loops at 10 Hz (Cortex-M7 core), and orchestrates communication between sensor networks, actuators, and the cloud platform (Cortex-M4 core).
-
+ 
+The Edge Controller (Arduino Portenta H7 (STM32H747 dual-core)) is the central coordination hub for a single zone. It manages all state transitions, executes local PID and hysteresis control loops at 10 Hz (Cortex-M7 core), and orchestrates communication between sensor networks, actuators, and the local Mini PC Edge Gateway (Cortex-M4 core).
+ 
 {table class="wrapped"}
-{thead}
-{tr}
-{th}Architectural Element{/th}
-{th}Description{/th}
-{/tr}
-{/thead}
-{tr}
-{td}State Diagram{/td}
-{td}{image file="01_edge_controller_state_diagram.png" height=400}{/td}
-{/tr}
-{tr}
-{td}Architectural Element{/td}
-{td}The state diagram illustrates the complete lifecycle of the Edge Controller from power-on through all operational modes. The Self-Test phase validates all sensors and actuators before greenhouse control begins. Cloud connectivity loss causes a seamless transition to Offline Autonomous mode—ongoing actuator cycles are not interrupted. Emergency Shutdown is reachable from any active state.
+ {thead}
+ {tr}
+ {th}Architectural Element{/th}
+ {th}Description{/th}
+ {/tr}
+ {/thead}
+ {tr}
+ {td}State Diagram{/td}
+ {td}{image file="01_edge_controller_state_diagram.png" height=400}{/td}
+ {/tr}
+ {tr}
+ {td}Architectural Element{/td}
+ {td}The state diagram illustrates the complete lifecycle of the Edge Controller from power-on through all operational modes. The Self-Test phase validates all sensors and actuators before greenhouse control begins. Cloud connectivity loss causes a seamless transition to Offline Autonomous mode—ongoing actuator cycles are not interrupted. Emergency Shutdown is reachable from any active state.
 
 ==== Critical Interactions
 {ul}
@@ -82,21 +82,21 @@ The Edge Controller (Arduino Portenta H7 (STM32H747 dual-core)) is the central c
 - Enables Configuration mode for crop-specific setpoints (SHR-15/16)
 - Emergency Shutdown satisfies critical safety response across SHR-11/12 and Project Charter O3
 {/ul}{/td}
-{/tr}
-{tr}
-{td}Sequence Diagram{/td}
-{td}{image file="02_system_initialization_sequence.png" height=400}{/td}
-{/tr}
-{tr}
-{td}Architectural Element{/td}
-{td}The initialization sequence shows how the Edge Controller coordinates startup across all subsystems before entering Standby. Local hardware (sensors and actuators) is verified first; cloud connectivity is established afterwards, ensuring the system can begin operation in Offline Autonomous mode if the cloud is unavailable at boot.
+ {/tr}
+ {tr}
+ {td}Sequence Diagram{/td}
+ {td}{image file="02_system_initialization_sequence.png" height=400}{/td}
+ {/tr}
+ {tr}
+ {td}Architectural Element{/td}
+ {td}The initialization sequence shows how the Edge Controller coordinates startup across all subsystems before entering Standby. Local hardware (sensors and actuators) is verified first; cloud connectivity is established afterwards, ensuring the system can begin operation in Offline Autonomous mode if the cloud is unavailable at boot.
 
 ==== Critical Interactions
 {ul}
 
 - Sensor calibration and range-check must complete before any actuator initialization (prevents actuation on stale data)
 - Actuator safety-state check confirms all outputs are in known safe state before normal operation begins
-- MQTT TLS handshake failure does not prevent transition to Standby—system defaults to Offline Autonomous
+- MQTT handshake failure with the local Mini PC does not prevent transition to Standby—system defaults to local safety loops
 - Setpoint loading from cloud ensures the latest crop profile is applied at startup
 {/ul}
 
@@ -107,27 +107,27 @@ The Edge Controller (Arduino Portenta H7 (STM32H747 dual-core)) is the central c
 - Enables system diagnostics required for Configuration and Maintenance operations
 - Cloud setpoint load satisfies SHR-15/16 (configurable crop thresholds applied at boot)
 {/ul}{/td}
-{/tr}
-{/table}
-
+ {/tr}
+ {/table}
+ 
 == 2. Sensor Acquisition System
-
+ 
 The distributed sensor network continuously monitors environmental parameters critical to crop development. Soil moisture, temperature, EC, pH, and NPK levels are measured by the SN-3002-TR-ECTHNPKPH-N01 multi-parameter soil sensor. Air temperature and relative humidity are measured by the SHT10/SHT20 (Sensirion). CO₂ concentration is monitored by an NDIR sensor, and light intensity by a PAR/lux sensor. Sensors interface with the Portenta H7 via RS485/Modbus RTU (SN-3002), I²C (SHT10/SHT20), and UART (CO₂ sensor).
-
+ 
 {table class="wrapped"}
-{thead}
-{tr}
-{th}Architectural Element{/th}
-{th}Description{/th}
-{/tr}
-{/thead}
-{tr}
-{td}Activity Diagram{/td}
-{td}{image file="03_sensor_acquisition_activity.png" height=400}{/td}
-{/tr}
-{tr}
-{td}Architectural Element{/td}
-{td style="vertical-align: top;"}The activity diagram illustrates the 60-second sensor polling cycle executing on the Cortex-M7 core. Every reading undergoes three-stage validation (range, plausibility, rate-of-change) before being used for threshold evaluation or transmission. Fault counters and automatic alert generation protect against sensor drift and hardware failures without requiring cloud connectivity.
+ {thead}
+ {tr}
+ {th}Architectural Element{/th}
+ {th}Description{/th}
+ {/tr}
+ {/thead}
+ {tr}
+ {td}Activity Diagram{/td}
+ {td}{image file="03_sensor_acquisition_activity.png" height=400}{/td}
+ {/tr}
+ {tr}
+ {td}Architectural Element{/td}
+ {td style="vertical-align: top;"}The activity diagram illustrates the 60-second sensor polling cycle executing on the Cortex-M7 core. Every reading undergoes three-stage validation (range, plausibility, rate-of-change) before being used for threshold evaluation or transmission. Fault counters and automatic alert generation protect against sensor drift and hardware failures without requiring cloud connectivity.
 
 ==== Critical Interactions
 {ul}
@@ -147,27 +147,27 @@ The distributed sensor network continuously monitors environmental parameters cr
 - CO₂ monitoring supports yield optimisation (SHR-7, 800–1200 ppm enrichment range)
 - Local alert generation satisfies SHR-11/12 without cloud dependency
 {/ul}{/td}
-{/tr}
-{/table}
-
+ {/tr}
+ {/table}
+ 
 == 3. Irrigation Control System
-
+ 
 The irrigation control system manages soil-moisture-based automatic irrigation, time-based schedule execution, and manual remote triggering. It operates fully autonomously on the edge controller without requiring cloud connectivity, satisfying the 3-month offline operation use case identified in the stakeholder survey.
-
+ 
 {table class="wrapped"}
-{thead}
-{tr}
-{th}Architectural Element{/th}
-{th}Description{/th}
-{/tr}
-{/thead}
-{tr}
-{td}Sequence Diagram{/td}
-{td}{image file="04_irrigation_decision_activity.png" height=400}{/td}
-{/tr}
-{tr}
-{td}Architectural Element{/td}
-{td}The activity diagram details the complete irrigation decision logic running in the Cortex-M7 control loop. Three trigger sources — soil threshold breach, scheduled time, and manual remote command — are evaluated concurrently. The 'skip-if-wet' gate prevents over-irrigation when soil has already reached the target. Auto-stop logic closes the loop by halting the pump once the target moisture is reached, regardless of trigger source.
+ {thead}
+ {tr}
+ {th}Architectural Element{/th}
+ {th}Description{/th}
+ {/tr}
+ {/thead}
+ {tr}
+ {td}Sequence Diagram{/td}
+ {td}{image file="04_irrigation_decision_activity.png" height=400}{/td}
+ {/tr}
+ {tr}
+ {td}Architectural Element{/td}
+ {td}The activity diagram details the complete irrigation decision logic running in the Cortex-M7 control loop. Three trigger sources — soil threshold breach, scheduled time, and manual remote command — are evaluated concurrently. The 'skip-if-wet' gate prevents over-irrigation when soil has already reached the target. Auto-stop logic closes the loop by halting the pump once the target moisture is reached, regardless of trigger source.
 
 ==== Critical Interactions
 {ul}
@@ -188,14 +188,14 @@ The irrigation control system manages soil-moisture-based automatic irrigation, 
 - Auto-stop prevents over-watering and root damage (SHR-39/40, 17% irrigation failure incident rate)
 - Edge-only execution without cloud dependency (Project Charter O5, ≥72 h offline autonomy)
 {/ul}{/td}
-{/tr}
-{tr}
-{td}Activity Diagram{/td}
-{td}{image file="05_irrigation_actuator_state_diagram.png" height=250}{/td}
-{/tr}
-{tr}
-{td}Architectural Element{/td}
-{td}The actuator state diagram shows the lifecycle of the irrigation pump across all trigger modes. The Idle state is the default; transitions to active states occur via three trigger paths. The Pumping state monitors soil moisture continuously and transitions to auto-stop when the target setpoint is reached. The Stopping state ensures orderly pump shutdown before returning to Idle.
+ {/tr}
+ {tr}
+ {td}Activity Diagram{/td}
+ {td}{image file="05_irrigation_actuator_state_diagram.png" height=250}{/td}
+ {/tr}
+ {tr}
+ {td}Architectural Element{/td}
+ {td}The actuator state diagram shows the lifecycle of the irrigation pump across all trigger modes. The Idle state is the default; transitions to active states occur via three trigger paths. The Pumping state monitors soil moisture continuously and transitions to auto-stop when the target setpoint is reached. The Stopping state ensures orderly pump shutdown before returning to Idle.
 
 ==== Critical Interactions
 {ul}
@@ -211,27 +211,27 @@ The irrigation control system manages soil-moisture-based automatic irrigation, 
 - State machine directly implements SHR-2 (sensor-triggered), SHR-13 (schedule-triggered), SHR-37 (manual remote)
 - Auto-stop state satisfies SHR-39/40 acceptance criterion (stops within 30 s of reaching setpoint)
 {/ul}{/td}
-{/tr}
-{/table}
-
+ {/tr}
+ {/table}
+ 
 == 4. Climate Control System — Ventilation & Heating
-
+ 
 The climate control system regulates greenhouse temperature and humidity using PID control (temperature, ±0.5°C setpoint stability) and hysteresis-based control (humidity). Actuators include exhaust fans, circulation fans, electric heaters, and ultrasonic humidifiers. This system is critical for Moldova's continental climate range of −15°C to +35°C (−50°C to +80°C possible inside without ventilation).
-
+ 
 {table class="wrapped"}
-{thead}
-{tr}
-{th}Architectural Element{/th}
-{th}Description{/th}
-{/tr}
-{/thead}
-{tr}
-{td}State Diagram{/td}
-{td}{image file="06_climate_threshold_sequence.png" height=400}{/td}
-{/tr}
-{tr}
-{td}Architectural Element{/td}
-{td}The sequence diagram illustrates the complete response chain from sensor reading to operator notification when a temperature or humidity threshold is breached. The Edge Controller triggers local actuators first (deterministic, sub-60 s response), then publishes the alert via MQTT. The two alt fragments show behavior when cloud is available (push notification) and when it is not (local audible alarm).
+ {thead}
+ {tr}
+ {th}Architectural Element{/th}
+ {th}Description{/th}
+ {/tr}
+ {/thead}
+ {tr}
+ {td}State Diagram{/td}
+ {td}{image file="06_climate_threshold_sequence.png" height=400}{/td}
+ {/tr}
+ {tr}
+ {td}Architectural Element{/td}
+ {td}The sequence diagram illustrates the complete response chain from sensor reading to operator notification when a temperature or humidity threshold is breached. The Edge Controller triggers local actuators first (deterministic, sub-60 s response), then publishes the alert via MQTT. The two alt fragments show behavior when cloud is available (push notification) and when it is not (local audible alarm).
 
 ==== Critical Interactions
 {ul}
@@ -250,33 +250,33 @@ The climate control system regulates greenhouse temperature and humidity using P
 - Humidity ventilation trigger prevents fungal disease (SHR-6, post-irrigation humidity surge scenario)
 - Two-tier severity model (informational: in-dashboard only; critical: push/SMS) satisfies peer review R3 from WP4.2
 {/ul}{/td}
-{/tr}
-{/table}
-
+ {/tr}
+ {/table}
+ 
 == 5. Cloud Communication & Telemetry System
-
-The cloud backend stores time-series sensor data in InfluxDB/TimescaleDB, exposes real-time data via MQTT to the dashboard, and provides historical analytics. The system uses an edge-cloud hybrid architecture: the edge controller operates autonomously during outages, buffers data locally, and re-syncs in batches on reconnect.
-
+ 
+The cloud backend stores time-series sensor data in InfluxDB/TimescaleDB, exposes real-time data via MQTT to the dashboard, and provides historical analytics. The system uses an edge-cloud hybrid architecture: the Mini PC Edge Gateway operates autonomously during WAN outages, buffers telemetry from all zone controllers locally, and re-syncs in batches on reconnect.
+ 
 {table class="wrapped"}
-{thead}
-{tr}
-{th}Architectural Element{/th}
-{th}Description{/th}
-{/tr}
-{/thead}
-{tr}
-{td}Activity Diagram{/td}
-{td}{image file="07_cloud_communication_sequence.png" height=400}{/td}
-{/tr}
-{tr}
-{td}Architectural Element{/td}
-{td}The sequence diagram covers three interaction modes: the normal 30–60 s telemetry loop, the batch-flush recovery sequence after a connectivity outage, and the operator-triggered setpoint update flow. The offline buffer recovery ensures zero data loss on reconnect as required by Project Charter O5.
+ {thead}
+ {tr}
+ {th}Architectural Element{/th}
+ {th}Description{/th}
+ {/tr}
+ {/thead}
+ {tr}
+ {td}Activity Diagram{/td}
+ {td}{image file="07_cloud_communication_sequence.png" height=400}{/td}
+ {/tr}
+ {tr}
+ {td}Architectural Element{/td}
+ {td}The sequence diagram covers three interaction modes: the normal 30–60 s telemetry loop, the batch-flush recovery sequence after a connectivity outage, and the operator-triggered setpoint update flow. The offline buffer recovery ensures zero data loss on reconnect as required by Project Charter O5.
 
 ==== Critical Interactions
 {ul}
 
 - Normal telemetry loop must use MQTT over TLS 1.2+ with QoS 1 (at-least-once delivery) to prevent data loss on unstable 4G/5G connections (55.6% of sites, WP3.3 survey)
-- Buffered data must be flushed as a batch after reconnect — individual record re-publish would exceed rate limits on mobile data plans
+- Buffered data must be flushed as a batch from the Mini PC after reconnect — individual record re-publish would exceed rate limits on mobile data plans
 - Setpoint update from dashboard must be acknowledged by edge controller within one control cycle (60 s) — stale setpoints could cause incorrect actuator behavior (SHR-16)
 - Cloud DB must retain time-series data for ≥90 days to support seasonal trend analysis (peer review R2, WP4.2)
 {/ul}
@@ -289,27 +289,27 @@ The cloud backend stores time-series sensor data in InfluxDB/TimescaleDB, expose
 - TLS 1.2+ / X.509 device authentication (SHR-33/34)
 - 90-day historical data retention enables seasonal trend analysis and ROI comparison (SHR-23/24, SHR-29/30)
 {/ul}{/td}
-{/tr}
-{/table}
-
+ {/tr}
+ {/table}
+ 
 == 6. Alert & Notification System
-
+ 
 The alert system implements the two-tier severity model defined in WP4.2 peer review R3: informational events (minor deviations) appear in the dashboard only; critical events (temperature >35°C, soil moisture <10%, actuator failure, connectivity loss) escalate to push notification or SMS. All alerts carry parameter name, current value, threshold value, and breach timestamp.
-
+ 
 {table class="wrapped"}
-{thead}
-{tr}
-{th}Architectural Element{/th}
-{th}Description{/th}
-{/tr}
-{/thead}
-{tr}
-{td}Sequence Diagram{/td}
-{td}{image file="08_alert_notification_activity.png" height=400 align=center}{/td}
-{/tr}
-{tr}
-{td}Architectural Element{/td}
-{td}The activity diagram details the complete alert lifecycle from breach detection through operator acknowledgement. Severity classification determines routing: informational events update the dashboard only; critical events trigger the push/SMS pipeline (when cloud is available) or activate the local audible alarm (when offline). All alerts are logged in the 90-day history regardless of severity. The system requires explicit operator acknowledgement before clearing a critical alert.
+ {thead}
+ {tr}
+ {th}Architectural Element{/th}
+ {th}Description{/th}
+ {/tr}
+ {/thead}
+ {tr}
+ {td}Sequence Diagram{/td}
+ {td}{image file="08_alert_notification_activity.png" height=400 align=center}{/td}
+ {/tr}
+ {tr}
+ {td}Architectural Element{/td}
+ {td}The activity diagram details the complete alert lifecycle from breach detection through operator acknowledgement. Severity classification determines routing: informational events update the dashboard only; critical events trigger the push/SMS pipeline (when cloud is available) or activate the local audible alarm (when offline). All alerts are logged in the 90-day history regardless of severity. The system requires explicit operator acknowledgement before clearing a critical alert.
 
 ==== Critical Interactions
 {ul}
@@ -330,7 +330,7 @@ The alert system implements the two-tier severity model defined in WP4.2 peer re
 - Operator acknowledgement workflow prevents premature alert clearance (SHR-12 acceptance criterion)
 - Differentiated heat vs frost alert labels supported as Could Have enhancement (SHR-41/42)
 {/ul}{/td}
-{/tr}
-{/table}
-
+ {/tr}
+ {/table}
+ 
 {br}

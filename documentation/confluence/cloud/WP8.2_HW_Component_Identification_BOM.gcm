@@ -1,0 +1,274 @@
+--- gcm ---
+title: 04 - GMS -WP8.2: HW component identification (BOM)
+page_id: 42634181
+version: 1
+source: http://confluence.microlab.club/rest/api/content/42634181
+---
+
+== 1. Main Hardware Components
+
+=== Core System Components
+
+==== 1.1 Delta XS Robot
+
+- **Function**: Primary mechanical manipulation system
+- **Components Included**:
+  - 3-axis delta mechanism
+  - Servo motors with encoders
+  - End effector/gripper
+  - Control board
+  - Power supply
+
+==== 1.2 Vision System
+
+- **RGB Color Camera**: For fruit/vegetable color detection
+- **Lighting System**: Consistent illumination for color accuracy
+
+==== 1.3 Computing Platform
+
+- **Microcontroller/SBC**: For robot control and image processing
+- **Options**: Raspberry Pi 4, Arduino with ESP32, or industrial PC
+
+==== 1.4 Communication Infrastructure
+
+- **Router/Network Equipment**: For API communication and remote monitoring
+- **Cables**: Ethernet, USB, power cables
+
+==== 1.5 Mechanical Support Components
+
+- **Conveyor System**: For item feeding (optional)
+- **Sorting Bins**: Collection containers for sorted items
+- **Mounting Hardware**: Camera mounts, protective enclosures
+
+==== 1.6 Sensors
+
+- **Proximity Sensors**: Object detection
+- **Position Encoders**: Already integrated in Delta XS
+- **Emergency Stop**: Safety system
+
+== 2. System Architecture Diagram
+
+== `{image file="Screenshot_2.png" align=center}`
+
+== ` `
+
+== 3. Component Specifications Table
+
+{table class="wrapped"}
+{thead}
+{tr}
+{th}Component Name{/th}
+{th}Description{/th}
+{th}Primary Distributor{/th}
+{th}Secondary Distributor{/th}
+{th}Estimated Cost{/th}
+{/tr}
+{/thead}
+{tr}
+{td}**Raspberry Pi 4 (4GB)**{/td}
+{td}Main processing unit for image processing and robot control{/td}
+{td}[Adafruit](https://www.adafruit.com/product/4296){/td}
+{td}[SparkFun](https://www.sparkfun.com/products/15447){/td}
+{td}$75-85{/td}
+{/tr}
+{tr}
+{td}**RGB USB Camera (1080p)**{/td}
+{td}Color detection and image capture{/td}
+{td}[Logitech C920](https://www.logitech.com/en-us/products/webcams/c920-pro-hd-webcam.960-001055.html){/td}
+{td}[Amazon](https://amazon.com/webcams){/td}
+{td}$70-90{/td}
+{/tr}
+{tr}
+{td}**LED Ring Light**{/td}
+{td}Consistent lighting for color detection{/td}
+{td}[Adafruit NeoPixel Ring](https://www.adafruit.com/product/1586){/td}
+{td}[SparkFun](https://www.sparkfun.com/products/14436){/td}
+{td}$10-15{/td}
+{/tr}
+{tr}
+{td}**Proximity Sensor (Ultrasonic)**{/td}
+{td}Object detection for sorting trigger{/td}
+{td}[SparkFun HC-SR04](https://www.sparkfun.com/products/15569){/td}
+{td}[Adafruit](https://www.adafruit.com/product/3942){/td}
+{td}$5-10{/td}
+{/tr}
+{tr}
+{td}**Wi-Fi Router (Industrial)**{/td}
+{td}Network communication for API calls{/td}
+{td}[ASUS RT-AX55](https://www.asus.com/networking-iot-servers/wifi-routers/){/td}
+{td}[Netgear](https://www.netgear.com/business/wifi/access-points/){/td}
+{td}$100-150{/td}
+{/tr}
+{tr}
+{td}**Power Supply (24V/5A)**{/td}
+{td}System power for additional components{/td}
+{td}[Mean Well LRS-150-24](https://www.mouser.com/ProductDetail/MEAN-WELL/LRS-150-24){/td}
+{td}[DigiKey](https://www.digikey.com/en/products/detail/mean-well-usa-inc/LRS-150-24/7705019){/td}
+{td}$25-35{/td}
+{/tr}
+{tr}
+{td}**Ethernet Cables (Cat6)**{/td}
+{td}Network connectivity{/td}
+{td}[Monoprice](https://www.monoprice.com/category/cables/network-cables){/td}
+{td}[Amazon Basics](https://amazon.com/ethernet-cables){/td}
+{td}$10-20{/td}
+{/tr}
+{tr}
+{td}**Sorting Bins (Set of 4)**{/td}
+{td}Collection containers for sorted items{/td}
+{td}[IKEA SAMLA](https://www.ikea.com/us/en/p/samla-box-transparent-s49929201/){/td}
+{td}[Amazon Storage Bins](https://amazon.com/storage-bins){/td}
+{td}$20-30{/td}
+{/tr}
+{tr}
+{td}**Emergency Stop Button**{/td}
+{td}Safety system component{/td}
+{td}[AutomationDirect](https://www.automationdirect.com/adc/shopping/catalog/pushbuttons_-_switches_-_indicators/emergency_stop_switches){/td}
+{td}[McMaster-Carr](https://www.mcmaster.com/emergency-stop-switches/){/td}
+{td}$15-25{/td}
+{/tr}
+{tr}
+{td}**Camera Mount/Bracket**{/td}
+{td}Positioning system for camera{/td}
+{td}[ServoCity](https://www.servocity.com/camera-mounts/){/td}
+{td}[Amazon Camera Mounts](https://amazon.com/camera-mounts){/td}
+{td}$20-40{/td}
+{/tr}
+{/table}
+
+== 4. API Integration Requirements
+
+=== 4.1 Robot Control API
+`# Example API endpoints for Delta XS control
+POST /api/robot/move
+{
+    "x": 100,
+    "y": 150,
+    "z": 50,
+    "speed": 80
+}
+
+GET /api/robot/status
+POST /api/robot/home
+POST /api/robot/gripper/open
+POST /api/robot/gripper/close
+`
+=== 4.2 Monitoring API
+`# System monitoring endpoints
+GET /api/system/health
+POST /api/sorting/log
+{
+    "item_color": "red",
+    "bin_location": "bin_1",
+    "timestamp": "2025-01-20T10:30:00Z",
+    "confidence": 0.95
+}
+
+GET /api/statistics/daily
+GET /api/camera/capture
+`
+== 5. Software Architecture
+
+=== 5.1 Main Application Components
+
+- **Color Detection Module**: OpenCV-based color classification
+- **Robot Control Interface**: Delta XS communication protocol
+- **API Client**: RESTful API communication
+- **Web Dashboard**: Real-time monitoring interface
+- **Database**: Sorting statistics and logs
+
+=== 5.2 Required Libraries/Frameworks
+
+- OpenCV for image processing
+- Flask/FastAPI for web services
+- Requests for API communication
+- SQLite for data storage
+- GPIO libraries for sensor interfacing
+
+== 6. Implementation Plan
+
+=== Phase 1: Hardware Setup
+
+- Install and configure Raspberry Pi
+- Mount camera and lighting system
+- Connect sensors and emergency stop
+- Network configuration
+
+=== Phase 2: Software Development
+
+- Develop color detection algorithm
+- Implement robot control interface
+- Create API integration layer
+- Build monitoring dashboard
+
+=== Phase 3: Integration Testing
+
+- Calibrate color detection system
+- Test robot movement accuracy
+- Validate API communication
+- Performance optimization
+
+=== Phase 4: Deployment
+
+- System documentation
+- User training materials
+- Maintenance procedures
+- Performance monitoring setup
+
+== 7. Safety Considerations
+
+- Emergency stop accessible at all times
+- Protective barriers around robot workspace
+- Proper grounding of electrical components
+- Regular calibration of safety sensors
+- Clear operational procedures and training
+
+== 8. Success Metrics
+
+- **Sorting Accuracy**: >95% color classification accuracy
+- **Throughput**: Minimum 10 items per minute
+- **System Uptime**: >99% operational availability
+- **API Response Time**: <200ms average response time
+- **Data Logging**: 100% transaction logging for monitoring
+
+== 9. Risk Mitigation
+
+{table class="wrapped"}
+{thead}
+{tr}
+{th}Risk{/th}
+{th}Impact{/th}
+{th}Mitigation Strategy{/th}
+{/tr}
+{/thead}
+{tr}
+{td}Color detection failure{/td}
+{td}High{/td}
+{td}Backup lighting, calibration procedures{/td}
+{/tr}
+{tr}
+{td}Network connectivity loss{/td}
+{td}Medium{/td}
+{td}Local fallback mode, data buffering{/td}
+{/tr}
+{tr}
+{td}Robot mechanical failure{/td}
+{td}High{/td}
+{td}Regular maintenance, spare parts inventory{/td}
+{/tr}
+{tr}
+{td}Power interruption{/td}
+{td}Medium{/td}
+{td}UPS system, graceful shutdown procedures{/td}
+{/tr}
+{/table}
+
+== 10. Next Steps
+
+- Procure components from identified distributors
+- Set up development environment
+- Begin hardware integration
+- Develop initial color detection prototype
+- Establish API communication framework
+
+- {br}

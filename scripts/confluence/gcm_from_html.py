@@ -66,6 +66,7 @@ class _GCMBuilder(HTMLParser):
         self._link_href = ""
         self._link_text = []
         self._in_pre = False
+        self._p_align = ""           # text-align value of current <p>, or ""
 
         # ac:structured-macro state
         self._macro_name = ""
@@ -462,11 +463,16 @@ class _GCMBuilder(HTMLParser):
             return
 
         if tag == "p":
+            style = attrs_dict.get("style", "")
+            align_m = re.search(r'text-align\s*:\s*(\w+)', style)
+            self._p_align = align_m.group(1) if align_m else ""
             if not self._cell_tag:
                 if self._list_depth > 0:
                     pass  # <p> inside <li> — <li> already emits newline+marker
                 elif self._in_blockquote:
                     self._emit("\n> ")
+                elif self._p_align:
+                    self._emit(f"\n{{p align={self._p_align}}}")
                 else:
                     self._emit("\n")
             return
@@ -696,6 +702,9 @@ class _GCMBuilder(HTMLParser):
                 self._cell_buf.append("\n")
             elif self._list_depth > 0:
                 pass  # </p> inside <li> — <li> already handles structure
+            elif self._p_align:
+                self._emit("{/p}\n")
+                self._p_align = ""
             else:
                 self._emit("\n")
             return
@@ -927,6 +936,10 @@ def html_to_gcm(html, title="", page_id="", version="", source_url=""):
     
     If title/page_id/version are given, a front-matter block is prepended.
     """
+    # Python's HTMLParser does not call handle_data for CDATA sections;
+    # preprocess to replace <![CDATA[...]]> with its raw content.
+    html = re.sub(r'<!\[CDATA\[(.*?)\]\]>', r'\1', html, flags=re.DOTALL)
+
     parser = _GCMBuilder()
     parser.feed(html)
     body = parser.get_gcm()

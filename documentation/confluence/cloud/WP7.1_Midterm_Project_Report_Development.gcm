@@ -1,0 +1,92 @@
+--- gcm ---
+title: 04 - GMS -WP7.1: Midterm Project report development
+page_id: 42634178
+version: 3
+source: http://confluence.microlab.club/rest/api/content/42634178
+---
+
+{raw}
+<ac:structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="0e2ad38f-7d87-4744-b2f0-fef8f1f0d352"><ac:parameter ac:name=""><ac:link><ri:page ri:content-title="04 - GMS -Greenhouse Management System"/></ac:link></ac:parameter></ac:structured-macro>
+{/raw}
+
+{raw}
+<ac:structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="f20dfb6d-cf7a-4b7b-bc09-6d50aeee0b1a"><ac:parameter ac:name=""><ac:link><ri:page ri:content-title="04 - GMS -WP1.1 Problem Definition"/></ac:link></ac:parameter></ac:structured-macro>
+{/raw}
+
+{raw}
+<ac:structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="b07f90bd-b084-4d8b-94ed-d1e45d434913"><ac:parameter ac:name=""><ac:link><ri:page ri:content-title="04 - GMS -WP2.1 Technology Research"/></ac:link></ac:parameter></ac:structured-macro>
+{/raw}
+
+{raw}
+<ac:structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="a49af431-17f8-4165-90e0-df9b7cb734b8"><ac:parameter ac:name=""><ac:link><ri:page ri:content-title="04 - GMS -WP3.1 Business Case/Stakeholder Analysis"/></ac:link></ac:parameter></ac:structured-macro>
+{/raw}
+
+{raw}
+<ac:structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="4778e184-b4a1-45ec-a902-b1538aa28c27"><ac:parameter ac:name=""><ac:link><ri:page ri:content-title="04 - GMS -WP3.2 Stakeholder Workshop"/></ac:link></ac:parameter></ac:structured-macro>
+{/raw}
+
+{raw}
+<ac:structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="1204e2ba-1a4e-4a9a-bdc7-5a40d48f908c"><ac:parameter ac:name=""><ac:link><ri:page ri:content-title="04 - GMS -WP3.3 Business Case-Survey"/></ac:link></ac:parameter></ac:structured-macro>
+{/raw}
+
+{raw}
+<ac:structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="ae2ee0e8-ef8c-4ca2-88db-915866be8120"><ac:parameter ac:name=""><ac:link><ri:page ri:content-title="04 - GMS -WP3.4 Project Charter"/></ac:link></ac:parameter></ac:structured-macro>
+{/raw}
+
+{raw}
+<ac:structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="8f1e2865-4577-4c6d-8721-7a54acd2d1f8"><ac:parameter ac:name=""><ac:link><ri:page ri:content-title="04 - GMS -WP4.1 Develop Stakeholder Requirements"/></ac:link></ac:parameter></ac:structured-macro>
+{/raw}
+
+{raw}
+<ac:structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="0a01ef74-0379-4e1f-9aa8-5d0597f91766"><ac:parameter ac:name=""><ac:link><ri:page ri:content-title="04 - GMS -WP4.2 Analyze Stakeholder Requirements"/></ac:link></ac:parameter></ac:structured-macro>
+{/raw}
+
+{raw}
+<ac:structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="595cfa46-20b3-480f-99cc-273008026ab1"><ac:parameter ac:name=""><ac:link><ri:page ri:content-title="04 - GMS -WP4.3 Import Stakeholder requirements in Jira"/></ac:link></ac:parameter></ac:structured-macro>
+{/raw}
+
+{raw}
+<ac:structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="cae4a93b-dcc2-4cda-959d-5c389ffa0fe5"><ac:parameter ac:name=""><ac:link><ri:page ri:content-title="04 - GMS -WP5.1 Analyze Stakeholder Requirements"/></ac:link></ac:parameter></ac:structured-macro>
+{/raw}
+
+{raw}
+<ac:structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="9e9a44a0-3d8a-4709-a4b9-cc5afe358158"><ac:parameter ac:name=""><ac:link><ri:page ri:content-title="04 - GMS -WP5.2 Develop System Requirements"/></ac:link></ac:parameter></ac:structured-macro>
+{/raw}
+
+{raw}
+<ac:structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="0cf8eaa8-2b90-4e86-902f-077d56846bf0"><ac:parameter ac:name=""><ac:link><ri:page ri:content-title="04 - GMS -WP5.3 Ensure requirements traceability"/></ac:link></ac:parameter></ac:structured-macro>
+{/raw}
+
+{raw}
+<ac:structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="450a1e76-84b5-4904-bbab-4d9917fa7dce"><ac:parameter ac:name=""><ac:link><ri:page ri:content-title="04 - GMS -WP5.4 Review and Release System requirements"/></ac:link></ac:parameter></ac:structured-macro>
+{/raw}
+
+{raw}
+<ac:structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="577456ed-cd8e-42ff-a09e-f73d668c5d1a"><ac:parameter ac:name=""><ac:link><ri:page ri:content-title="04 - GMS -WP6.1 Static aspects of the system architecture specification"/></ac:link></ac:parameter></ac:structured-macro>
+{/raw}
+
+{raw}
+<ac:structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="92b95aff-b980-4255-818a-3448b3d13044"><ac:parameter ac:name=""><ac:link><ri:page ri:content-title="04 - GMS -WP6.2 Dynamic aspects of the system architecture Specification"/></ac:link></ac:parameter></ac:structured-macro>
+{/raw}
+
+{raw}
+<ac:structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="666b50f4-337b-41d9-ab4e-482d8095b927"><ac:parameter ac:name=""><ac:link><ri:page ri:content-title="04 - GMS -WP6.3 System architecture analysis"/></ac:link></ac:parameter></ac:structured-macro>
+{/raw}
+
+{raw}
+<ac:structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="9fb06243-616d-4c2e-99a3-fc45ca0b10cd"><ac:parameter ac:name=""><ac:link><ri:page ri:content-title="04 - GMS -WP6.4 Ensure consistency and establish bidirectional traceability"/></ac:link></ac:parameter></ac:structured-macro>
+{/raw}
+
+{raw}
+<ac:structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="92aec5ce-b5e5-4f70-b846-8c155d1956c0"><ac:parameter ac:name=""><ac:link><ri:page ri:content-title="04 - GMS -WP6.5 Review and Communicate agreed system architecture"/></ac:link></ac:parameter></ac:structured-macro>
+{/raw}
+
+{raw}
+<ac:structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="f4e70859-a9b6-414d-8c43-033ecfc03b41"><ac:parameter ac:name=""><ac:link><ri:page ri:content-title="04 - GMS -Articol"/></ac:link></ac:parameter></ac:structured-macro>
+{/raw}
+
+{br}
+
+{br}
+
+{br}

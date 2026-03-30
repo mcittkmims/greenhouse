@@ -1,7 +1,7 @@
 --- gcm ---
 title: 04 - GMS -WP6.1 Static aspects of the system architecture specification
 page_id: 42634152
-version: 6
+version: 9
 source: http://confluence.microlab.club/rest/api/content/42634152
 ---
 
@@ -11,10 +11,10 @@ The system requirements (WP5.4) define nine functional and non-functional groups
 
 {table class="wrapped"}
 {colgroup}
-{col }
-{col }
-{col }
-{/colgroup}
+ {col }
+ {col }
+ {col }
+ {/colgroup}
 {tr}
 {th}**SR Group**{/th}
 {th}**Architectural Driver**{/th}
@@ -69,14 +69,14 @@ The system requirements (WP5.4) define nine functional and non-functional groups
 
 == High-Level Architectural Design
 
-The GMS architecture follows a four-layer modular design. Hardware is confirmed in WP6.2: Arduino Portenta Machine Control (STM32H747 dual-core). Cortex-M7 (10 Hz) runs PID/hysteresis control loops; Cortex-M4 handles MQTT communications and security. Cloud uses InfluxDB or TimescaleDB for time-series storage.
+The GMS architecture follows a five-layer modular design. Hardware is confirmed in WP6.2: Arduino Portenta Machine Control (STM32H747 dual-core). Cortex-M7 (10 Hz) runs PID/hysteresis control loops; Cortex-M4 handles local LAN MQTT communications. Cloud uses InfluxDB or TimescaleDB for time-series storage.
 
 {table class="wrapped"}
 {colgroup}
-{col }
-{col }
-{col }
-{/colgroup}
+ {col }
+ {col }
+ {col }
+ {/colgroup}
 {tr}
 {th}**Layer**{/th}
 {th}**Key Technology**{/th}
@@ -89,13 +89,18 @@ The GMS architecture follows a four-layer modular design. Hardware is confirmed 
 {/tr}
 {tr}
 {td}Edge Controller{/td}
-{td}Arduino Portenta MC; STM32H747 Cortex-M7 (PID 10Hz) + Cortex-M4 (MQTT/Security); NV config storage{/td}
-{td}Local PID/hysteresis automation; schedule execution; offline buffering 72 h; MQTT publish; local auth{/td}
+{td}Arduino Portenta MC; STM32H747 Cortex-M7 (PID 10Hz) + Cortex-M4 (Local LAN MQTT); NV config storage{/td}
+{td}Local PID/hysteresis automation; schedule execution; Local LAN MQTT publish{/td}
+{/tr}
+{tr}
+{td}Mini PC Edge Gateway{/td}
+{td}Linux OS; Local MQTT Broker (Mosquitto); Decision Processing Engine{/td}
+{td}Multi-zone aggregation; offline telemetry buffer (72 h); cached AI parameter execution; sole WAN boundary via X.509 mTLS{/td}
 {/tr}
 {tr}
 {td}Cloud Backend{/td}
-{td}MQTT Broker; InfluxDB/TimescaleDB 90-day; REST API; AuthN/AuthZ; Alert+Notification service{/td}
-{td}Telemetry ingestion; alert generation; RBAC; analytics; push/SMS dispatch{/td}
+{td}MQTT Broker; InfluxDB/TimescaleDB 90-day; REST API; AuthN/AuthZ; Alert+Notification service; AI Agent Service{/td}
+{td}Telemetry ingestion; alert generation; RBAC; analytics; push/SMS dispatch; AI setpoint optimization{/td}
 {/tr}
 {tr}
 {td}Client Layer{/td}
@@ -112,10 +117,10 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 
 {table class="wrapped"}
 {colgroup}
-{col }
-{col }
-{col }
-{/colgroup}
+ {col }
+ {col }
+ {col }
+ {/colgroup}
 {tr}
 {th}**Mode**{/th}
 {th}**Active Components**{/th}
@@ -152,10 +157,10 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 
 {table class="wrapped"}
 {colgroup}
-{col }
-{col }
-{col }
-{/colgroup}
+ {col }
+ {col }
+ {col }
+ {/colgroup}
 {tr}
 {th}**Component**{/th}
 {th}**Responsible**{/th}
@@ -172,9 +177,19 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 {td}Control Subsystem - Edge Controller (Cortex-M7 PID/Hysteresis){/td}
 {/tr}
 {tr}
+{td}Mini PC Edge Gateway{/td}
+{td}Alexei Maxim{/td}
+{td}Gateway Subsystem - Edge Layer{/td}
+{/tr}
+{tr}
 {td}Cloud Backend System{/td}
 {td}Rațeeva Daria{/td}
 {td}Cloud Backend (InfluxDB/TimescaleDB, MQTT Broker, REST API){/td}
+{/tr}
+{tr}
+{td}AI Agent Service{/td}
+{td}Rațeeva Daria{/td}
+{td}Analytics Subsystem - Cloud Backend{/td}
 {/tr}
 {tr}
 {td}Web Dashboard & User Interface System{/td}
@@ -188,7 +203,7 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 {/tr}
 {/table}
 
-== {image file="gms_high_level_architecture.png" height=400}
+{image file="architecture-es.drawio(1).png" width=650}
 
 == Component Details and Interfaces
 
@@ -196,9 +211,9 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 
 {table class="wrapped"}
 {colgroup}
-{col }
-{col }
-{/colgroup}
+ {col }
+ {col }
+ {/colgroup}
 {tr}
 {td}**Architectural Element**{/td}
 {td}Sensor Acquisition & Environmental Monitoring System{/td}
@@ -221,7 +236,7 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 {/tr}
 {tr}
 {td}**Scope**{/td}
-{td}Sensor polling, 3-stage validation (range/plausibility/rate-of-change), threshold evaluation, alert classification, data serialisation, MQTT payload preparation, fault counter monitoring, local buffer feed{/td}
+{td}Sensor polling, 3-stage validation (range/plausibility/rate-of-change), threshold evaluation, alert classification, data serialisation, local MQTT payload preparation, fault counter monitoring{/td}
 {/tr}
 {tr}
 {td}**Key Features**{/td}
@@ -234,7 +249,7 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 - Humidity ventilation within 30 s of exceeding maximum configured threshold (SR-1.4)
 - CO2 informational advisory when concentration drops below 800 ppm (SR-1.5)
 - SensorFaultMonitor: configurable fault counter per sensor; flags alarm on persistent failures
-- MQTT publish is non-blocking - cloud outage does not delay local threshold evaluation
+- MQTT publish is non-blocking - local MQTT outage does not delay local threshold evaluation
 - Light intensity excluded from pilot scope (no corresponding SHR, review R4)
 {/ul}{/td}
 {/tr}
@@ -246,10 +261,10 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 
 {table class="wrapped"}
 {colgroup}
-{col }
-{col }
-{col }
-{/colgroup}
+ {col }
+ {col }
+ {col }
+ {/colgroup}
 {tr}
 {th}**Interface**{/th}
 {th}**Description / Scope**{/th}
@@ -267,13 +282,8 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 {/tr}
 {tr}
 {td}**SENS-MQTT-IF**{/td}
-{td}Serialises SensorData to JSON MQTT payloads (sensorId, parameter, value, unit, ISO 8601 timestamp). Passed to MQTT Client (Cortex-M4) for cloud publication at 60 s intervals.{/td}
-{td}MQTT Client (Cortex-M4 Core){/td}
-{/tr}
-{tr}
-{td}**SENS-BUFF-IF**{/td}
-{td}Feeds sensor records to Offline Buffer Manager when cloud connectivity is lost. Records time-stamped locally and flushed chronologically on reconnect. Ensures zero data loss (SR-6.2).{/td}
-{td}Offline Buffer Manager{/td}
+{td}Serialises SensorData to JSON MQTT payloads (sensorId, parameter, value, unit, ISO 8601 timestamp). Passed to MQTT Client (Cortex-M4) for local publication to Mini PC at 60 s intervals.{/td}
+{td}Local MQTT Broker (Mini PC){/td}
 {/tr}
 {/table}
 
@@ -283,9 +293,9 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 
 {table class="wrapped"}
 {colgroup}
-{col }
-{col }
-{/colgroup}
+ {col }
+ {col }
+ {/colgroup}
 {tr}
 {td}**Architectural Element**{/td}
 {td}Local Automation Engine{/td}
@@ -304,11 +314,11 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 {/tr}
 {tr}
 {td}**Purpose**{/td}
-{td}Orchestrates all on-device automated greenhouse control. Receives sensor events, applies PID/hysteresis logic, issues actuator commands, executes scheduled irrigation, handles remote manual commands, buffers data during cloud outages, and maintains 72 h+ autonomous operation (SR-6.2).{/td}
+{td}Orchestrates all on-device automated greenhouse control. Receives sensor events, applies PID/hysteresis logic, issues actuator commands, executes scheduled irrigation, handles remote manual commands, and maintains local safety interlocks.{/td}
 {/tr}
 {tr}
 {td}**Scope**{/td}
-{td}Irrigation control (sensor/schedule/manual-triggered), climate PID/hysteresis, actuator conflict arbitration, threshold config persistence, offline buffer management, resource usage logging, emergency stop enforcement{/td}
+{td}Irrigation control (sensor/schedule/manual-triggered), climate PID/hysteresis, actuator conflict arbitration, threshold config persistence, resource usage logging, emergency stop enforcement{/td}
 {/tr}
 {tr}
 {td}**Key Features**{/td}
@@ -318,11 +328,10 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 - Irrigation valve activation within 30 s of soil moisture breach (SR-2.1); auto-stop within 30 s of reaching target regardless of trigger source (SR-2.2)
 - Skip-if-wet gate: skips scheduled irrigation if soil already at/above target, preventing over-watering
 - Maximum duration timer safeguard on pump prevents indefinite operation on sensor failure
-- Autonomous schedule execution (daily/weekly) persisted in NV; survives restarts and 72 h+ cloud outages (SR-2.3)
+- Autonomous schedule execution (daily/weekly) persisted in NV; survives restarts and WAN outages (SR-2.3)
 - Remote manual irrigation commands from dashboard execute within 10 s (SR-2.4)
 - Ventilation arbitration: temp and humidity breaches share physical actuator; each event logged independently with trigger type
 - ResourceLogger: records water volume, energy, trigger type (SENSOR|SCHEDULE|MANUAL), timestamp per activation event (SR-7.3)
-- Offline buffer with zero data loss on reconnect; batch flush avoids mobile rate-limit issues (SR-6.2)
 - ActuatorSafetyInterlock: emergency stop reachable from any state; all actuators to safe state within 60 s
 {/ul}{/td}
 {/tr}
@@ -334,10 +343,10 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 
 {table class="wrapped"}
 {colgroup}
-{col }
-{col }
-{col }
-{/colgroup}
+ {col }
+ {col }
+ {col }
+ {/colgroup}
 {tr}
 {th}**Interface**{/th}
 {th}**Description / Scope**{/th}
@@ -355,8 +364,8 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 {/tr}
 {tr}
 {td}**AUTO-API-IF**{/td}
-{td}Receives manual remote control commands from Cloud REST API Gateway via MQTT downlink. Executes within 10 s of dashboard submission. Guarded by EdgeAuthModule in offline mode.{/td}
-{td}Cloud REST API Gateway / EdgeAuthModule{/td}
+{td}Receives manual remote control commands from Mini PC Edge Gateway via MQTT downlink. Executes within 10 s of dashboard submission. Guarded by EdgeAuthModule in offline mode.{/td}
+{td}Mini PC Edge Gateway{/td}
 {/tr}
 {tr}
 {td}**AUTO-CONFIG-IF**{/td}
@@ -369,14 +378,80 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 {td}ScheduleExecutor{/td}
 {/tr}
 {tr}
-{td}**AUTO-BUF-IF**{/td}
-{td}Passes buffered SensorRecords and activation logs to MQTT Client for batch upload on cloud reconnect. Guarantees zero data loss and chronological ordering (SR-6.2).{/td}
-{td}MQTT Client (Cortex-M4 Core){/td}
-{/tr}
-{tr}
 {td}**AUTO-LOG-IF**{/td}
 {td}Passes resource usage records (water volume, energy, trigger type, timestamp) to Cloud Time-Series DB for 90-day retention (SR-7.3).{/td}
 {td}Cloud Time-Series DB (via MQTT pipeline){/td}
+{/tr}
+{/table}
+
+{br}
+
+=== Mini PC Edge Gateway
+
+{table class="wrapped"}
+{colgroup}
+ {col }
+ {col }
+ {/colgroup}
+{tr}
+{td}**Architectural Element**{/td}
+{td}Mini PC Edge Gateway{/td}
+{/tr}
+{tr}
+{td}**Component Type**{/td}
+{td}Gateway Subsystem{/td}
+{/tr}
+{tr}
+{td}**Responsible**{/td}
+{td}Alexei Maxim{/td}
+{/tr}
+{tr}
+{td}**Platform**{/td}
+{td}Linux OS; Local MQTT Broker (Mosquitto); Python/Node.js for Decision Engine{/td}
+{/tr}
+{tr}
+{td}**Purpose**{/td}
+{td}Acts as the central integration point for all greenhouse zones, maintaining a local MQTT broker, executing cached AI logic during cloud outages, and buffering telemetry to guarantee zero data loss over unstable WAN connections.{/td}
+{/tr}
+{tr}
+{td}**Scope**{/td}
+{td}Local MQTT aggregation, multi-zone coordination, offline telemetry buffer (72 h+), cached AI parameter execution, X.509 mTLS WAN boundary{/td}
+{/tr}
+{tr}
+{td}**Key Features**{/td}
+{td}{ul}
+
+- Operates a local LAN MQTT broker (Mosquitto) for fast, lightweight communication with all zone controllers
+- Buffers up to 72 hours of telemetry from all zones during WAN outages
+- Executes cached AI-derived setpoints and cross-zone arbitration rules
+- Serves as the sole WAN boundary, maintaining a single X.509 mutual TLS connection to the cloud EMQX broker
+- Flushes buffered records in batches upon cloud reconnection, ensuring zero data loss (SR-6.2)
+{/ul}{/td}
+{/tr}
+{/table}
+
+==== Component Interfaces
+
+{table class="wrapped"}
+{colgroup}
+ {col }
+ {col }
+ {col }
+ {/colgroup}
+{tr}
+{th}**Interface**{/th}
+{th}**Description / Scope**{/th}
+{th}**Connected Component**{/th}
+{/tr}
+{tr}
+{td}**EDGE-LOCAL-IF**{/td}
+{td}Lightweight MQTT communication over the local LAN. Receives telemetry from zone Portenta controllers and sends manual/scheduled actuator commands.{/td}
+{td}Edge Controllers (Portenta Cortex-M4){/td}
+{/tr}
+{tr}
+{td}**GATEWAY-CLOUD-IF**{/td}
+{td}MQTT over TLS 1.2+ with X.509 mutual auth. Sends aggregated telemetry and buffered batches to the cloud. Receives cloud configuration and manual commands.{/td}
+{td}Cloud EMQX Broker{/td}
 {/tr}
 {/table}
 
@@ -386,9 +461,9 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 
 {table class="wrapped"}
 {colgroup}
-{col }
-{col }
-{/colgroup}
+ {col }
+ {col }
+ {/colgroup}
 {tr}
 {td}**Architectural Element**{/td}
 {td}Cloud Backend System{/td}
@@ -411,7 +486,7 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 {/tr}
 {tr}
 {td}**Scope**{/td}
-{td}MQTT broker with X.509 mTLS, data ingestion, InfluxDB/TimescaleDB 90-day store, alert evaluation, two-tier notification dispatch, REST API with RBAC, analytics, resource usage storage, notification gateway{/td}
+{td}MQTT broker with X.509 mTLS, data ingestion, InfluxDB/TimescaleDB 90-day store, alert evaluation, two-tier notification dispatch, REST API with RBAC, analytics, resource usage storage, notification gateway, AI Agent Service{/td}
 {/tr}
 {tr}
 {td}**Key Features**{/td}
@@ -428,6 +503,7 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 - Setpoint/config updates acknowledged by edge within one 60 s control cycle (SR-2.6)
 - Multi-site aggregation: 10 sites, initial load 5 s, refresh 3 s (SR-8.3, SR-8.5)
 - REST API returns HTTP 401/403 for unauthenticated/unauthorised requests; logs with timestamp and source IP (SR-9.3)
+- AI Agent Service operates as an API client to suggest optimized setpoints based on 90-day historical trends.
 {/ul}{/td}
 {/tr}
 {/table}
@@ -438,19 +514,19 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 
 {table class="wrapped"}
 {colgroup}
-{col }
-{col }
-{col }
-{/colgroup}
+ {col }
+ {col }
+ {col }
+ {/colgroup}
 {tr}
 {th}**Interface**{/th}
 {th}**Description / Scope**{/th}
 {th}**Connected Component**{/th}
 {/tr}
 {tr}
-{td}**CLOUD-EDGE-IF**{/td}
+{td}**GATEWAY-CLOUD-IF**{/td}
 {td}MQTT over TLS 1.2+ with X.509 mutual auth. QoS 1 (at-least-once). Receives telemetry every 30-60 s and batch historical records on reconnect. Delivers actuator commands and config updates via MQTT downlink. Transport: 4G/5G (SR-6.1).{/td}
-{td}Edge MQTT Client (Cortex-M4){/td}
+{td}Mini PC Edge Gateway{/td}
 {/tr}
 {tr}
 {td}**CLOUD-WEB-IF**{/td}
@@ -475,7 +551,7 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 {tr}
 {td}**CLOUD-SYNC-IF**{/td}
 {td}Receives batch-flushed buffered records from reconnecting edge controllers. Inserts chronologically into DB with zero data loss (SR-6.2).{/td}
-{td}Edge Offline Buffer (on reconnect){/td}
+{td}Mini PC Offline Buffer (on reconnect){/td}
 {/tr}
 {/table}
 
@@ -485,9 +561,9 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 
 {table class="wrapped"}
 {colgroup}
-{col }
-{col }
-{/colgroup}
+ {col }
+ {col }
+ {/colgroup}
 {tr}
 {td}**Architectural Element**{/td}
 {td}Web Dashboard & User Interface System{/td}
@@ -537,10 +613,10 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 
 {table class="wrapped"}
 {colgroup}
-{col }
-{col }
-{col }
-{/colgroup}
+ {col }
+ {col }
+ {col }
+ {/colgroup}
 {tr}
 {th}**Interface**{/th}
 {th}**Description / Scope**{/th}
@@ -574,9 +650,9 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 
 {table class="wrapped"}
 {colgroup}
-{col }
-{col }
-{/colgroup}
+ {col }
+ {col }
+ {/colgroup}
 {tr}
 {td}**Architectural Element**{/td}
 {td}Cybersecurity System{/td}
@@ -609,7 +685,7 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 - RBAC: Operator (full read/write, account management) and Viewer (read-only) (SR-9.2)
 - Operator creates, modifies, deactivates user accounts; initial Operator provisioned at installation (SR-9.2, review R7)
 - All unauthenticated/unauthorised API requests: HTTP 401/403, logged with timestamp and source IP (SR-9.3)
-- EdgeAuthModule: offline mode enforces pre-provisioned credential auth; operates without cloud (SR-9.4)
+- EdgeAuthModule: WAN offline mode enforces pre-provisioned credential auth on Mini PC; operates without cloud (SR-9.4)
 - CertificateStore: manages X.509 edge certs; supports certificate rotation
 - MQTT QoS 1 prevents command injection on unstable 4G/5G; TLS prevents eavesdropping and replay
 {/ul}{/td}
@@ -622,10 +698,10 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 
 {table class="wrapped"}
 {colgroup}
-{col }
-{col }
-{col }
-{/colgroup}
+ {col }
+ {col }
+ {col }
+ {/colgroup}
 {tr}
 {th}**Interface**{/th}
 {th}**Description / Scope**{/th}
@@ -649,7 +725,7 @@ The GMS operates in five modes managed by the Edge Controller System State Contr
 {tr}
 {td}**SEC-EDGE-IF**{/td}
 {td}EdgeAuthModule on edge local API: validates pre-provisioned credential when cloud unavailable. Returns HTTP 401 if unauthenticated. Fully independent of cloud (SR-9.4).{/td}
-{td}Edge Controller Local API (Cortex-M4){/td}
+{td}Mini PC Gateway Local API{/td}
 {/tr}
 {tr}
 {td}**SEC-USERMGMT-IF**{/td}
@@ -666,20 +742,30 @@ The GMS sequence diagram illustrates three key operational scenarios: normal sen
 
 {br}
 
-{image file="gms_sequence_diagram (1).png" width=749}
+{image file="MQTT Sensor Data Management-2026-03-22-194459(1).png"}
 
 == Architectural Decisions and Rationale
 
 {table class="wrapped"}
 {colgroup}
-{col }
-{col }
-{col }
-{/colgroup}
+ {col }
+ {col }
+ {col }
+ {/colgroup}
 {tr}
 {th}**Decision**{/th}
 {th}**Rationale**{/th}
 {th}**Requirements / Source**{/th}
+{/tr}
+{tr}
+{td}Mini PC Edge Gateway (5-Layer Architecture){/td}
+{td}Reduces N Portenta connections to a single WAN trust boundary. Offloads memory-heavy 72h buffering and complex certificate management from the microcontrollers to a Linux environment.{/td}
+{td}SR-6.1, SR-6.2, SR-9.1, Review R1, R2, R4{/td}
+{/tr}
+{tr}
+{td}AI Agent as Backend Client{/td}
+{td}Decouples experimental AI logic from deterministic edge control loops. Allows proactive threshold optimization based on historical trends without risking real-time crop safety.{/td}
+{td}Review R3{/td}
 {/tr}
 {tr}
 {td}STM32H747 dual-core edge controller{/td}

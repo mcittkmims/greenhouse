@@ -78,9 +78,24 @@ def wp_key(wp_str):
 def pages_up_to(config, limit_str):
     """Return pages list where WP <= limit, sorted ascending."""
     limit = wp_key(limit_str)
-    selected = [p for p in config["pages"] if wp_key(p["wp"]) <= limit]
+    selected = [p for p in config["pages"]
+                if p["wp"].replace(".", "").isdigit() and wp_key(p["wp"]) <= limit]
     selected.sort(key=lambda p: wp_key(p["wp"]))
     return selected
+
+
+def pages_all(config):
+    """Return all pages, numeric WPs sorted ascending, non-numeric appended after."""
+    numeric = [p for p in config["pages"] if p["wp"].replace(".", "").isdigit()]
+    other = [p for p in config["pages"] if not p["wp"].replace(".", "").isdigit()]
+    numeric.sort(key=lambda p: wp_key(p["wp"]))
+    return numeric + other
+
+
+def pages_by_name(config, names):
+    """Return pages matching the given wp identifiers (case-insensitive)."""
+    names_lower = [n.lower() for n in names]
+    return [p for p in config["pages"] if p["wp"].lower() in names_lower]
 
 
 def fetch_page(page_id, base_url, auth):
@@ -98,9 +113,18 @@ def main():
     parser = argparse.ArgumentParser(
         description="Sync GMS Confluence pages to local GCM files."
     )
-    parser.add_argument(
-        "--up-to", required=True, metavar="X.Y",
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument(
+        "--up-to", metavar="X.Y",
         help="Fetch pages with WP number up to X.Y"
+    )
+    group.add_argument(
+        "--all", action="store_true",
+        help="Fetch all pages in confluence_pages.json"
+    )
+    group.add_argument(
+        "--page", metavar="WP", nargs="+",
+        help="Fetch specific page(s) by WP identifier (e.g. 6.5 articol)"
     )
     parser.add_argument(
         "--dry-run", action="store_true",
@@ -121,12 +145,21 @@ def main():
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     ATTACHMENTS_DIR.mkdir(parents=True, exist_ok=True)
 
-    pages = pages_up_to(config, args.up_to)
+    if args.up_to:
+        pages = pages_up_to(config, args.up_to)
+        label = f"up to WP {args.up_to}"
+    elif args.all:
+        pages = pages_all(config)
+        label = "all pages"
+    else:
+        pages = pages_by_name(config, args.page)
+        label = f"page(s): {', '.join(args.page)}"
+
     if not pages:
-        print(f"No pages found with WP <= {args.up_to}")
+        print(f"No matching pages found.")
         sys.exit(0)
 
-    print(f"Pages to sync (up to WP {args.up_to}):")
+    print(f"Pages to sync ({label}):")
     for p in pages:
         skip = p.get("skip_fetch", False)
         note = f"  [SKIP — {p.get('note', 'local-only')}]" if skip else ""

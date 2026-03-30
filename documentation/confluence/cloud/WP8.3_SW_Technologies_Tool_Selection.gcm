@@ -1,0 +1,416 @@
+--- gcm ---
+title: 04 - GMS -WP8.3: SW Technologies & Tool Selection
+page_id: 42634185
+version: 1
+source: http://confluence.microlab.club/rest/api/content/42634185
+---
+
+= SW Technologies & Tool Selection
+
+The GMS adopts a five-layer edge-cloud architecture. Each layer has a distinct software stack selected to meet the specific runtime, reliability, and connectivity constraints of that layer. This document maps each architectural layer to its software components, with justification for each selection.
+
+{image file="architecture-es.drawio.png" width=900 align=center}
+
+== 1. Mini PC Edge Gateway Software
+
+The Mini PC runs Linux and hosts the local MQTT broker, the decision processing engine, and the offline buffer. It is the sole WAN boundary for a greenhouse site.
+
+=== 1.1 Linux OS (Ubuntu 22.04 LTS)
+
+{image url="https://assets.ubuntu.com/v1/29985a98-ubuntu-logo32.png" height=80}
+
+**Component Description:**{br}General-purpose Linux operating system providing a stable, long-term-support base for all gateway services.
+
+**Scope in Project:**{br}Host OS for Mosquitto, the Python edge processing engine, and all local storage. Manages network interfaces (LAN toward Portenta controllers, WAN toward cloud via 4G modem).
+
+**Argumentation of Selection:**
+
+- LTS release guarantees security patches through 2027, suitable for unattended field deployments
+- Native support for Docker (used to containerise gateway services)
+- Broad hardware compatibility with low-cost Mini PC hardware (Intel NUC, Beelink, etc.)
+
+=== 1.2 Eclipse Mosquitto 2.x (Local MQTT Broker)
+
+{image url="https://mosquitto.org/images/mosquitto-text-side-28.png" height=80}
+
+**Component Description:**{br}Lightweight, open-source MQTT broker implementing MQTT 3.1.1 and 5.0. Runs as a system service on the Mini PC.
+
+**Scope in Project:**{br}Aggregates MQTT telemetry published by all Portenta zone controllers on the local LAN. The Python edge processing engine subscribes to this broker; the broker bridges outbound telemetry to the cloud EMQX broker when WAN is available.
+
+**Argumentation of Selection:**
+
+- Industry-standard broker for embedded and edge IoT deployments
+- Sub-millisecond intra-LAN latency; negligible CPU and RAM footprint
+- MQTT bridging feature enables seamless cloud forwarding without application-layer glue code
+- Supports ACL-based topic authorization for multi-zone security isolation
+
+=== 1.3 Python 3.11+ (Edge Processing Engine)
+
+{image url="https://www.python.org/static/community_logos/python-logo-master-v3-TM.png" height=80}
+
+**Component Description:**{br}Python application running as a system service on the Mini PC, implementing the decision processing engine, offline buffer, and cloud sync logic.
+
+**Scope in Project:**{br}Subscribes to local Mosquitto, evaluates threshold rules and cached AI setpoints, buffers sensor records to local SQLite during WAN outages (≥72 h), and batch-flushes historical data to the cloud REST API on reconnect.
+
+**Argumentation of Selection:**
+
+- Rapid development for glue logic between MQTT, SQLite, and REST API
+- `paho-mqtt` library provides a robust MQTT client with QoS 1 support
+- `requests` / `httpx` for REST batch-flush to the Spring Boot backend
+- `sqlite3` (stdlib) for zero-dependency offline buffer storage
+
+**Key Libraries:**
+
+- `paho-mqtt` — MQTT subscribe/publish with QoS 1
+- `sqlite3` — offline telemetry buffer (72 h+)
+- `httpx` — async batch-flush to cloud REST API on reconnect
+- `cryptography` / `ssl` — X.509 mTLS certificate management for cloud MQTT bridge
+
+=== 1.4 SQLite (Offline Telemetry Buffer)
+
+{image url="https://www.sqlite.org/images/sqlite370_banner.gif" height=60}
+
+**Component Description:**{br}Embedded serverless SQL database storing sensor readings locally when WAN connectivity is unavailable.
+
+**Scope in Project:**{br}Offline buffer for all Portenta telemetry during WAN outages. On reconnect, the Python engine reads buffered records in time-ordered batches and posts them to the cloud backend for deduplication and storage.
+
+**Argumentation of Selection:**
+
+- No server process required; suitable for unattended Mini PC deployments
+- ACID-compliant writes prevent data corruption during unexpected power loss
+- Built into Python stdlib — no additional dependencies
+- Sufficient throughput for the low-frequency 60 s sensor polling cycle
+
+== 2. Cloud Backend
+
+The cloud backend runs on **Google Cloud Platform** and consists of four components: an MQTT broker, a REST API, two databases, and an AI agent service.
+
+=== 2.1 EMQX Cloud (Cloud MQTT Broker)
+
+{image url="https://www.emqx.com/images/logo.png" height=80}
+
+**Component Description:**{br}Fully managed, enterprise-grade MQTT broker service supporting MQTT 3.1.1 and 5.0, mutual TLS, and multi-tenant topic isolation.
+
+**Scope in Project:**{br}Receives telemetry from all Mini PC Edge Gateways (one per greenhouse site) via X.509 mTLS. Routes actuator commands from the Spring Boot backend back to the correct site gateway over MQTT. Only the Mini PC authenticates to EMQX — Portenta controllers never communicate directly with the cloud.
+
+**Argumentation of Selection:**
+
+- Managed service eliminates broker infrastructure management in GCP
+- X.509 mTLS device authentication reduces certificate management from N Portenta controllers to one per site (Mini PC only)
+- MQTT topic ACLs provide per-tenant, per-greenhouse isolation required for multi-site SaaS (R5 from WP6.5 review)
+- High availability SLA suitable for production agricultural deployments
+
+=== 2.2 Spring Boot 3.x (REST API Backend)
+
+{image url="https://spring.io/img/spring-2.svg" height=80}
+
+**Component Description:**{br}Java-based web framework for building production-ready REST APIs with built-in dependency injection, security, and observability.
+
+**Scope in Project:**{br}Central API gateway for the GMS platform. Handles telemetry ingestion from the Mini PC batch-flush, actuator command dispatch, RBAC enforcement, alert generation and notification dispatch, and historical data queries.
+
+**Argumentation of Selection:**
+
+- Strong typing and compile-time safety for a multi-tenant API serving multiple concurrent greenhouse sites
+- Spring Security provides tenant-scoped RBAC (Farmer → Greenhouse → Device hierarchy, R5 from WP6.5 review) with JWT validation out of the box
+- Spring Data JPA integrates cleanly with PostgreSQL for configuration and tenant data
+- Spring Boot Actuator provides production health endpoints for GCP monitoring
+
+**Key API Responsibilities:**
+
+- `POST /telemetry/batch` — receive offline-buffered records from Mini PC on reconnect
+- `POST /actuator/command` — receive command from AI Agent or dashboard, dispatch via EMQX MQTT
+- `GET /sensor/history` — serve 90-day time-series data to dashboard
+- `POST /alerts` — generate and route push/SMS alerts for threshold breaches
+- `GET /dashboard/multisite` — aggregate real-time status across up to 10 sites
+
+=== 2.3 InfluxDB (Time-Series Database)
+
+{image url="https://www.influxdata.com/wp-content/uploads/influxdb-logo.png" height=80}
+
+**Component Description:**{br}Purpose-built time-series database optimised for high-throughput writes and time-range queries on sensor metrics.
+
+**Scope in Project:**{br}Stores all sensor readings (soil moisture, temperature, humidity, CO₂) with 90-day retention. Used by the Spring Boot API for historical queries and by the AI Agent for trend analysis.
+
+**Argumentation of Selection:**
+
+- Native time-series storage model: timestamps as primary dimension, no schema migration on new sensor types
+- Retention policies enforce the 90-day requirement (SR-5) automatically
+- InfluxQL / Flux query language well-suited for aggregation, downsampling, and trend extraction
+- Horizontally scalable for multi-site telemetry ingestion
+
+=== 2.4 PostgreSQL (Relational Database)
+
+{image url="https://www.postgresql.org/media/img/about/press/elephant.png" height=80}
+
+**Component Description:**{br}Open-source relational database providing ACID-compliant storage for structured configuration, tenant, and user data.
+
+**Scope in Project:**{br}Stores tenant hierarchy (Farmer → Greenhouse → Zone → Device), crop profiles and setpoints, irrigation schedules, RBAC roles and permissions, alert history, and audit logs.
+
+**Argumentation of Selection:**
+
+- Relational model is the natural fit for multi-tenant hierarchical configuration data
+- Spring Data JPA provides type-safe ORM access from Spring Boot
+- ACID transactions ensure crop setpoints and schedules are never partially written
+- Managed GCP Cloud SQL instance eliminates DBA overhead
+
+=== 2.5 AI Agent Service (Google Vertex AI)
+
+{image url="https://www.gstatic.com/devrel-devsite/prod/v0e0f589edd85502a40d78d7d0825db8ea5ef3b99ab4070381ee86977c9168730/cloud/images/cloud-logo.svg" height=80}
+
+**Component Description:**{br}Fully managed AI agent built and hosted on Google Cloud Vertex AI, using Gemini as the underlying model. Integration scripts written in Python handle data preparation and trigger the agent via the Vertex AI API.
+
+**Scope in Project:**{br}Operates as a backend API client (R3 from WP6.5 review). The agent is defined and managed on Vertex AI; it receives historical sensor trends from InfluxDB, produces optimised setpoint recommendations, and the results are forwarded to the Spring Boot REST API as actuator commands. Cached AI parameters are also pushed down to the Mini PC Edge Gateway for offline execution (R6 from WP6.5 review).
+
+**Argumentation of Selection:**
+
+- Vertex AI is the native GCP platform for building and hosting AI agents — the agent definition, model selection, and execution all live on Google Cloud with no separate infrastructure to manage
+- Gemini is the natural model choice on Vertex AI; well-suited for reasoning over structured time-series context (temperature, soil moisture, humidity trends)
+- Python is used only as a lightweight scripting layer to feed sensor data to the agent and relay its output to the Spring Boot API — no full Python service required
+- Tight GCP integration means the same service account and IAM roles used by the Spring Boot backend also cover Vertex AI access
+
+**Key Components:**
+
+- **Vertex AI Agent Builder** — platform where the agent is defined, grounded, and deployed
+- **Gemini** — underlying model powering the agent's reasoning and setpoint recommendations
+- **Python scripting** (`google-cloud-aiplatform`) — data preparation and Vertex AI API invocation
+
+== 3. Web Dashboard & User Interface
+
+=== 3.1 React + Tailwind CSS (Frontend SPA)
+
+{image url="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" height=80}
+{image url="https://upload.wikimedia.org/wikipedia/commons/d/d5/Tailwind_CSS_Logo.svg" height=80}
+
+**Component Description:**{br}Component-based JavaScript library for building interactive single-page web applications, paired with a utility-first CSS framework for responsive styling.
+
+**Scope in Project:**{br}Primary operator interface. Displays real-time sensor readings (10 s auto-refresh), alert banners, manual actuator controls, historical trend charts, crop profile configuration, and multi-site overview (up to 10 greenhouses). Fully responsive from 360 px (mobile) to 2560 px (desktop).
+
+**Argumentation of Selection:**
+
+- Component architecture enables reusable dashboard widgets (sensor card, alert banner, chart panel) shared across single-site and multi-site views
+- Tailwind CSS utility classes make it straightforward to implement the 360–2560 px responsive layout without writing custom CSS
+- WebSocket / SSE integration straightforward for real-time dashboard updates
+- Wide developer familiarity across the team
+
+**Key Libraries:**
+
+- `TanStack Query` — data fetching, caching, and 10 s polling against the Spring Boot REST API
+- `Recharts` — responsive SVG charts for soil moisture, temperature, humidity, and CO₂ trend visualisation
+- `react-router-dom` — client-side routing for multi-site navigation
+- `axios` — HTTP client for REST API calls and manual actuator commands
+
+=== 3.2 Vite (Build Tool)
+
+{image url="https://vitejs.dev/logo.svg" height=80}
+
+**Component Description:**{br}Next-generation JavaScript build tool providing near-instant hot module replacement and optimised production bundles.
+
+**Scope in Project:**{br}Development server and production bundler for the React SPA.
+
+**Argumentation of Selection:**
+
+- Fastest dev-server HMR for React projects; critical for rapid iteration on dashboard layouts
+- Native ESM output; no Webpack configuration overhead
+- No additional TypeScript configuration required for plain JavaScript projects
+
+== 4. Communication Protocols & Security
+
+=== 4.1 MQTT over TLS 1.2+ (IoT Messaging)
+
+{image url="https://mqtt.org/assets/img/mqtt-logo.svg" height=80}
+
+**Component Description:**{br}Lightweight publish/subscribe messaging protocol designed for constrained IoT devices and unreliable networks.
+
+**Scope in Project:**{br}All sensor telemetry and actuator command channels: Portenta ↔ Mosquitto (LAN), and Mini PC ↔ EMQX Cloud (WAN). QoS 1 (at-least-once delivery) ensures no readings are lost over Moldova's mobile 4G/5G links.
+
+**Argumentation of Selection:**
+
+- Minimal overhead per message — critical for 60 s polling cycles over metered 4G data plans (55.6% of sites mobile-only, WP3.3 survey)
+- QoS 1 guarantees at-least-once delivery for telemetry and actuator commands on unreliable WAN links
+- TLS 1.2+ over MQTT satisfies SR-9 (SHR-33/34) for all IoT channels
+- Industry-standard for IoT sensor networks; supported by both Mosquitto and EMQX
+
+=== 4.2 X.509 Mutual TLS (Device Authentication)
+
+**Component Description:**{br}Certificate-based device identity and channel authentication for the WAN MQTT connection between Mini PC and EMQX Cloud.
+
+**Scope in Project:**{br}The Mini PC holds a site-specific X.509 client certificate. EMQX Cloud validates this certificate on every connection, ensuring only authorised gateways can publish telemetry or receive commands.
+
+**Argumentation of Selection:**
+
+- Reduces certificate management from N Portenta controllers to 1 Mini PC per site (R4 from WP6.5 review)
+- Stronger than username/password authentication for long-lived unattended IoT devices
+- Required by SR-9 for all cloud-facing MQTT connections (SHR-33/34)
+
+=== 4.3 JWT + RBAC (User Authentication)
+
+**Component Description:**{br}JSON Web Token-based stateless authentication with role-based access control enforced in the Spring Boot API.
+
+**Scope in Project:**{br}Authenticates all dashboard users. Roles: Admin (full access), Operator (read + manual control), Viewer (read only). All API responses return HTTP 401 (unauthenticated) or 403 (insufficient role) per SR-9.
+
+**Argumentation of Selection:**
+
+- Stateless JWT tokens are compatible with the SPA architecture — no server-side session storage required
+- Spring Security provides tenant-scoped RBAC with Farmer → Greenhouse → Device hierarchy (R5 from WP6.5 review)
+- Standard implementation; no additional dependencies beyond Spring Security and `jjwt`
+
+== 5. Development Environment & DevOps
+
+=== 5.1 Visual Studio Code
+
+{image url="https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg" height=80}
+
+**Component Description:**{br}Lightweight, extensible code editor with integrated terminal, debugging, and Git support.
+
+**Scope in Project:**{br}Primary development environment for Python (edge engine), React (dashboard), Spring Boot, and configuration file authoring.
+
+**Argumentation of Selection:**
+
+- Remote SSH extension enables live development on a running Mini PC gateway
+- Excellent Python and JavaScript/React support with IntelliSense
+- Integrated terminal for running Spring Boot, Vite dev server, and Python services locally
+
+**Key Extensions:**
+
+- Remote - SSH — remote editing on the Mini PC gateway
+- Python — IntelliSense, linting, debugging
+- REST Client — manual API endpoint testing
+- ESLint / Prettier — JavaScript/React code quality
+
+=== 5.2 Git + GitHub
+
+{image url="https://git-scm.com/images/logos/downloads/Git-Logo-2Color.png" height=60}
+{image url="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" height=80}
+
+**Component Description:**{br}Distributed version control and cloud-hosted repository with CI/CD automation.
+
+**Scope in Project:**{br}Source code management for all GMS components: Python edge services, Spring Boot API, React dashboard, and infrastructure configuration.
+
+**Argumentation of Selection:**
+
+- Monorepo structure (`/edge`, `/backend`, `/dashboard`) enables atomic commits across layers
+- GitHub Actions used for CI: Python lint, Spring Boot unit tests, React build
+- Pull request workflow enforces code review before merging to `main`
+
+=== 5.3 Docker + Docker Compose
+
+{image url="https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png" height=80}
+
+**Component Description:**{br}Containerisation platform for packaging applications and their dependencies into portable, reproducible containers.
+
+**Scope in Project:**{br}Cloud backend deployment: Spring Boot API, InfluxDB, PostgreSQL, and AI Agent Service each run as Docker containers orchestrated with Docker Compose (development) and deployed to GCP Cloud Run (production).
+
+**Argumentation of Selection:**
+
+- Eliminates environment drift between development laptops and GCP production
+- `docker-compose.yml` lets any team member spin up the full cloud stack locally for integration testing
+- GCP Cloud Run supports Docker images natively, enabling zero-infrastructure deployment of the Spring Boot API and AI Agent
+
+== 6. Technology Stack Summary
+
+{table class="wrapped"}
+{thead}
+{tr}
+{th}Layer{/th}
+{th}Component{/th}
+{th}Technology{/th}
+{th}Key Role{/th}
+{/tr}
+{/thead}
+{tr}
+{td}Edge Gateway{/td}
+{td}Host OS{/td}
+{td}Ubuntu 22.04 LTS{/td}
+{td}Linux base for all gateway services{/td}
+{/tr}
+{tr}
+{td}Edge Gateway{/td}
+{td}Local MQTT Broker{/td}
+{td}Eclipse Mosquitto 2.x{/td}
+{td}LAN broker; MQTT bridge to cloud EMQX{/td}
+{/tr}
+{tr}
+{td}Edge Gateway{/td}
+{td}Processing Engine{/td}
+{td}Python 3.11+ (paho-mqtt, httpx){/td}
+{td}Decision engine; offline buffer; batch-flush on reconnect{/td}
+{/tr}
+{tr}
+{td}Edge Gateway{/td}
+{td}Offline Buffer{/td}
+{td}SQLite{/td}
+{td}72 h+ local telemetry storage during WAN outage{/td}
+{/tr}
+{tr}
+{td}Cloud Backend{/td}
+{td}MQTT Broker{/td}
+{td}EMQX Cloud{/td}
+{td}Cloud IoT ingestion; X.509 mTLS device auth; topic ACL{/td}
+{/tr}
+{tr}
+{td}Cloud Backend{/td}
+{td}REST API{/td}
+{td}Spring Boot 3.x (Java 17){/td}
+{td}Telemetry ingestion; actuator commands; RBAC; alerts{/td}
+{/tr}
+{tr}
+{td}Cloud Backend{/td}
+{td}Time-Series DB{/td}
+{td}InfluxDB{/td}
+{td}90-day sensor data retention; historical queries{/td}
+{/tr}
+{tr}
+{td}Cloud Backend{/td}
+{td}Relational DB{/td}
+{td}PostgreSQL{/td}
+{td}Tenant config; crop profiles; RBAC; audit log{/td}
+{/tr}
+{tr}
+{td}Cloud Backend{/td}
+{td}AI Agent{/td}
+{td}Google Vertex AI (Gemini) + Python scripting{/td}
+{td}Managed AI agent on GCP; setpoint optimisation; offline parameter cache push{/td}
+{/tr}
+{tr}
+{td}Client Layer{/td}
+{td}Dashboard SPA{/td}
+{td}React + Tailwind CSS + Vite (JavaScript){/td}
+{td}Operator UI; real-time monitoring; manual control; multi-site view{/td}
+{/tr}
+{tr}
+{td}Client Layer{/td}
+{td}Charting{/td}
+{td}Recharts{/td}
+{td}Time-series trend visualisation for sensor parameters{/td}
+{/tr}
+{tr}
+{td}Security{/td}
+{td}IoT Auth{/td}
+{td}X.509 mTLS{/td}
+{td}Mini PC ↔ EMQX Cloud device authentication{/td}
+{/tr}
+{tr}
+{td}Security{/td}
+{td}User Auth{/td}
+{td}JWT + Spring Security RBAC{/td}
+{td}Dashboard user auth; tenant-scoped access control{/td}
+{/tr}
+{tr}
+{td}DevOps{/td}
+{td}IDE{/td}
+{td}VS Code{/td}
+{td}Python, React, Spring Boot development; remote SSH to gateway{/td}
+{/tr}
+{tr}
+{td}DevOps{/td}
+{td}Version Control{/td}
+{td}Git + GitHub{/td}
+{td}Monorepo; CI/CD via GitHub Actions{/td}
+{/tr}
+{tr}
+{td}DevOps{/td}
+{td}Containerisation{/td}
+{td}Docker + Docker Compose{/td}
+{td}Cloud service packaging; local integration testing{/td}
+{/tr}
+{/table}

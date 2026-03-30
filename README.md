@@ -24,9 +24,11 @@ scripts/
   confluence/
     confluence_sync.py      ← fetch Confluence → local .gcm files
     confluence_push.py      ← push local .gcm edits back to Confluence
+    confluence_attachments.py ← standalone attachment downloader
     gcm_from_html.py        ← converter: Confluence storage HTML → GCM
     gcm_to_html.py          ← converter: GCM → Confluence storage HTML
     gcm_spec.py             ← shared GCM constants and utilities
+    gcm_preview.py          ← preview GCM as rendered HTML
     GCM_SPEC.md             ← GCM format specification
   jira/
     jira_board_server.py    ← local interactive Jira board API/server + GMS automation commands
@@ -99,10 +101,14 @@ Key syntax:
 - Headings: `= H1`, `== H2`, `=== H3`
 - Bold/italic: `**bold**`, `*italic*`
 - Links: `[text](url)`, `{link page="Page Title"}text{/link}`
-- Jira issues: `{jira:GMS-10}`
+- Jira issues: `{jira:GMS-10}`, `{jira:GMS-10|showSummary=false}`
 - Tables: `{table}…{/table}` with full `rowspan`/`colspan` support
-- Images: `{image file="diagram.png" height=400}`
-- Raw passthrough: `{raw}…{/raw}` for any unrecognized Confluence XML
+- Images: `{image file="diagram.png" height=400}`, `{image url="..." height=150}`
+- Aligned paragraphs: `{p align=center}…{/p}`
+- Underline: `{u}…{/u}`
+- Status badges: `{status:Draft|color=Yellow}`
+- Anchors: `{anchor:ref4}`
+- Raw passthrough: `{raw}…{/raw}` for any unrecognized Confluence XML (code blocks, expand, info/note panels, layouts, task lists, etc.)
 
 ### Syncing
 
@@ -112,6 +118,8 @@ Fetch pages from Confluence up to a given work package:
 python3 scripts/confluence/confluence_sync.py --up-to 5.4
 python3 scripts/confluence/confluence_sync.py --up-to 5.4 --dry-run
 python3 scripts/confluence/confluence_sync.py --up-to 5.4 --force
+python3 scripts/confluence/confluence_sync.py --all           # all pages in confluence_pages.json
+python3 scripts/confluence/confluence_sync.py --page 6.1 6.2  # specific pages by WP number
 ```
 
 Pages are fetched in ascending WP order, converted from Confluence storage HTML to GCM,
@@ -208,6 +216,12 @@ python3 scripts/logging/log_work.py list-transitions PBL26-563
 # Move one or more tickets to a new status
 python3 scripts/logging/log_work.py move --to "Resolve Issue" PBL26-563
 python3 scripts/logging/log_work.py move --to "Start Progress" PBL26-548 PBL26-553
+
+# List all worklogs on a ticket (shows IDs for deletion)
+python3 scripts/logging/log_work.py list-worklogs --ticket 5.4
+
+# Delete a specific worklog entry
+python3 scripts/logging/log_work.py delete-worklog --ticket 5.4 --id 17643
 ```
 
 `--to` matches case-insensitively (e.g. `--to resolve`). Available transitions: **Start Progress**, **Resolve Issue**, **Close Issue**, **Rejected**.

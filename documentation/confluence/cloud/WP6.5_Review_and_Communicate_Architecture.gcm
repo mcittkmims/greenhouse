@@ -1,8 +1,176 @@
 --- gcm ---
 title: 04 - GMS -WP6.5 Review and Communicate agreed system architecture
 page_id: 42634175
-version: 1
+version: 7
 source: http://confluence.microlab.club/rest/api/content/42634175
 ---
 
+{table width=100.0% class="relative-table wrapped"}
+{colgroup}
+ {col style="width: 6.26781%;"}
+ {col style="width: 22.3647%;"}
+ {col style="width: 28.0627%;"}
+ {col style="width: 21.3675%;"}
+ {col style="width: 12.3932%;"}
+ {col style="width: 9.54416%;"}
+ {/colgroup}
+{thead}
+{tr}
+{th}**ID**{/th}
+{th}**Architectural Element Ticket**{/th}
+{th}**Architectural Element**{/th}
+{th}**Actions**{/th}
+{th}**Assignee**{/th}
+{th}**Due Date**{/th}
+{/tr}
+{/thead}
+{tr}
+{td}**1.**{/td}
+{td}**{jira:GMS-137}**{/td}
+{td}**Sensor Acquisition & Environmental Monitoring System — Architecture**{/td}
+{td}Review perception layer static spec, interfaces, and special characteristics. Ensure non-blocking MQTT requirement is validated.{/td}
+{td}Cojocaru Daniel{/td}
+{td}2026-03-18{/td}
+{/tr}
+{tr}
+{td}**2.**{/td}
+{td}**{jira:GMS-120}**{/td}
+{td}**Local Automation Engine — Architecture**{/td}
+{td}Review control layer PID logic, actuator conflict arbitration, offline buffer management, and ensure multiple zone coordination via Mini PC is feasible.{/td}
+{td}Alexei Maxim{/td}
+{td}2026-03-19{/td}
+{/tr}
+{tr}
+{td}**3.**{/td}
+{td}**{jira:GMS-119}**{/td}
+{td}**Cloud Backend System — Architecture**{/td}
+{td}Review MQTT broker limits, alert dispatch latency, and Time-Series DB retention logic. Integrate TenantService and AI Agent Service support.{/td}
+{td}Rațeeva Daria{/td}
+{td}2026-03-20{/td}
+{/tr}
+{tr}
+{td}**4.**{/td}
+{td}**{jira:GMS-112}**{/td}
+{td}**Web Dashboard & User Interface System — Architecture**{/td}
+{td}Review dashboard layout, alert presentation, mobile-first design, and multi-site views.{/td}
+{td}Mutruc Victoria{/td}
+{td}2026-03-21{/td}
+{/tr}
+{tr}
+{td}**5.**{/td}
+{td}**{jira:GMS-102}**{/td}
+{td}**Cybersecurity System — Architecture**{/td}
+{td}Review TLS 1.2+ configuration, RBAC enforcement, offline Edge Auth, and audit logging features.{/td}
+{td}Vremere Adrian{/td}
+{td}2026-03-22{/td}
+{/tr}
+{tr}
+{td}**6.**{/td}
+{td}**{jira:GMS-103}**{/td}
+{td}**System-Level Architecture**{/td}
+{td}Review the 5-layer overall structural topology. Confirm the Mini PC Gateway acts as the LAN/WAN boundary and AI Agent communicates via Cloud Backend.{/td}
+{td}Team{/td}
+{td}2026-03-23{/td}
+{/tr}
+{tr}
+{td}**7.**{/td}
+{td}**{jira:GMS-151}**{/td}
+{td}**Mini PC Edge Gateway — Architecture**{/td}
+{td}Review the architecture, components, and interfaces of the newly introduced Mini PC Edge Gateway.{/td}
+{td}Alexei Maxim{/td}
+{td}2026-03-23{/td}
+{/tr}
+{tr}
+{td}**8.**{/td}
+{td}**{jira:GMS-152}**{/td}
+{td}**AI Agent Service — Architecture**{/td}
+{td}Review the architecture, components, and interfaces of the newly introduced AI Agent Service.{/td}
+{td}Rațeeva Daria{/td}
+{td}2026-03-23{/td}
+{/tr}
+{/table}
 
+{br}
+
+{image file="architecture-es.drawio.png" width=1000}
+
+{br}
+
+{image file="MQTT Sensor Data Management-2026-03-22-194459(1).png" width=1000}
+
+== Review Session
+
+{table width=99.2126% class="wrapped relative-table"}
+{colgroup}
+ {col style="width: 2.93882%;"}
+ {col style="width: 7.62568%;"}
+ {col style="width: 12.9467%;"}
+ {col style="width: 41.3818%;"}
+ {col style="width: 35.1864%;"}
+ {/colgroup}
+{tr}
+{th}ID{/th}
+{th}Reviewer{/th}
+{th}Element(s){/th}
+{th}Issue{/th}
+{th}Verdict{/th}
+{/tr}
+{tr}
+{td}R1{/td}
+{td}Rațeeva Daria{/td}
+{td}GMS-111, GMS-137, GMS-119{/td}
+{td}No Edge Gateway (Mini PC) tier between Portenta and Cloud. Single point of connectivity and offline buffer capacity missing.{/td}
+{td}Add 5th layer; create story GMS-AE6-EDGE for Mini PC Edge Gateway under GMS-103{/td}
+{/tr}
+{tr}
+{td}R2{/td}
+{td}Alexei Maxim{/td}
+{td}GMS-120, GMS-137, GMS-111{/td}
+{td}Single Portenta assumed per greenhouse — no multi-zone support or cross-zone arbitration.{/td}
+{td}Refactor to N Portentas per greenhouse; Mini PC coordinates zones{/td}
+{/tr}
+{tr}
+{td}R3{/td}
+{td}Mutruc Victoria{/td}
+{td}GMS-119, GMS-130, GMS-111{/td}
+{td}No AI Agent component in cloud architecture for proactive decision-making.{/td}
+{td}Add AI Agent Service as backend client; create story GMS-AE6-AI under GMS-103{/td}
+{/tr}
+{tr}
+{td}R4{/td}
+{td}Cojocaru Daniel{/td}
+{td}GMS-131, GMS-141, GMS-127{/td}
+{td}Portenta communicates directly with cloud broker, security/certificate issues.{/td}
+{td}Split CLOUD-EDGE-IF into EDGE-LOCAL-IF + GATEWAY-CLOUD-IF{/td}
+{/tr}
+{tr}
+{td}R5{/td}
+{td}Cojocaru Daniel{/td}
+{td}GMS-104, GMS-134, GMS-115{/td}
+{td}Flat RBAC — no tenant hierarchy for multi-farmer SaaS deployment.{/td}
+{td}Add TenantService; scope all API/commands per Farmer→GH→Device{/td}
+{/tr}
+{tr}
+{td}R6{/td}
+{td}Mutruc Victoria{/td}
+{td}GMS-120, new GMS-AE6-EDGE{/td}
+{td}Mini PC has no offline decision processing defined.{/td}
+{td}Define Edge Processing Engine with Decision Engine + AI Cache{/td}
+{/tr}
+{tr}
+{td}R7{/td}
+{td}Rațeeva Daria{/td}
+{td}GMS-111, WP6.1 diagram{/td}
+{td}4-layer diagram is outdated — must show 5-layer architecture.{/td}
+{td}Replace `gms_high_level_architecture.png` with refactored diagram{/td}
+{/tr}
+{tr}
+{td}R8{/td}
+{td}Vremere Adrian{/td}
+{td}WP6.4 traceability{/td}
+{td}No Jira coverage for Mini PC or AI Agent.{/td}
+{td}Create GMS-AE6-EDGE and GMS-AE6-AI architectural stories to cover them{/td}
+{/tr}
+{/table}
+
+{br}

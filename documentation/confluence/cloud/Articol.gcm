@@ -1,0 +1,88 @@
+--- gcm ---
+title: 04 - GMS -Articol
+page_id: 42634177
+version: 16
+source: http://confluence.microlab.club/rest/api/content/42634177
+---
+
+{p align=center}**IoT-ENABLED GREENHOUSE MANAGEMENT SYSTEM: EDGE-CLOUD ARCHITECTURE FOR AUTONOMOUS CROP MONITORING IN MOLDOVA**{/p}
+
+{p align=center}**Victoria MUTRUC****1\*****, **{/p}
+
+{p align=center}**Maxim ALEXEI****2****, **{/p}
+
+{p align=center}**Adrian VREMERE****3****,**{/p}
+
+{p align=center}**Daria RAȚEEVA****4****,**{/p}
+
+{p align=center}**Daniel COJOCARU****5****,**{/p}
+
+{p align=center}*1**Department of Software Engineering and Automation, group FAF-232, Faculty of Computers, Informatics and Microelectronics, Technical University of Moldova, Chișinău, Republic of Moldova*{/p}
+
+{p align=center}\*Corresponding Author: Victoria Mutruc, [victoria.mutruc@isa.utm.md](mailto:victoria.mutruc@isa.utm.md){/p}
+
+{p align=center}{br}{/p}
+
+{p align=center}**Coordinator:Andrei BRAGARENCO, **Ph.D., Technical University of Moldova{/p}
+
+***Abstract.**** **** ****Greenhouse agriculture in the Republic of Moldova relies heavily on manual practices for irrigation, heating, and ventilation control, leading to delayed responses to plant stress, wasted resources, and monitoring burden for small-scale operators. As the demand for precision in agriculture grows, the limitations of purely manual supervision affect both productivity and crop quality. The purpose of this paper is to present the Greenhouse Management System, an IoT platform that combines an industrial-grade edge controller with cloud connectivity and a mobile-friendly web dashboard for real-time monitoring and autonomous control. The proposed architecture delivers offline autonomy, fast actuator response, and a hardware cost accessible to small Moldovan farms, targeting significant reductions in water and energy consumption compared to manual baselines and making precision greenhouse automation viable for small-scale operators for the first time.*
+
+***Key words****: greenhouse automation, IoT, edge computing, MQTT, Arduino Portenta, PID control, precision agriculture, Moldova*
+
+** ****Introduction**
+
+Greenhouse agriculture in the Republic of Moldova is dominated by manual practices. Operators physically inspect soil conditions, open irrigation valves by hand and adjust heating or ventilation based on direct observation. Moldova's climate, with temperatures ranging from -15°C in winter to +35°C in summer, has droughts responsible for over half of poor harvests in recent years {link anchor=ref1}[1]{/link}{link anchor=ref6}[6]{/link}. The climate leads to a demand of precise and continuous environmental control that manual supervision simply cannot provide.
+
+The consequences are well documented. Without real-time monitoring, plant stress begins at the cellular level and is invisible until structural damage has already occurred {link anchor=ref2}[2]{/link}. Delayed responses to overheating, frost or lack of soil moisture reduce crop yields and increase water and energy waste. For small-scale farmers, who make up the majority of Moldovan greenhouse operators, the 24/7 monitoring burden is economically unsustainable.
+
+IoT technologies transform greenhouse management from reactive supervision to proactive, data-driven control. Layered IoT architectures with integrated sensor acquisition, local processing and cloud analytics enable continuous environmental awareness and autonomous actuation {link anchor=ref3}[3]{/link}{link anchor=ref7}[7]{/link}. Programmable Logic Controllers (PLCs), unlike consumer microcontrollers, provide the deterministic real-time processing, fault tolerance and industrial communication protocols required for reliable commercial-scale deployment {link anchor=ref4}[4]{/link}. Embedding these control capabilities locally and connecting them selectively to cloud platforms enables a layered industrial IoT approach that separates real-time control from data management concerns.
+
+This paper presents the GMS, which bridges the gaps identified in existing solutions: simple micro controller prototypes lack industrial reliability; industrial PLC/SCADA systems are robust but expensive; and fully cloud-dependent platforms suffer from latency and connectivity risks that are increasingly being mitigated by intelligent edge gateways {link anchor=ref5}[5]{/link}. The GMS combines industrial-grade edge control with a mobile-first cloud dashboard at a cost accessible to small Moldovan farms.
+
+**Methodology**
+
+Requirements were gathered through two complementary methods. A structured survey was distributed to 18 greenhouse stakeholders in the Republic of Moldova during February 2026, covering small-scale farmers (50%), large enterprise representatives (16.7%), greenhouse operators (11.1%), and technical researchers (22.2%), as shown in {link anchor=figref1}Figure 1{/link}. In parallel, two interviews were conducted: one with Andrei Bragarenco, an IoT and embedded systems expert focused on agricultural automation, and one with Tatiana Gropa, the agronomist and greenhouse operator at the UTM campus greenhouse. These interviews led to insights on real operational challenges, hardware reliability constraints, dashboard requirements, and practical usability needs that the survey alone could not showcase.
+
+{image file="image-2026-3-22_13-13-47.png" height=223 align=center}
+
+{p align=center}***{anchor:figref1}Figure 1****. Survey respondent categories (18 responses).*{/p}
+
+Respondents rated four environmental parameters for monitoring priority on a 1-5 scale. Soil moisture received the highest score (4.83/5), followed by humidity (4.72/5) and temperature (4.61/5). Soil moisture drought was also the most frequently cited production incident, mentioned by 39% of respondents. CO₂ monitoring scored lowest (4.22/5) with no respondents citing it as a recurring incident, which guided its lower priority classification.
+
+Connectivity data was a critical finding: 55.6% of respondents rely exclusively on 4G/5G mobile data and 11.1% reported no stable connection. Only 33.3% have fixed broadband. This ruled out fixed-internet-dependent designs and required the system to work reliably over mobile networks with local buffering for outages.
+
+The survey results, combined with insights from the stakeholder interviews, were used to define the requirements for the system. The resulting solution is an integrated IoT platform consisting of five components: Sensor Acquisition & Environmental Monitoring System, Local Automation Engine, Cloud Backend System, Web Dashboard & User Interface System and Cyber Security System.
+
+**System Architecture and Implementation**
+
+The GMS adopts a five-layer edge-cloud architecture that addresses two competing constraints identified during stakeholder analysis: deterministic sub-minute actuator response across Moldova's -15 °C to +35 °C climate range, and remote multi-site monitoring over unreliable mobile networks where 55.6% of operators depend exclusively on 4G/5G connectivity. As illustrated in {link anchor=figref2}Figure 2{/link}, the architecture separates concerns across a Hardware Layer, an Edge Controller Layer, a Mini PC Edge Gateway, a Cloud Backend, and a Client Layer. This layered decomposition extends the sensor software stack model proposed by Bragarenco and Marusic {link anchor=ref3}[3]{/link} with an intermediate gateway tier that decouples real-time zone control from wide-area connectivity, enabling autonomous operation when mobile networks are unavailable.
+
+{image file="architecture-es.drawio.png" width=850 align=center}
+
+{p align=center}***{anchor:figref2}Figure 2****. GMS five-layer system architecture.*{/p}
+
+The Hardware Layer integrates industrial-grade sensors - a SN-3002-TR-ECTHNPKPH-N01 seven-parameter soil probe (RS-485 Modbus RTU), a Sensirion SHT10 air sensor (I2C), and an NDIR CO2 sensor (UART) - alongside actuators for irrigation, heating, ventilation, and humidity control. Within each greenhouse, one Arduino Portenta Machine Control unit per zone executes deterministic PID temperature control and hysteresis-based humidity regulation on its Cortex-M7 core at 10 Hz, while its Cortex-M4 core handles local MQTT communication and TLS security {link anchor=ref4}[4]{/link}{link anchor=ref8}[8]{/link}. A site-level Mini PC Edge Gateway aggregates telemetry from all zone controllers via a local MQTT broker, runs a decision processing engine with threshold rules and cached AI parameters to ensure continuous operation without cloud latency {link anchor=ref5}[5]{/link}, and buffers up to 72 hours of sensor data for zero-loss batch synchronisation on reconnect.
+
+Only the Mini PC authenticates to the cloud EMQX broker via X.509 mutual TLS, reducing certificate management from N controllers to a single device per site. The Cloud Backend on Google Cloud Platform provides a Spring Boot REST API for data ingestion, tenant-scoped role-based access control, and alerting, InfluxDB for 90-day time-series retention, PostgreSQL for configuration and tenant data, and an AI Agent service that operates as a backend API client to suggest optimised setpoints from historical trends. The Client Layer delivers a responsive single-page application accessible from 360 to 2560 px viewports with 10-second auto-refresh, colour-coded alert banners, manual actuator control, and multi-site views supporting up to ten greenhouses over mobile networks.
+
+**Conclusions**
+
+The Greenhouse Management System demonstrates that industrial-grade precision agriculture is achievable at a cost accessible to small-scale Moldovan greenhouse operators. By combining deterministic edge control with cloud analytics through a five-layer architecture, the platform delivers autonomous operation for at least 72 hours over unreliable mobile networks, sub-minute actuator response to environmental deviations across Moldova's -15 °C to +35 °C climate range, and continuous multi-site monitoring from a single mobile-friendly dashboard. The resulting system positions itself as a practical alternative to both fragile microcontroller prototypes and prohibitively expensive industrial SCADA installations, making precision greenhouse automation viable for small-scale operators.
+
+**References**
+
+{anchor:ref1}[1]  V. Botnari and E. Cotenco, "Seceta-factor de risc sporit pentru agricultura conventionala," Conf. Teh.-Stiint. UTM, vol. 8, pp. 496-502, 2024. [Online]. Available: [https://ibn.idsi.md/vizualizare_articol/213539](https://ibn.idsi.md/vizualizare_articol/213539)
+
+{anchor:ref2}[2]  J. Cooper et al., "Current methods and future needs for visible and non-visible detection of plant stress responses," Frontiers in Plant Science, vol. 16, Sept. 2025, Available: [https://www.frontiersin.org/journals/plant-science/articles/10.3389/fpls.2025.1585413/full](https://www.frontiersin.org/journals/plant-science/articles/10.3389/fpls.2025.1585413/full)
+
+{anchor:ref3}[3]  A. Bragarenco, G. Marusic, "Layered architecture approach of the sensor software component stack for IoT applications," WSEAS Trans. Comput. Res., vol. 7, pp. 124-135, 2019. [Online]. Available: [https://wseas.com/journals/cr/2019/a305118-090.pdf](https://wseas.com/journals/cr/2019/a305118-090.pdf)
+
+{anchor:ref4}[4]  M. A. Sehr et al., "Programmable Logic Controllers in the context of Industry 4.0," IEEE Trans. Ind. Informat., vol. 17, no. 5, pp. 3523-3533, May 2021, Available: [https://www.researchgate.net/publication/342755816_Programmable_Logic_Controllers_in_the_Context_of_Industry_40](https://www.researchgate.net/publication/342755816_Programmable_Logic_Controllers_in_the_Context_of_Industry_40)
+
+{anchor:ref5}[5]  G. Codeluppi, A. Cilfone, L. Davoli, and G. Ferrari, "AI at the Edge: A Smart Gateway for Greenhouse Air Temperature Forecasting," in Proc. 2020 IEEE Int. Workshop on Metrology for Agriculture and Forestry (MetroAgriFor), Trento, Italy, 2020, pp. 348-353. [Online]. Available: [http://doi.org/10.1109/MetroAgriFor50201.2020.9277553](http://doi.org/10.1109/MetroAgriFor50201.2020.9277553)
+
+{anchor:ref6}[6]  A. Zbanca et al., "Conservation Agriculture in Moldova: Current Status, Challenges, and Prospects," Sustainability, vol. 17, no. 24, p. 10916, Dec. 2025. [Online]. Available: [https://doi.org/10.3390/su172410916](https://doi.org/10.3390/su172410916)
+
+{anchor:ref7}[7]  M. Ayaz, M. Ammad-Uddin, Z. Sharif, A. Mansour, and E.-H. M. Aggoune, "Internet-of-Things (IoT)-Based Smart Agriculture: Toward Making the Fields Talk," IEEE Access, vol. 7, pp. 129551-129583, 2019. [Online]. Available: [https://doi.org/10.1109/ACCESS.2019.2932609](https://doi.org/10.1109/ACCESS.2019.2932609)
+
+{anchor:ref8}[8]  W. Su et al., "Parameter Self-Tuning PID Algorithm for Greenhouse Climate Control System," IEEE Access, vol. 8, pp. 186941-186950, 2020. [Online]. Available: [https://doi.org/10.1109/ACCESS.2020.3030416](https://doi.org/10.1109/ACCESS.2020.3030416)

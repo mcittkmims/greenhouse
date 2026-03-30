@@ -1,0 +1,150 @@
+--- gcm ---
+title: 04 - GMS -WP8.1: Distribute roles in the team for the development phase
+page_id: 42634180
+version: 7
+source: http://confluence.microlab.club/rest/api/content/42634180
+---
+
+== Project Overview
+
+The Greenhouse Management System (GMS) is a multi-layered IoT platform for automated environmental monitoring and control. It spans five core subsystems: Sensor Acquisition & Environmental Monitoring, Local Automation Engine, Cloud Backend, Web Dashboard & User Interface, and a Cybersecurity layer, all coordinated through a 4-layer architecture (Hardware / Edge / Cloud / Client) running on a dual-core STM32H747 edge controller augmented by a Mini PC edge gateway and cloud AI agent service.
+
+== Team Members & Rols
+
+{table class="wrapped"}
+{tr}
+{th scope=col}**Name**{/th}
+{th scope=col}**Role**{/th}
+{th scope=col}**Focus Area**{/th}
+{/tr}
+{tr}
+{td}Victoria Mutruc{/td}
+{td}Frontend Developer{/td}
+{td}Web Dashboard, UI components, real-time data visualization, documentation{/td}
+{/tr}
+{tr}
+{td}Adrian Vremere{/td}
+{td}Hardware Developer{/td}
+{td}Edge hardware, sensor acquisition, system architecture, local automation engine{/td}
+{/tr}
+{tr}
+{td}Maxim Alexei{/td}
+{td}Hardware / Backend Developer{/td}
+{td}Sensor acquisition, edge hardware, local automation engine{/td}
+{/tr}
+{tr}
+{td}Daniel Cojocaru{/td}
+{td}Backend Developer{/td}
+{td}Cloud backend, cybersecurity, AI agent service{/td}
+{/tr}
+{tr}
+{td}Daria Rateeva{/td}
+{td}Backend Developer{/td}
+{td}Cloud backend interfaces, notifications, data storage, documentation{/td}
+{/tr}
+{/table}
+
+== Development Phase Activities
+
+{table class="wrapped"}
+{thead}
+{tr}
+{th}**Development Activity**{/th}
+{th}**Assigned Member(s)**{/th}
+{th}**Description**{/th}
+{/tr}
+{/thead}
+{tr}
+{td}Sensor Acquisition & Environmental Monitoring{/td}
+{td}Adrian Vremere,
+Maxim Alexei{/td}
+{td}Design and implement the hardware sensor interface (RS-485/SHT10/UART), data validation pipeline, fault monitoring, and MQTT payload serialisation to the Cortex-M4 client{/td}
+{/tr}
+{tr}
+{td}Local Automation Engine{/td}
+{td}Adrian Vremere,
+Maxim Alexei{/td}
+{td}Implement the decision engine, irrigation/climate controllers, schedule executor, offline buffer manager, resource logger, and actuator safety interlock with GPIO/relay actuation logic{/td}
+{/tr}
+{tr}
+{td}Cloud Backend System{/td}
+{td}Daniel Cojocaru,
+Daria Rateeva{/td}
+{td}Build the MQTT broker, data ingestion service, alert evaluation, notification dispatcher, REST API gateway, analytics service, and cloud time-series DB integration{/td}
+{/tr}
+{tr}
+{td}Web Dashboard & User Interface{/td}
+{td}Victoria Mutruc{/td}
+{td}Build the sensor dashboard, alert panel, irrigation control panel, schedule manager, threshold config UI, historical trend view, resource summary, and multi-site dashboard with WebSocket/SSE real-time updates{/td}
+{/tr}
+{tr}
+{td}Cybersecurity System{/td}
+{td}Daniel Cojocaru,
+Daria Rateeva{/td}
+{td}Implement TLS termination, JWT + RBAC request guard, audit logger, edge auth module, certificate store, and user account manager{/td}
+{/tr}
+{tr}
+{td}System-Level Architecture & Edge Gateway{/td}
+{td}Adrian Vremere,
+Maxim Alexei{/td}
+{td}Define the 4-layer architecture (Hardware/Edge/Cloud/Client), edge gateway components (LocalMQTTBroker, WANMQTTClient, DecisionEngine, ScheduleExecutor, OfflineBufferManager){/td}
+{/tr}
+{tr}
+{td}AI Agent Service{/td}
+{td}Daniel Cojocaru{/td}
+{td}Develop the AI agent service: sensor data consumer, decision model, command issuer, and tenant scope filter{/td}
+{/tr}
+{tr}
+{td}System Integration & Testing{/td}
+{td}All Members{/td}
+{td}Test full stack across sensor acquisition, automation engine, cloud backend, UI, and security layer; debug issues collaboratively{/td}
+{/tr}
+{tr}
+{td}Documentation & Confluence Maintenance{/td}
+{td}Victoria Mutruc,
+Daria Rateeva{/td}
+{td}Maintain updated technical documentation, traceability tables, and team responsibilities pages{/td}
+{/tr}
+{/table}
+
+----
+
+== Individual Responsibilities
+
+- ** Victoria Mutruc - Frontend Developer**
+  - Design and implement all web dashboard UI components: sensor dashboard, alert panel, irrigation control panel, schedule manager, threshold configuration UI, historical trend view, resource summary panel, and multi-site dashboard
+  - Integrate WebSocket/SSE push for real-time alert banners (5 s) and sensor data refresh (10 s)
+  - Implement JWT login flow with role-based operator gates on the frontend
+  - Implement CSV/XLSX data export (90-day window, 5 mandatory fields)
+  - Ensure mobile-first rendering, alert prioritisation display, and data freshness indication
+  - Connect all UI views to the Cloud REST API Gateway via HTTPS
+  - Co-maintain Confluence documentation, traceability tables, and team responsibilities pages alongside Daria
+
+- ** Adrian Vremere - Hardware Developer**
+  - Co-implement the Sensor Acquisition & Environmental Monitoring System alongside Maxim: RS-485/SHT10/UART hardware interface, SensorPoller, DataValidator, ThresholdEvaluator, AlertClassifier, and SensorFaultMonitor
+  - Co-implement the Local Automation Engine alongside Maxim: AutomationDecisionEngine, IrrigationController, ClimateController, ScheduleExecutor, OfflineBufferManager, ResourceLogger, and ActuatorSafetyInterlock
+  - Co-define the 4-layer system architecture (Hardware/Edge/Cloud/Client) with SR group mapping and architectural decision rationale
+  - Co-design the Mini PC Edge Gateway architecture: LocalMQTTBroker, WANMQTTClient, DecisionEngine, ScheduleExecutor, AIDecisionCache, ConfigStore, OfflineBufferManager
+  - Collaborate on edge hardware validation and system integration testing
+
+- ** Maxim Alexei - Hardware / Backend Developer**
+  - Co-implement the Sensor Acquisition & Environmental Monitoring System alongside Adrian: RS-485/SHT10/UART hardware interface, SensorPoller, DataValidator, ThresholdEvaluator, AlertClassifier, and SensorFaultMonitor
+  - Co-implement the Local Automation Engine alongside Adrian: GPIO/relay actuation logic (30 s automatic / 10 s manual modes), PID anti-windup, actuator conflict resolution, and 72-hour offline autonomy
+  - Build the non-blocking MQTT payload serialisation pipeline to the Cortex-M4 MQTT client and offline buffer feed to the OfflineBufferManager
+  - Co-define the 4-layer system architecture (Hardware/Edge/Cloud/Client) with SR group mapping and architectural decision rationale
+  - Co-design the Mini PC Edge Gateway architecture: LocalMQTTBroker, WANMQTTClient, DecisionEngine, ScheduleExecutor, AIDecisionCache, ConfigStore, OfflineBufferManager
+  - Collaborate on system integration and edge hardware validation
+
+- ** Daniel Cojocaru - Backend Developer**
+  - Co-build the Cloud Backend System alongside Daria: MQTT broker, data ingestion service, alert evaluation service, REST API gateway, and analytics service
+  - Implement resource usage logging to Cloud Time-Series DB via MQTT and batch-flush buffered records on reconnect
+  - Co-implement the Cybersecurity System: TLS 1.2+ X.509 mTLS termination, JWT + RBAC request guard, append-only audit logger, offline edge auth module, certificate store, and user account manager
+  - Lead the AI Agent Service: sensor data consumer, AI decision model, command issuer, and tenant scope filter
+  - Collaborate on system integration testing across backend layers
+
+- ** Daria Rateeva - Backend Developer**
+  - Co-build the Cloud Backend System alongside Daniel: notification dispatcher (Twilio/FCM), AuthNAuthZService, InfluxDB/TimescaleDB integration with 90-day retention, and CLOUDSYNC-IF batch-flush on reconnect
+  - Implement CLOUDNOTIF-IF: Twilio/FCM push/SMS notification gateway (30 s dispatch after 60 s persist)
+  - Co-implement the Cybersecurity System: JWT + RBAC via AuthNAuthZService, append-only audit logger, certificate store, and user account manager
+  - Support system integration testing across cloud backend layers
+  - Co-maintain Confluence documentation, traceability tables, and team responsibilities pages alongside Victoria

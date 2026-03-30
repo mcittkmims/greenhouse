@@ -260,6 +260,27 @@ def gcm_to_html(gcm_text, jira_server="", jira_server_id=""):
             i += 1  # skip {/raw}
             continue
 
+        # ── {p align=X}...{/p} — aligned paragraph ──
+        if re.match(r'^\{p\s+align=', line.strip()):
+            flush_paragraph()
+            flush_blockquote()
+            close_lists()
+            m = re.match(r'^\{p\s+align=(\w+)\}(.*)$', line.strip())
+            if m:
+                align = m.group(1)
+                content_parts = [m.group(2)]
+                while '{/p}' not in content_parts[-1] and i + 1 < len(lines):
+                    i += 1
+                    content_parts.append(lines[i])
+                content = " ".join(content_parts)
+                content = re.sub(r'\{/p\}\s*$', '', content).strip()
+                output.append(
+                    f'<p style="text-align: {escape_xhtml(align)};">'
+                    f'{_convert_inline(content, server, server_id)}</p>'
+                )
+            i += 1
+            continue
+
         # ── {table ...} ──
         if re.match(r'^\{table\b', line.strip()):
             flush_paragraph()

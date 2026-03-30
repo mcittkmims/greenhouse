@@ -68,3 +68,16 @@ python3 scripts/logging/log_work.py report \
 - Shows what was done, total hours, and which WP to work on next (first WP with no worklogs).
 - `--to` defaults to now.
 - `--no-post` prints only, skips posting to `PBL26-1362`.
+
+## 6. Inspect / delete worklogs
+
+```sh
+# List all worklogs on a ticket with their IDs and timestamps
+python3 scripts/logging/log_work.py list-worklogs --ticket <WP_OR_KEY>
+
+# Delete a specific worklog entry by ID
+python3 scripts/logging/log_work.py delete-worklog --ticket <WP_OR_KEY> --id <WORKLOG_ID>
+python3 scripts/logging/log_work.py delete-worklog --ticket 5.4 --id 17643 --adjust-estimate leave
+```
+- Use `list-worklogs` first to find the worklog ID before deleting.
+- `--adjust-estimate` controls Jira's remaining estimate after deletion: `new` (default), `leave`, or `auto`.

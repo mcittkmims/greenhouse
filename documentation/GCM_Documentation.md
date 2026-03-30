@@ -43,7 +43,7 @@ Confluence Storage HTML ──► gcm_from_html.py ──► .gcm file
 2. **Lossless round-trip** — `HTML → GCM → HTML` produces semantically identical output (validated against 202 pages with 100% acceptance)
 3. **Human-editable** — headings, paragraphs, bold, links, Jira issues look natural
 4. **Diff-friendly** — line-oriented, deterministic formatting, no trailing whitespace
-5. **`{raw}` safety net** — anything unrecognized is captured verbatim
+5. **`{raw}` safety net** — anything unrecognized (code blocks, layout sections, expand macros, info/note/warning/tip panels, and any unknown Confluence macro) is captured verbatim
 
 ---
 
@@ -102,7 +102,7 @@ Headings use `=` prefix markers. The number of `=` signs determines the level (1
 - One space required between `=` markers and heading text
 - Empty headings are allowed: `== ` (renders as `<h2></h2>`)
 - Headings may contain inline formatting: `== **Bold Heading**`
-- Headings may contain inline `{raw}...{/raw}` for macros embedded in headings (e.g., anchors, TOC macros)
+- Headings may contain inline `{raw}...{/raw}` for macros embedded in headings (e.g., anchors, self-closing TOC macros)
 
 **HTML mapping:**
 
@@ -149,7 +149,7 @@ Lines prefixed with `> `:
 
 #### Unordered Lists
 
-Use `-` prefix (GCM only recognizes `-` as the unordered list marker, not `*` or `+`, to avoid ambiguity with italic markers):
+Use `-` prefix (GCM only recognizes `-` as the unordered list marker at the block level, not `*` or `+`, to avoid ambiguity with italic markers):
 
 ```
 - First item
@@ -224,9 +224,9 @@ Tables use tag-style syntax with full support for merged cells, headers, footers
 
 | Tag | Description | Supported Attributes |
 | --- | --- | --- |
-| `{table ...}...{/table}` | Table container | `width`, `class`, `style` |
+| `{table ...}...{/table}` | Table container | `width`, `class` |
 | `{thead}...{/thead}` | Table header section | — |
-| `{tbody}...{/tbody}` | Table body section | — |
+| `{tbody}...{/tbody}` | Table body section (optional; never emitted by converter, but parsed if present) | — |
 | `{tfoot}...{/tfoot}` | Table footer section | — |
 | `{colgroup}...{/colgroup}` | Column group | — |
 | `{col ...}` | Column definition (self-closing) | `style`, `class` |
@@ -236,7 +236,7 @@ Tables use tag-style syntax with full support for merged cells, headers, footers
 
 #### Cell Content
 
-Cell content supports inline formatting (bold, italic, links, etc.) and can span multiple lines using `\n` within the cell:
+Cell content supports inline formatting (bold, italic, links, etc.) and can span multiple lines using literal newlines within the cell:
 
 ```
 {td}**Bold text** and *italic*{/td}
@@ -274,75 +274,25 @@ Lists inside cells are explicitly wrapped with `{ul}...{/ul}` or `{ol}...{/ol}` 
 {/ol}{/td}
 ```
 
-### 3.7 Code Blocks
+#### Raw Passthrough Inside Cells
+
+`{raw}...{/raw}` blocks are supported inside cell content for verbatim Confluence XML.
+
+### 3.7 Aligned Paragraphs
+
+Paragraphs with a text-align style use the `{p align=X}` tag:
 
 ```
-{code lang=python title="Example"}
-def hello():
-    print("world")
-{/code}
+{p align=center}This text is centered.{/p}
+
+{p align=right}This text is right-aligned.{/p}
 ```
 
-**Supported attributes:** `lang` (language), `title`, `theme`, `linenumbers`, `collapse`
+**Supported alignment values:** `left`, `center`, `right`, `justify`
 
-**HTML mapping:** `<ac:structured-macro ac:name="code">` with `<ac:plain-text-body>` content
+**HTML mapping:** `<p style="text-align: center;">text</p>`
 
-### 3.8 Layout Sections
-
-Confluence multi-column layouts:
-
-```
-{layout}
-{layout-section type=two_left_sidebar}
-{layout-cell}
-Sidebar content here
-{/layout-cell}
-{layout-cell}
-Main content here
-{/layout-cell}
-{/layout-section}
-{/layout}
-```
-
-**Layout section types:** `single`, `two_equal`, `two_left_sidebar`, `two_right_sidebar`, `three_equal`
-
-### 3.9 Expand / Collapse
-
-```
-{expand title="Click to expand"}
-Hidden content here.
-{/expand}
-```
-
-### 3.10 Info / Note / Warning / Tip Panels
-
-```
-{info title="Information"}
-Info panel content.
-{/info}
-
-{note}
-Note panel content.
-{/note}
-
-{warning}
-Warning panel content.
-{/warning}
-
-{tip title="Pro Tip"}
-Tip panel content.
-{/tip}
-```
-
-### 3.11 Div Containers
-
-```
-{div class=content-wrapper}
-Paragraph content inside the div.
-{/div}
-```
-
-`<span>` elements are transparent in GCM — their content flows through without any special markers.
+**Note:** This construct is generated from HTML whenever a `<p>` element carries a `text-align` style. It can also be written manually in GCM.
 
 ---
 
@@ -384,7 +334,15 @@ Paragraph content inside the div.
 
 **HTML mapping:** `<code>code here</code>`
 
-### 4.4 Links
+### 4.4 Underline
+
+```
+{u}underlined text{/u}
+```
+
+**HTML mapping:** `<u>underlined text</u>`
+
+### 4.5 Links
 
 #### External Links
 
@@ -405,7 +363,7 @@ Paragraph content inside the div.
 {link page="WP1.1 Problem Definition"}display text{/link}
 ```
 
-**HTML mapping:** `<ac:link><ri:page ri:content-title="WP1.1 Problem Definition"/><ac:link-body>display text</ac:link-body></ac:link>`
+**HTML mapping:** `<ac:link><ri:page ri:content-title="WP1.1 Problem Definition"/><ac:plain-text-link-body>display text</ac:plain-text-link-body></ac:link>`
 
 #### Confluence Anchor Links
 
@@ -417,7 +375,7 @@ Paragraph content inside the div.
 
 User mentions inside ac:link structures are handled as `{user:...}` (see below).
 
-### 4.5 Images
+### 4.6 Images
 
 #### Attached Images
 
@@ -425,7 +383,7 @@ User mentions inside ac:link structures are handled as `{user:...}` (see below).
 {image file="diagram.png" height=400 align=center}
 ```
 
-**Supported attributes:** `file`, `height`, `width`, `align`, `alt`, `title`, `border`, `vspace`, `hspace`
+**Supported attributes:** `file`, `height`, `width`, `align`, `class`, `thumbnail`
 
 **HTML mapping:** `<ac:image ...><ri:attachment ri:filename="diagram.png"/></ac:image>`
 
@@ -437,7 +395,7 @@ User mentions inside ac:link structures are handled as `{user:...}` (see below).
 
 **HTML mapping:** `<ac:image ...><ri:url ri:value="https://example.com/img.png"/></ac:image>`
 
-### 4.6 Jira Issue
+### 4.7 Jira Issue
 
 ```
 {jira:GMS-10}
@@ -451,7 +409,7 @@ This is the most common inline element in the GMS project. The key is always the
 
 Can appear both inline (within paragraphs, table cells) and as a standalone block.
 
-### 4.7 Status Badge
+### 4.8 Status Badge
 
 ```
 {status:Draft|color=Yellow}
@@ -465,7 +423,7 @@ Can appear both inline (within paragraphs, table cells) and as a standalone bloc
 
 **HTML mapping:** `<ac:structured-macro ac:name="status">` with `<ac:parameter>` children
 
-### 4.8 Anchor
+### 4.9 Anchor
 
 ```
 {anchor:ref4}
@@ -475,7 +433,7 @@ Creates a named anchor point for cross-referencing.
 
 **HTML mapping:** `<ac:structured-macro ac:name="anchor"><ac:parameter ac:name="">ref4</ac:parameter></ac:structured-macro>`
 
-### 4.9 User Mention
+### 4.10 User Mention
 
 ```
 {user:ff8081819b134c58019c0a81410c0005}
@@ -485,7 +443,7 @@ References a Confluence user by their userkey.
 
 **HTML mapping:** `<ri:user ri:userkey="ff8081819b134c58019c0a81410c0005"/>`
 
-### 4.10 Subscript / Superscript
+### 4.11 Subscript / Superscript
 
 ```
 H{sub}2{/sub}O
@@ -494,7 +452,7 @@ x{sup}2{/sup}
 
 **HTML mapping:** `<sub>2</sub>` / `<sup>2</sup>`
 
-### 4.11 Inline Line Break
+### 4.12 Inline Line Break
 
 ```
 {br}
@@ -502,7 +460,7 @@ x{sup}2{/sup}
 
 Represents `<br/>` within flowing text (outside table cells). Inside table cells, line breaks are represented as literal newlines in the cell content.
 
-### 4.12 Inline Raw Passthrough
+### 4.13 Inline Raw Passthrough
 
 ```
 {raw}<ac:structured-macro ac:name="toc"/>{/raw}
@@ -526,16 +484,24 @@ For macros or other Confluence XML that appears inline within text (e.g., inside
 
 Used for any Confluence construct that doesn't have a dedicated GCM representation. The XML content is preserved verbatim — never parsed, never modified. It is pushed back byte-for-byte to Confluence.
 
-### Common Raw-Wrapped Elements
+### Raw-Wrapped Elements
+
+All Confluence structured macros that do not have a dedicated GCM syntax are captured as `{raw}...{/raw}` blocks by the HTML→GCM converter. This includes:
 
 | Confluence Element | Description |
 | --- | --- |
 | `ac:task-list` | Task lists with checkboxes |
+| `code` macro | Syntax-highlighted code blocks |
+| `expand` macro | Collapsible expand/collapse sections |
+| `info` / `note` / `warning` / `tip` macros | Styled info panels |
+| `layout` / `layout-section` / `layout-cell` | Multi-column layout sections |
 | `children` macro | Displays child pages |
 | `pagetree` macro | Page tree navigation |
 | `toc` macro | Table of contents |
 | `excerpt` macro | Page excerpt |
-| Custom macros | Any plugin-specific macros |
+| Any other plugin macro | Any unrecognized `ac:structured-macro` |
+
+**Note:** `<div>` and `<span>` elements in Confluence HTML are transparent in GCM — their content flows through without any special markers and their attributes are discarded.
 
 ---
 
@@ -679,13 +645,9 @@ GCM represents this as `**Part 1****Part 2**` where `****` is the close-open bou
 
 HTML may contain nested identical tags: `<strong><strong>text</strong></strong>`. GCM tracks depth and only emits one pair of `**` markers, producing `**text**` — semantically equivalent.
 
-### `<span>` Transparency
+### `<span>` and `<div>` Transparency
 
-`<span>` elements are treated as transparent containers — their content flows through without any GCM markers. Style attributes on spans are not preserved (they're typically Confluence editor artifacts).
-
-### `<div>` Handling
-
-`<div>` elements with significant attributes (like `class=content-wrapper`) are preserved as `{div ...}...{/div}`. Plain `<div>` wrappers without meaningful attributes may be stripped or simplified.
+`<span>` and `<div>` elements are treated as transparent containers — their content flows through without any GCM markers. Style attributes are not preserved (they're typically Confluence editor artifacts). `<div>` does not have a GCM equivalent.
 
 ### Newline Normalization
 
@@ -694,6 +656,14 @@ Source HTML newlines within flowing text are normalized to spaces. This prevents
 ### Table Cell Inline Formatting
 
 When inline formatting (bold, italic, etc.) spans a line break within a table cell, GCM automatically closes the formatting markers before the newline and (in the HTML direction) the formatting context is re-established on the next line. This prevents cross-line formatting issues.
+
+### `{tbody}` is Optional
+
+The `{tbody}` tag is recognized and correctly converted to `<tbody>` by `gcm_to_html.py`, but `gcm_from_html.py` never emits it (Confluence HTML's implicit tbody is discarded). Manually adding `{tbody}...{/tbody}` to a GCM file is valid and will round-trip correctly.
+
+### Unknown Macros → Raw
+
+Any `ac:structured-macro` whose `ac:name` is not `jira`, `anchor`, or `status` is captured verbatim as a `{raw}...{/raw}` block. Self-closing macros (`<ac:structured-macro ... />`) that appear inside a heading become inline `{raw}...{/raw}`. This ensures 100% lossless round-tripping regardless of which Confluence plugins are in use.
 
 ---
 
@@ -771,7 +741,7 @@ The above GCM, when converted with `gcm_to_html()`, produces valid Confluence st
 
 ```
 scripts/confluence/
-├── gcm_from_html.py    # HTML → GCM converter (~930 lines)
+├── gcm_from_html.py    # HTML → GCM converter (~952 lines)
 ├── gcm_to_html.py      # GCM → HTML converter (~490 lines)
 ├── gcm_spec.py         # Shared utilities (~115 lines)
 ├── GCM_SPEC.md         # Quick-reference specification

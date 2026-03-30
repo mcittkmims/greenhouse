@@ -22,6 +22,11 @@
     { "wp": "6.2", "id": "42634164", "local_file": "WP6.2_Dynamic_Aspects_System_Architecture.gcm" },
     { "wp": "6.3", "id": "42634173", "local_file": "WP6.3_System_Architecture_Analysis.gcm" },
     { "wp": "6.4", "id": "42634174", "local_file": "WP6.4_Ensure_Consistency_Traceability.gcm" },
-    { "wp": "6.5", "id": "42634175", "local_file": "WP6.5_Review_and_Communicate_Architecture.gcm" }
+    { "wp": "6.5", "id": "42634175", "local_file": "WP6.5_Review_and_Communicate_Architecture.gcm" },
+    { "wp": "7.1", "id": "42634178", "local_file": "WP7.1_Midterm_Project_Report_Development.gcm" },
+    { "wp": "8.1", "id": "42634180", "local_file": "WP8.1_Distribute_Roles_Development_Phase.gcm" },
+    { "wp": "8.2", "id": "42634181", "local_file": "WP8.2_HW_Component_Identification_BOM.gcm" },
+    { "wp": "8.3", "id": "42634185", "local_file": "WP8.3_SW_Technologies_Tool_Selection.gcm" },
+    { "wp": "articol", "id": "42634177", "local_file": "Articol.gcm" }
   ]
 }

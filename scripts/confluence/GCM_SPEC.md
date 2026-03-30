@@ -115,14 +115,14 @@ Escaped list markers (paragraph text that starts with a list-like pattern):
   {/ul}{/td}
   ```
 
-### Code block
+### Aligned paragraph
 
 ```
-{code lang=python}
-def hello():
-    print("world")
-{/code}
+{p align=center}This text is centered.{/p}
+{p align=right}Right-aligned.{/p}
 ```
+
+Generated from `<p style="text-align: ...">`. Alignment values: `left`, `center`, `right`, `justify`.
 
 ### Confluence macros
 
@@ -146,20 +146,7 @@ stored — they are re-added from config at push time.
 {status:Draft|color=Yellow}
 ```
 
-**Task list**: Wrapped in `{raw}` passthrough (no native GCM syntax).
-
-**Layout**:
-```
-{layout}
-{layout-section type=single}
-{layout-cell}
-Content here
-{/layout-cell}
-{/layout-section}
-{/layout}
-```
-
-**Any other macro** → `{raw}...{/raw}` passthrough.
+**Task list, code blocks, expand, info/note/warning/tip, layout sections, and any other macro** → `{raw}...{/raw}` passthrough (no native GCM syntax).
 
 ### Raw passthrough
 
@@ -178,13 +165,15 @@ byte-for-byte.
 
 ## Inline elements
 
-### Bold / Italic / Strikethrough / Code
+### Bold / Italic / Strikethrough / Code / Underline
 
 ```
 **bold text**
 *italic text*
+***bold and italic***
 ~~strikethrough~~
 `inline code`
+{u}underlined text{/u}
 ```
 
 ### Links
@@ -266,13 +255,7 @@ inline contexts where block-level `{raw}` is not appropriate.
 
 ## Div / Span (style containers)
 
-```
-{div class=content-wrapper}
-  paragraph content
-{/div}
-```
-
-`{span}...{/span}` is transparent (content flows through).
+`<div>` and `<span>` are **transparent** — their content flows through without any GCM markers. Attributes are discarded. There is no `{div}` GCM construct.
 
 ---
 
